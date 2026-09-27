@@ -1499,12 +1499,12 @@ function drawMirror(){
     if (S.playing && S.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
       for (const [i,a] of S.trail){ if (a.length < 2 || S.frameNo - a[a.length-1][4] > 1) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
         ctx.strokeStyle = TYPE_COL[ty]; ctx.globalAlpha = .45; ctx.beginPath(); let pen = false;
-        let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : (al > -0.05 ? sxy(al, az) : null);
+        let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : ((whole || al > -0.05) ? sxy(al, az) : null);
           if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
         ctx.stroke(); }
       ctx.globalAlpha = 1; }
-    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue;
-      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0 && !whole) continue;
+      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i)*(al < 0 ? .55 : 1); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
     genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
