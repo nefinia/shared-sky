@@ -2,7 +2,7 @@
 
 **The sky above any place and moment, laid one-to-one onto the Earth.** Indigenous and Western constellations, and every publicly tracked object in orbit passing through them.
 
-Made for [YOHAKU 余白](https://www.space4innovation.com/yohaku), the Space4Innovation hackathon on space debris, AI and Indigenous knowledge (25–27 September 2026). Written with Challenge 1, *Caring for Sky Country*, in mind.
+Made for [YOHAKU 余白](https://www.space4innovation.com/yohaku), the Space4Innovation hackathon on space debris, AI and Indigenous knowledge (25–27 September 2026). Submitted to Challenge 2, *Seven Generations in Orbit*: how can we decide which pieces of space debris humanity should take responsibility for first? It began with Challenge 1, *Caring for Sky Country*, in mind.
 
 ## The idea
 
@@ -22,6 +22,7 @@ A star at zenith distance *z* and azimuth *A* is directly overhead at the point 
 - **Choose any place and moment:** city search (7,342 cities), coordinates, map links, tap the map, or *Use my location* when the page is hosted on its own site. Date and time go from 1900 to 2100.
 - **"Does it pass over…?"** finds when a figure is at your zenith in a dark sky, lists the cities it passes over, and jumps there with *Take me there*.
 - **Paths ahead:** where each object crossing the figure is now, and where it goes over the next 10–60 minutes, with who launched it and when.
+- **Seven generations in orbit:** how long each object will stay up, how many will still be there in seven generations (about 175 years), who they are registered to, and a ranked list of which pieces to take responsibility for first. Four sliders (future generations, crowding, size, shared skies) set how much each value counts, so the ranking is a conversation rather than a verdict. The seven-generations view dims what will come down on its own and marks the first 20 in line on the sky. Tap any object to see its orbit, how long it will stay, how much of the Earth it passes over and its place in line.
 
 **Live:** [sofiagallego.com/shared-sky](https://sofiagallego.com/shared-sky/) · by [Sofia Gallego](https://sofiagallego.com)
 
@@ -68,6 +69,7 @@ python tools/build.py
 ## Limits, stated plainly
 
 - **Debris positions** come from one snapshot of the public catalogue and are reliable only within about ±7 days of it. Outside that window the page shows stars and figures only. With the daily workflow, "today" is always covered.
+- **Lifetimes and the ranking are rough.** Decay times come from a rule of thumb by height and vary several-fold with solar activity and each object's shape and mass. Masses are typical values for each kind of object (named for the heaviest rocket-stage families). The ranking is for thinking together, not an official risk rating.
 - **Only objects larger than about 10 cm are tracked.** Millions of smaller fragments are not in any public catalogue.
 - **Sky cultures:** the open datasets hold 15 sky cultures. **Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal and Samburu skies are not here.** They should be added only if those communities choose to share them, on their terms.
 - **The 3D landscape is illustrative.** The one-to-one map uses real relief from Natural Earth, at about 2 km per pixel near the featured places and coarser elsewhere.

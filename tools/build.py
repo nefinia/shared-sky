@@ -10,7 +10,7 @@ def main():
     sky = json.loads(gzip.decompress((ROOT / 'data/sky.json.gz').read_bytes()))
     orbits = json.loads(gzip.decompress((ROOT / 'data/orbits.json.gz').read_bytes()))
     sky.update(orbits)  # sats, types, owners, epoch
-    blob = base64.b64encode(gzip.compress(json.dumps(sky, separators=(',', ':'), ensure_ascii=False).encode(), 9)).decode()
+    blob = base64.b64encode(gzip.compress(json.dumps(sky, separators=(',', ':'), ensure_ascii=False).encode(), 9, mtime=0)).decode()
     page = (ROOT / 'src/template.html').read_text()
     page = (page.replace('__EARTH__', (ROOT / 'data/earth.json').read_text())
                 .replace('__THREE__', (ROOT / 'vendor/three.min.js').read_text())

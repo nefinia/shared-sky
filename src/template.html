@@ -276,6 +276,7 @@ footer a,.card a{color:var(--muted)}
       <span><i class="dot" style="background:var(--rb)"></i>Rocket bodies</span>
       <span><i class="dot" style="background:var(--pay)"></i>Satellites</span>
       <span>A line from a dot shows where that object goes next</span>
+      <span id="lensKey" hidden><i class="dot" style="background:transparent;box-shadow:inset 0 0 0 1.5px #CFF5B0;transform:rotate(45deg);border-radius:1px"></i>Seven-generations view: bright dots will still be up in 175 years; a diamond marks the first 20 in line</span>
     </div>
   </div>
 
@@ -334,6 +335,30 @@ footer a,.card a{color:var(--muted)}
         <dl class="kv" id="selKv"></dl>
       </div>
       <p class="small" id="selHint" style="color:var(--faint)">Tap a dot or a path to see what it is and who launched it.</p>
+    </section>
+
+    <section class="card" id="genCard" aria-labelledby="hGen">
+      <p class="eyebrow">Seven generations in orbit</p>
+      <h2 id="hGen">Which pieces should we take responsibility for first?</h2>
+      <p class="small" id="genHead">Working out how long each object will stay up…</p>
+      <div class="row"><button id="bLens" aria-pressed="false">Show what outlives seven generations</button></div>
+      <p class="small muted">The answer depends on what we value. Each slider sets how much one thing counts, and the list re-ranks.</p>
+      <div class="stack" id="genW">
+        <label class="f">Future generations · how long it will stay up <input type="range" min="0" max="2" step="0.25" value="1" data-w="t"></label>
+        <label class="f">Crowding · how busy its height band is <input type="range" min="0" max="2" step="0.25" value="1" data-w="c"></label>
+        <label class="f">Size · how many pieces it could break into <input type="range" min="0" max="2" step="0.25" value="1" data-w="m"></label>
+        <label class="f">Shared skies · how much of the Earth it passes over <input type="range" min="0" max="2" step="0.25" value="1" data-w="a"></label>
+      </div>
+      <div class="toggles" style="margin-top:10px"><button id="bGenHere" aria-pressed="false">Only what crosses this sky</button><button id="bGenPay" aria-pressed="false">Include satellites</button></div>
+      <div id="genOut"></div>
+      <details class="fold">
+        <summary>How this is worked out</summary>
+        <p class="small muted" style="margin-top:8px"><b>Future generations:</b> a rule-of-thumb decay time from the object's lowest height (roughly a year at 400 km, 25–30 years at 600 km, 150 years at 750 km, many centuries above 900 km). It counts up to seven generations of 25 years, the horizon this challenge asks us to care for. Real lifetimes vary several-fold with solar activity and each object's shape and mass.</p>
+        <p class="small muted"><b>Crowding:</b> how many tracked objects share its height band, per unit of volume. More neighbours, more chances of a collision.</p>
+        <p class="small muted"><b>Size:</b> a typical mass for its kind (named for the heaviest rocket-stage families, such as the ~9-tonne SL-16; otherwise ~1.5 t for a rocket body, ~1 t for a satellite, ~10 kg for a fragment), raised to the power 0.75, because that is how the number of fragments from a collision grows with mass in NASA's standard breakup model.</p>
+        <p class="small muted"><b>Shared skies:</b> the share of the Earth's surface its orbit passes over, from its tilt.</p>
+        <p class="small muted">The score multiplies the four, each raised to its slider's weight; a weight of zero leaves that value out. Satellites are left out by default because the public catalogue does not say which still work, though many, like Envisat, do not. These are open, rough estimates for thinking together, not an official risk rating.</p>
+      </details>
     </section>
 
     <section class="card">
@@ -732,13 +757,14 @@ function draw(){
       const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue;
       const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue;
       const [x,y] = proj(al,az); const lit = f[k+4] > 0;
-      ctx.globalAlpha = (lit ? .9 : .22)*dim; ctx.fillStyle = TYPE_COL[ty];
+      ctx.globalAlpha = (lit ? .9 : .22)*dim*lensA(i); ctx.fillStyle = TYPE_COL[ty];
       ctx.beginPath(); ctx.arc(x,y, lit ? 1.4 : 1.1, 0, Math.PI*2); ctx.fill();
       lastDrawn.push([x,y,i]);
     }
     ctx.globalAlpha = 1;
     ctx.strokeStyle = '#F0BE6E'; ctx.lineWidth = 1.2;
     crossing.forEach(i => { const p = lastDrawn.find(d => d[2]===i); if (p){ ctx.beginPath(); ctx.arc(p[0],p[1],4.5,0,Math.PI*2); ctx.stroke(); } });
+    genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2]===S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0],p[1],8,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p[0]+8,p[1]); ctx.lineTo(p[0]+14,p[1]); ctx.moveTo(p[0]-8,p[1]); ctx.lineTo(p[0]-14,p[1]); ctx.stroke(); } }
   }
   // labels
@@ -844,7 +870,7 @@ function drawFocus(){
       ctx.lineCap = 'round';
       for (let n=1;n<pts.length;n++){ const a = pts[n-1], b = pts[n]; if (!a || !b) continue;
         const lit = a[2] > 0 || b[2] > 0;
-        ctx.strokeStyle = sel ? '#FFFFFF' : TYPE_COL[ty]; ctx.globalAlpha = sel ? 1 : (lit ? (hot ? .95 : .6) : (hot ? .45 : .2))*dim;
+        ctx.strokeStyle = sel ? '#FFFFFF' : TYPE_COL[ty]; ctx.globalAlpha = sel ? 1 : (lit ? (hot ? .95 : .6) : (hot ? .45 : .2))*dim*lensA(tr.i);
         ctx.lineWidth = sel ? 2.6 : hot ? 1.9 : 1.1; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); }
     }
     ctx.globalAlpha = 1;
@@ -852,7 +878,7 @@ function drawFocus(){
   // objects at this instant
   if (S.M.objects && S.frame){ const f = S.frame.data;
     for (let q=0;q<f.length;q+=FS){ const ty = SAT.types[f[q]]; if (!S.show[ty]) continue; const p = projEq(cam, f[q+1], f[q+2]); if (!p || p[2] < 0 || p[0] < 0 || p[1] < 0 || p[0] > W || p[1] > H) continue;
-      ctx.globalAlpha = f[q+4] > 0 ? .95 : .35; ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], 2, 0, Math.PI*2); ctx.fill(); }
+      ctx.globalAlpha = (f[q+4] > 0 ? .95 : .35)*lensA(f[q]); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], 2, 0, Math.PI*2); ctx.fill(); }
     ctx.globalAlpha = 1; }
   // the figure itself
   if (S.M.figures){ ctx.save(); ctx.strokeStyle = 'rgba(5,8,18,.75)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke();
@@ -1173,7 +1199,7 @@ function buildObjects(){
   if (!S.frame) return;
   const f = S.frame.data, list = [], cols = TYPE_COL.map(G.hex);
   for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const lit = f[k+4] > 0, sel = i === S.sel;
-    list.push([vec(f[k+1], f[k+2]), sel ? 10 : (lit ? 3.6 : 2.6), sel ? [1,1,1] : cols[ty], sel ? 1 : lit ? .95 : .35]); G.objIdx.push(i); }
+    list.push([vec(f[k+1], f[k+2]), sel ? 10 : (lit ? 3.6 : 2.6), sel ? [1,1,1] : cols[ty], sel ? 1 : (lit ? .95 : .35)*lensA(i)]); G.objIdx.push(i); }
   G.objs = G.mkPoints(list, false); G.objs.renderOrder = 6; G.cel.add(G.objs); need3d();
 }
 function buildStreaks(){
@@ -1181,7 +1207,7 @@ function buildStreaks(){
   ['hot','cold'].forEach(k => { if (G[k]){ G.cel.remove(G[k]); G[k].geometry.dispose(); G[k] = null; } });
   if (!S.tracks) return;
   const mk = (hot) => { const P = [], C = [], cols = TYPE_COL.map(G.hex);
-    S.tracks.list.forEach((t,j) => { if ((t.cross >= 0 || j === S.trackSel) !== hot) return; const ty = SAT.types[t.i]; if (!S.show[ty]) return; const col = j === S.trackSel ? [1,1,1] : cols[ty];
+    S.tracks.list.forEach((t,j) => { if ((t.cross >= 0 || j === S.trackSel) !== hot) return; const ty = SAT.types[t.i]; if (!S.show[ty]) return; const col = j === S.trackSel ? [1,1,1] : cols[ty].map(v => v*lensA(t.i));
       for (let n=1;n<t.pts.length;n++){ const a = vec(t.pts[n-1][0], t.pts[n-1][1]), b = vec(t.pts[n][0], t.pts[n][1]); const k = (t.pts[n][2] > 0 || t.pts[n-1][2] > 0) ? 1 : .4;
         P.push(a[0]*1000,a[1]*1000,a[2]*1000,b[0]*1000,b[1]*1000,b[2]*1000); C.push(...col.map(v => v*k), ...col.map(v => v*k)); } });
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P,3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C,3));
@@ -1409,7 +1435,7 @@ function drawMirror(){
   if (S.M.streaks && S.tracks){
     ctx.lineCap = 'round';
     S.tracks.list.forEach((tr,j) => { const hot = tr.cross >= 0, sel = j === S.trackSel; if (!hot && !sel && !S.showAll) return; const ty = SAT.types[tr.i]; if (!S.show[ty]) return;
-      ctx.strokeStyle = sel ? '#fff' : TYPE_COL[ty]; ctx.lineWidth = sel ? 2.4 : hot ? 1 : .8; ctx.globalAlpha = sel ? 1 : hot ? .55 : .15; ctx.beginPath();
+      ctx.strokeStyle = sel ? '#fff' : TYPE_COL[ty]; ctx.lineWidth = sel ? 2.4 : hot ? 1 : .8; ctx.globalAlpha = sel ? 1 : (hot ? .55 : .15)*lensA(tr.i); ctx.beginPath();
       // the clock may have moved on since the paths were traced: start each path at "now"
       const dtNow = (S.t - S.tracks.meta.t0)/1000, pts = tr.pts; let s = 0; while (s < pts.length - 1 && pts[s+1][3] <= dtNow) s++;
       if (pts[pts.length-1][3] < dtNow) return;
@@ -1447,8 +1473,9 @@ function drawMirror(){
         ctx.stroke(); }
       ctx.globalAlpha = 1; }
     for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue;
-      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = lit ? .95 : .4; ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
+    genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
   }
   // altitude rings: circles on the Earth at a fixed distance from you (horizon = 90° of arc = 10,008 km)
@@ -1558,7 +1585,7 @@ function setCustom(lat, lon, name){
   S.customName = name || nearestPlaceName(S.lat, S.lon, 60) || `${S.lat.toFixed(3)}°, ${S.lon.toFixed(3)}°`;
   S.tz = approxZone(S.lon); $('place').value = S.place; $('lat').value = +S.lat.toFixed(4); $('lon').value = +S.lon.toFixed(4);
   applyLocalSky(localCult(S.lat, S.lon));
-  S.events = []; $('scanOut').innerHTML = ''; S.gc = [S.lat, S.lon]; buildLand(); setTime(S.t); renderPass(); landPalette(); arrive(false);
+  S.events = []; $('scanOut').innerHTML = ''; S.gc = [S.lat, S.lon]; buildLand(); setTime(S.t); renderPass(); landPalette(); arrive(false); if (ORB) renderGen();
 }
 // ---------- whose sky: local by default, pinned once chosen ----------
 function localCult(lat, lon){ // the sky culture of the nearest featured place, if one is close enough to call it local
@@ -1810,6 +1837,99 @@ function renderNowCross(){
   $('nowCross').innerHTML = `<p style="margin-bottom:6px">Crossing a figure line right now (ringed on the sky):</p>${rows}`;
 }
 
+// ---------- seven generations: how long each object stays, and who comes first ----------
+const GEN = 25, GEN_H = 7*GEN; // one generation ≈ 25 years; seven ≈ 175
+const LIFE_T = [[150,5e-4],[200,5e-3],[250,.03],[300,.12],[350,.4],[400,1],[450,3],[500,7],[550,15],[600,30],[650,55],[700,100],[750,150],[800,220],[850,320],[900,450],[1000,900],[1100,1500],[1200,2500],[1400,6000],[1600,12000],[2000,50000]]; // rough years in orbit by height, solar-average
+const RB_MASS = [['SL-16',9000],['SL-12',3500],['SL-8',1400],['SL-3 ',1440],['SL-14',1400],['SL-4 ',2400],['SL-19',1600],['CZ-2C',3800],['CZ-2D',3500],['CZ-4',1000],['ARIANE 1',1700],['ARIANE 40',1700],['ARIANE 42',1700],['ARIANE 44',1700],['H-2A',3000],['ELECTRON',40],['PEGASUS',150]];
+let ORB = null;
+function lifeYears(h){
+  if (h <= LIFE_T[0][0]) return LIFE_T[0][1];
+  for (let k=1;k<LIFE_T.length;k++){ const [h1,y1] = LIFE_T[k]; if (h <= h1){ const [h0,y0] = LIFE_T[k-1], u = (h-h0)/(h1-h0); return 10**(Math.log10(y0) + u*(Math.log10(y1) - Math.log10(y0))); } }
+  return 1e5;
+}
+function typicalMass(s){
+  const n = s[0], ty = s[3];
+  if (ty === 1){ for (const [k,m] of RB_MASS) if (n.startsWith(k)) return m; return 1500; }
+  if (ty === 0){ if (n.startsWith('ENVISAT')) return 8211; if (n.startsWith('STARLINK')) return 500; if (n.startsWith('ONEWEB')) return 150; return 1000; }
+  return 10;
+}
+function orbitStats(){
+  const L = SAT.list, N = L.length, MU = 398600.4418, RE = 6378.137, BIN = 20, NB = 100;
+  const inc = new Float32Array(N), pe = new Float32Array(N), ap = new Float32Array(N), life = new Float32Array(N), mass = new Float32Array(N), dens = new Float32Array(N), cnt = new Float64Array(NB);
+  const band = i => { const lo = Math.max(pe[i], 0), hi = Math.min(ap[i], 1999); return lo >= 2000 ? null : [Math.floor(lo/BIN), Math.min(NB-1, Math.floor(Math.max(lo,hi)/BIN))]; };
+  for (let i=0;i<N;i++){
+    const l2 = L[i][2], mm = parseFloat(l2.slice(52,63)), e = parseFloat('0.' + l2.slice(26,33).trim());
+    inc[i] = parseFloat(l2.slice(8,16)); mass[i] = typicalMass(L[i]);
+    if (!(mm > 0)){ pe[i] = ap[i] = -1; continue; }
+    const n = mm*2*Math.PI/86400, a = Math.cbrt(MU/(n*n));
+    pe[i] = a*(1-e) - RE; ap[i] = a*(1+e) - RE;
+    life[i] = pe[i] < 100 ? 0 : lifeYears(pe[i] + 0.1*Math.min(ap[i] - pe[i], 2000)); // drag works mostly at the lowest point
+    const b = band(i); if (b){ const w = 1/(b[1]-b[0]+1); for (let k=b[0];k<=b[1];k++) cnt[k] += w; }
+  }
+  const per = Array.from(cnt, (c,k) => c/((RE + (k+.5)*BIN)**2)), mx = Math.max(...per);
+  for (let i=0;i<N;i++){ const b = band(i); if (!b){ dens[i] = .01; continue; } let s = 0; for (let k=b[0];k<=b[1];k++) s += per[k]/mx; dens[i] = Math.max(1e-3, s/(b[1]-b[0]+1)); }
+  let long = 0; for (let i=0;i<N;i++) if (life[i] > GEN_H) long++;
+  ORB = {inc, pe, ap, life, mass, dens, long, rank:new Int32Array(N).fill(-1), top:new Set(), n:0};
+}
+const tiltOf = i => { const t = ORB.inc[i]; return t > 90 ? 180 - t : t; };
+function crossesHere(i){ const h = Math.max(ORB.pe[i], 100), reach = Math.acos(6378.137/(6378.137 + h))*R2D; return tiltOf(i) + reach >= Math.abs(S.lat); }
+function lifeTxt(y){
+  if (y <= 0) return 'already coming down';
+  const t = y < 1 ? 'under a year' : y < 2 ? 'about a year' : y < 100 ? `about ${Math.round(y)} years` : y < 10000 ? `about ${(Math.round(y/(y < 1000 ? 10 : 100))*(y < 1000 ? 10 : 100)).toLocaleString()} years` : 'thousands of years or more';
+  return t + (y > GEN_H ? ' · outlives seven generations' : y >= GEN ? ` · about ${Math.round(y/GEN)} generation${Math.round(y/GEN) > 1 ? 's' : ''}` : '');
+}
+const lensA = i => (S.lens && ORB) ? (ORB.life[i] > GEN_H ? 1 : .1) : 1;
+function rankGen(){
+  if (!ORB) return;
+  const w = S.gw || (S.gw = {t:1,c:1,m:1,a:1}), N = SAT.list.length, cand = [];
+  for (let i=0;i<N;i++){
+    const ty = SAT.types[i]; if (ty === 0 && !S.genPay) continue; if (ORB.life[i] <= 0) continue; if (S.genHere && !crossesHere(i)) continue;
+    const T = Math.max(Math.min(ORB.life[i], GEN_H)/GEN_H, 1e-3)*(1 + .1*Math.log10(Math.max(ORB.life[i]/GEN_H, 1))), C = ORB.dens[i], M = (ORB.mass[i]/9000)**.75, A = Math.max(Math.sin(tiltOf(i)*D2R), .05);
+    cand.push([i, w.t*Math.log(T) + w.c*Math.log(C) + w.m*Math.log(M) + w.a*Math.log(A)]);
+  }
+  cand.sort((a,b) => b[1] - a[1]);
+  ORB.rank.fill(-1); cand.forEach(([i],r) => ORB.rank[i] = r);
+  ORB.n = cand.length; ORB.order = cand.map(c => c[0]); ORB.top = new Set(ORB.order.slice(0, 20));
+}
+function renderGen(){
+  if (!ORB) return;
+  rankGen();
+  const N = SAT.list.length; let here = 0; const own = new Map();
+  for (let i=0;i<N;i++) if (ORB.life[i] > GEN_H && crossesHere(i)){ here++; const o = SAT.owners[SAT.list[i][4]]; own.set(o, (own.get(o)||0) + 1); }
+  const owners = [...own.entries()].sort((a,b) => b[1]-a[1]).slice(0,4).map(([o,n]) => `${esc(ownerName(o))} <span class="muted">${Math.round(n/here*100)}%</span>`).join(' · ');
+  $('genHead').innerHTML = `<b>${ORB.long.toLocaleString()}</b> of the ${N.toLocaleString()} tracked objects will likely still be in orbit seven generations from now, about ${GEN_H} years. <b>${here.toLocaleString()}</b> of them pass over the sky of ${esc(placeName())}.` + (here ? `<br><span class="muted">Registered to:</span> ${owners}` : '');
+  const top = ORB.order.slice(0, 15);
+  const fam = new Map(); ORB.order.slice(0, 20).forEach(i => { const s = SAT.list[i], k = s[0].replace(/\s*\(.*\)$/, '') + '|' + SAT.owners[s[4]]; fam.set(k, (fam.get(k)||0) + 1); });
+  const famTxt = [...fam.entries()].sort((a,b) => b[1]-a[1]).slice(0,4).map(([k,n]) => { const [nm,o] = k.split('|'); return `${n} × ${esc(nm)} <span class="muted">(${esc(ownerName(o))})</span>`; }).join(' · ');
+  $('genOut').innerHTML = !top.length ? '<p class="small muted">Nothing matches these choices.</p>' : `
+    <p class="small" style="margin-top:10px"><span class="muted">The first 20 in line:</span> ${famTxt}</p>
+    <p class="eyebrow" style="margin-top:4px">First in line · tap one to find it</p>
+    <div class="list" id="genList">${top.map((i,r) => { const s = SAT.list[i]; return `<button class="ev" data-i="${i}"><span class="t">#${r+1}</span><span class="c">${esc(s[0])}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span class="nm">${esc(ownerName(SAT.owners[s[4]]))} · ${Math.round(ORB.pe[i])} km · ${lifeTxt(ORB.life[i]).split(' · ')[0]}${s[5] ? ' · launched ' + s[5] : ''}</span></span></button>`; }).join('')}</div>`;
+  if (S.lens){ if (G.ok){ buildObjects(); buildStreaks(); } draw(); }
+  renderSel();
+}
+function initGen(){
+  orbitStats(); renderGen();
+  $('genW').addEventListener('input', e => { const k = e.target.dataset.w; if (!k) return; S.gw[k] = +e.target.value; renderGen(); });
+  $('bGenHere').onclick = () => { S.genHere = !S.genHere; $('bGenHere').setAttribute('aria-pressed', S.genHere); renderGen(); };
+  $('bGenPay').onclick = () => { S.genPay = !S.genPay; $('bGenPay').setAttribute('aria-pressed', S.genPay); renderGen(); };
+  $('bLens').onclick = () => { S.lens = !S.lens; $('bLens').setAttribute('aria-pressed', S.lens); $('lensKey').hidden = !S.lens;
+    if (S.lens && !S.M.objects){ S.M.objects = true; if (S.touched) S.touched.add('objects'); initLayersAll(); } if (G.ok){ buildObjects(); buildStreaks(); } draw(); };
+  $('genOut').addEventListener('click', e => { const b = e.target.closest('.ev'); if (!b) return; S.sel = +b.dataset.i; renderSel(); if (G.ok) buildObjects(); draw(); $('selBox').scrollIntoView({block:'nearest', behavior:'smooth'}); });
+}
+function genRings(){ // ring the objects first in line, when the seven-generations view is on
+  if (!S.lens || !ORB) return; ctx.strokeStyle = '#CFF5B0'; ctx.lineWidth = 1.6; ctx.globalAlpha = .95;
+  for (const [x,y,i] of lastDrawn) if (ORB.top.has(i)){ ctx.beginPath(); ctx.moveTo(x, y-7); ctx.lineTo(x+7, y); ctx.lineTo(x, y+7); ctx.lineTo(x-7, y); ctx.closePath(); ctx.stroke(); }
+  ctx.globalAlpha = 1;
+}
+function genRows(i){
+  if (!ORB || i < 0) return '';
+  const t = tiltOf(i), cover = t >= 89 ? 'the whole Earth' : `the ground between ${Math.round(t)}°S and ${Math.round(t)}°N, ${Math.round(Math.sin(t*D2R)*100)}% of the Earth's surface`;
+  return (ORB.pe[i] > 0 ? `<dt>Orbit</dt><dd>${Math.round(ORB.pe[i]).toLocaleString()}–${Math.round(ORB.ap[i]).toLocaleString()} km up · tilted ${ORB.inc[i].toFixed(1)}°</dd>` : '') +
+    `<dt>Stays up</dt><dd>${lifeTxt(ORB.life[i])} (rough)</dd><dt>Passes over</dt><dd>${cover}</dd>` +
+    (ORB.rank[i] >= 0 ? `<dt>In line</dt><dd>#${(ORB.rank[i]+1).toLocaleString()} of ${ORB.n.toLocaleString()} with the current weights</dd>` : '');
+}
+
 // ---------- selection ----------
 cv.addEventListener('click', e => {
   const r = cv.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;
@@ -1836,7 +1956,7 @@ function renderSel(){
   let altTxt = 'below horizon', subTxt = '';
   if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ subTxt = `<dt>Flying over</dt><dd>${f[k+5].toFixed(2)}°, ${f[k+6].toFixed(2)}°${(() => { const n = nearestPlaceName(f[k+5], f[k+6], 300); return n ? ' · ' + esc(n) : ''; })()}</dd>`; break; } }
   if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ const [al,az] = altaz(f[k+1],f[k+2],lstNow(),S.lat*D2R); if (al >= 0) altTxt = `${(al*R2D).toFixed(1)}° up, azimuth ${(((az*R2D)%360+360)%360).toFixed(0)}° · ${f[k+4] > 0 ? 'in sunlight' : "in Earth's shadow"}`; break; } }
-  $('selKv').innerHTML = `<dt>Name</dt><dd>${esc(s[0])}</dd><dt>Type</dt><dd><i class="dot" style="background:${TYPE_COL[ty]}"></i> ${TYPE_NAME[ty]}</dd><dt>Registered to</dt><dd>${esc(ownerName(SAT.owners[s[4]]))}</dd><dt>Launched</dt><dd>${s[5] || 'unknown'}</dd><dt>Catalogue no.</dt><dd>${s[1].slice(2,7).trim()}</dd><dt>Position</dt><dd>${altTxt}</dd>${subTxt}`;
+  $('selKv').innerHTML = `<dt>Name</dt><dd>${esc(s[0])}</dd><dt>Type</dt><dd><i class="dot" style="background:${TYPE_COL[ty]}"></i> ${TYPE_NAME[ty]}</dd><dt>Registered to</dt><dd>${esc(ownerName(SAT.owners[s[4]]))}</dd><dt>Launched</dt><dd>${s[5] || 'unknown'}</dd><dt>Catalogue no.</dt><dd>${s[1].slice(2,7).trim()}</dd><dt>Position</dt><dd>${altTxt}</dd>${subTxt}${genRows(S.sel)}`;
   $('selBox').hidden = false; $('selHint').hidden = true;
 }
 
@@ -1901,7 +2021,7 @@ function setPlace(i){
   if (p.lat != null){ S.lat = p.lat; S.lon = p.lon; $('lat').value = p.lat; $('lon').value = p.lon; }
   S.tz = p.tz; S.customName = null; S.gc = [S.lat, S.lon];
   applyLocalSky(p.lat != null ? (p.cult || localCult(S.lat, S.lon)) : localCult(S.lat, S.lon));
-  buildLand(); renderPass();
+  buildLand(); renderPass(); if (ORB) renderGen();
   if (p.key && EARTH.local && EARTH.local[p.key]) loadRaster(p.key, EARTH.local[p.key].img, EARTH.local[p.key].b);
   S.events = []; $('scanOut').innerHTML = '';
   setTime(S.t); landPalette(); if (S.booted) arrive(false);
@@ -1920,10 +2040,8 @@ function onFocusChange(){ S.tracks = null; S.trackSel = -1; requestTracks(); bui
 function initUI(){
   $('place').innerHTML = PLACES.map((p,i) => `<option value="${i}">${esc(p.n)}</option>`).join('');
   const AUS = {kamilaroi:'New South Wales, Australia', boorong:'Victoria, Australia'};
-  const rank = c => c.id === 'kamilaroi' ? 0 : c.id === 'boorong' ? 1 : c.id === 'western' ? 3 : 2;
-  const order = Object.values(CULT).sort((a,b) => rank(a) - rank(b) || a.title.localeCompare(b.title));
-  $('culture').innerHTML = `<optgroup label="Aboriginal Australian">${order.filter(c => rank(c) < 2).map(c => `<option value="${c.id}" title="${AUS[c.id]}">${esc(c.title)}</option>`).join('')}</optgroup>` +
-    `<optgroup label="Other sky cultures">${order.filter(c => rank(c) >= 2).map(c => `<option value="${c.id}" title="${esc(c.region)}">${esc(c.title)}</option>`).join('')}</optgroup>`;
+  const order = Object.values(CULT).sort((a,b) => a.title.localeCompare(b.title));
+  $('culture').innerHTML = order.map(c => `<option value="${c.id}" title="${esc(AUS[c.id] || c.region)}">${esc(c.title)}</option>`).join('');
   $('lat').value = S.lat; $('lon').value = S.lon;
   $('slider').min = -1440; $('slider').max = 1440; $('slider').step = 1;
   $('slider').addEventListener('input', e => setTime(S.anchor + (+e.target.value)*60000));
@@ -1979,6 +2097,7 @@ function initUI(){
   // default: Sydney (Gadigal Country), Kamilaroi sky, 20:30 on the evening after the orbit data
   S.t = S.epoch; setPlace(0);
   setTime(Date.UTC(2026,8,26,10,30));
+  initGen();
   resize(); pickFocus();
   { const C = consCenter(0), [al] = altaz(C.ra, C.dec, lstNow(), S.lat*D2R); if (S.cult === 'kamilaroi' && al > 10*D2R){ S.focus = 0; $('focusSel').value = 0; } }
   if (EARTH.global) loadRaster('global', EARTH.global, null);
