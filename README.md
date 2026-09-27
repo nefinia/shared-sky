@@ -2,7 +2,7 @@
 
 **The sky above any place and moment, laid one-to-one onto the Earth.** Indigenous and Western constellations, and every publicly tracked object in orbit passing through them.
 
-Made for [YOHAKU 余白](https://www.space4innovation.com/yohaku), the Space4Innovation hackathon on space debris, AI and Indigenous knowledge (25–27 September 2026). Submitted to Challenge 1, *Caring for Sky Country*, and Challenge 2, *Seven Generations in Orbit*: how can we decide which pieces of space debris humanity should take responsibility for first?
+Made for [YOHAKU 余白](https://www.space4innovation.com/yohaku), the Space4Innovation hackathon on space debris, AI and Indigenous knowledge (25–27 September 2026).
 
 ## The idea
 
