@@ -947,7 +947,7 @@ function requestTracks(now){
     trkBusy = true; trkPending = false;
     const C = consCenter(S.focus), fov = focusFov(S.focus), all = S.scope === 'all';
     // while playing, trace a window that runs ahead of the clock, long enough to cover the time the tracing takes
-    const playing = S.playing, dur = playing ? Math.min(3*3600000, Math.max(S.expo*60000, S.speed*1000*8)) : S.expo*60000;
+    const playing = S.playing, dur = playing ? Math.min(3*3600000, Math.max(S.expo*60000, S.speed*1000*20)) : S.expo*60000;
     const t0 = S.t;
     S.trackMeta = {cult:S.cult, focus:S.focus, t0, expo:dur/60000, all, quiet:playing};
     if (!playing) $('focusOut').textContent = all ? 'Tracing every object over your sky…' : 'Tracing orbits…';
@@ -957,7 +957,7 @@ function requestTracks(now){
 }
 function onTracks(m){
   trkBusy = false;
-  if (trkPending){ trkPending = false; requestTracks(); return; }
+  if (trkPending){ trkPending = false; if (!S.playing){ requestTracks(); return; } setTimeout(() => requestTracks(true), 0); }
   if (m.id !== trkId) return;
   const d = m.data, list = []; let k = 0;
   const cons = CULT[S.cult].cons, segs = [];
@@ -2021,7 +2021,7 @@ function setTime(t){
   $('timeUtc').textContent = new Date(S.t).toISOString().replace('T',' ').slice(0,16) + ' UTC';
   requestFrame();
   if (!S.playing) requestTracks();
-  else { const T = S.tracks; if (!T || S.t < T.meta.t0 || S.t - T.meta.t0 > T.meta.expo*60000*.7) requestTracks(true); }
+  else { const T = S.tracks; if (!T || !T.meta.quiet || S.t < T.meta.t0 || S.t - T.meta.t0 > T.meta.expo*60000*.35) requestTracks(true); }
   if (S.mode === 'land') need3d(); updateWhere(); if ($('tTime')) $('tTime').textContent = fmtTime(S.t, true) + ' · ' + new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'short', timeZone:S.tz}).format(new Date(S.t));
 }
 function setPlace(i){
