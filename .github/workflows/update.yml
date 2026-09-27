@@ -1,0 +1,76 @@
+name: Refresh orbits and publish
+
+# Once a day: fetch the public orbit catalogue from CelesTrak, rebuild index.html, commit it,
+# and publish the site with GitHub Pages. The sky and land data change rarely and are rebuilt by hand.
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch the orbit catalogue (one query per launch year) and SATCAT
+        if: github.event_name != 'push'
+        run: |
+          set -uo pipefail
+          : > /tmp/catalog.tle
+          fails=0
+          for y in $(seq 1958 "$(date -u +%Y)"); do
+            code=$(curl -sS --retry 2 --retry-delay 5 --max-time 60 -w "%{http_code}" "https://celestrak.org/NORAD/elements/gp.php?INTDES=${y}&FORMAT=tle" -o /tmp/year.tle) || code=000
+            if [ "$code" = "200" ] && grep -qE '^1 ' /tmp/year.tle; then cat /tmp/year.tle >> /tmp/catalog.tle
+            elif [ "$code" != "404" ] && [ "$code" != "200" ]; then fails=$((fails+1)); fi
+            sleep 0.3
+          done
+          curl -fsS --retry 3 --max-time 120 https://celestrak.org/pub/satcat.csv -o /tmp/satcat.csv || true
+          n=$(grep -cE '^1 ' /tmp/catalog.tle || true)
+          echo "catalogue: ${n} objects, ${fails} failed years"
+          if [ "$fails" -eq 0 ] && [ "$n" -ge 20000 ] && head -1 /tmp/satcat.csv | grep -q NORAD_CAT_ID; then
+            python tools/build_orbits.py --tle /tmp/catalog.tle --satcat /tmp/satcat.csv
+          else
+            echo "::warning::incomplete download, keeping the previous orbit data"
+          fi
+
+      - name: Build the page
+        run: python tools/build.py
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "shared-sky-bot"
+          git config user.email "shared-sky-bot@users.noreply.github.com"
+          git add data/orbits.json.gz index.html
+          git diff --cached --quiet || git commit -m "Refresh orbits $(date -u +%Y-%m-%d)" && git push
+
+      - uses: actions/configure-pages@v5
+      - name: Stage the site
+        run: mkdir -p _site && cp index.html _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
