@@ -24,7 +24,7 @@ A star at zenith distance *z* and azimuth *A* is directly overhead at the point 
 - **Paths ahead:** where each object crossing the figure is now, and where it goes over the next 10–60 minutes, with who launched it and when.
 - **Seven generations in orbit:** how long each object will stay up, how many will still be there in seven generations (about 175 years), who they are registered to, and a ranked list of which pieces to take responsibility for first. Four sliders (future generations, crowding, size, shared skies) set how much each value counts, so the ranking is a conversation rather than a verdict. The seven-generations view dims what will come down on its own and marks the first 20 in line on the sky. Tap any object to see its orbit, how long it will stay, how much of the Earth it passes over and its place in line.
 
-**Live:** [sofiagallego.com/shared-sky](https://sofiagallego.com/shared-sky/) · by [Sofia Gallego](https://sofiagallego.com)
+**Live:** [sofiagallego.com/shared-sky](https://sofiagallego.com/shared-sky/) · **Paper:** [paper/shared-sky.pdf](paper/shared-sky.pdf) (LaTeX source in `paper/`) · by [Sofia Gallego](https://sofiagallego.com)
 
 **What comes next** (skies uploaded and controlled by the communities who hold them, listening to the sky, and more) is in [FUTURE.md](FUTURE.md).
 
