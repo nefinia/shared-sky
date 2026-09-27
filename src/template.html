@@ -195,7 +195,8 @@ button.step{padding:7px 9px;font-family:var(--mono);font-size:12px;flex:none}
 .fold summary::after{content:"+";color:var(--faint);font-family:var(--mono)}
 .fold[open] summary::after{content:"−"}
 .stack{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-footer{grid-column:1/-1;color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
+footer{color:var(--faint);font-size:12px;padding-top:16px;margin:8px auto 0;border-top:1px solid var(--line);max-width:1600px}
+.about p+p{margin-top:8px}
 footer a,.card a{color:var(--muted)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}body{transition:none}}
@@ -206,7 +207,7 @@ footer a,.card a{color:var(--muted)}
   <header class="masthead">
     <div class="mark">
       <h1>Shared <span>Sky</span></h1>
-      <p class="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">source</a></p>
+      <p class="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">source</a> · <a href="paper/shared-sky.pdf" target="_blank" rel="noopener">paper</a></p>
     </div>
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
     <div class="headtools"><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
@@ -396,12 +397,19 @@ footer a,.card a{color:var(--muted)}
         </div>
       </details>
     </section>
+    <section class="card about" aria-labelledby="hAbout">
+      <p class="eyebrow" id="hAbout">About this project</p>
+      <p class="small">Shared Sky lays the night sky of any place and moment onto the land below it, with constellations from fifteen sky cultures and every tracked object in orbit passing through them. Each star sits over the place where it is overhead, so space debris stops being an abstract number and becomes something crossing your own sky, and your own constellations.</p>
+      <p class="small">The sky is shared by everyone beneath it, and most of the people under it never chose what now crosses it. Shared Sky is about seeing that. Many skies are still missing; they should be added only if their communities choose to, on their terms.</p>
+      <p class="small muted">By Sofia Gallego, CosmoVentures. Made for the YOHAKU hackathon on space debris, AI and Indigenous knowledge.</p>
+      <p class="small"><a href="paper/shared-sky.pdf" target="_blank" rel="noopener">Read the paper (PDF)</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">Source code</a> · <a href="https://github.com/nefinia/shared-sky/blob/main/FUTURE.md" target="_blank" rel="noopener">What comes next</a></p>
+    </section>
   </aside>
 
-  <footer>
-    Orbits: CelesTrak public catalogue via a GitHub mirror, <span id="epochTxt"></span>, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.
-  </footer>
 </div>
+<footer>
+    Orbits: CelesTrak public catalogue via a GitHub mirror, <span id="epochTxt"></span>, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.
+</footer>
 
 <script type="application/json" id="earthdata">__EARTH__</script>
 <script id="threelib">__THREE__</script>
