@@ -500,7 +500,7 @@ en: {
   pctLine:"Debris {d}% · Rocket bodies {r}% · Satellites {s}%",
   timelineLabel:"Timeline{extra} · tap to jump there", first250:" · first 250",
   genHead:"<b>{long}</b> of the {N} tracked objects will likely still be in orbit seven generations from now, about {genH} years. <b>{here}</b> of them pass over the sky of {place}.",
-  skyWord:"sky", artworkCaption:"Artwork: {culture} sky culture (Stellarium, CC BY-SA)",
+  skyWord:"sky", cultureSkyLabel:"{culture} sky", artworkCaption:"Artwork: {culture} sky culture (Stellarium, CC BY-SA)",
   emptyArtFrame:"This frame is kept for artwork by {culture} artists, if and when they choose to share it. The figure's lines come from the source dataset.",
   dayTime:"Daytime", twilight:"Twilight", night:"Night", sunUp:"sun {d}° up", sunBelow:"sun {d}° below horizon",
   illustrativeLandscape:"illustrative landscape",
@@ -604,7 +604,7 @@ es: {
   pctLine:"Basura espacial {d}% · Cuerpos de cohete {r}% · Satélites {s}%",
   timelineLabel:"Cronología{extra} · toca para saltar ahí", first250:" · primeros 250",
   genHead:"<b>{long}</b> de los {N} objetos rastreados probablemente seguirán en órbita dentro de siete generaciones, unos {genH} años. <b>{here}</b> de ellos sobrevuelan el cielo de {place}.",
-  skyWord:"cielo", artworkCaption:"Ilustración: cultura celeste {culture} (Stellarium, CC BY-SA)",
+  skyWord:"cielo", cultureSkyLabel:"Cielo {culture}", artworkCaption:"Ilustración: cultura celeste {culture} (Stellarium, CC BY-SA)",
   emptyArtFrame:"Este espacio se reserva para ilustraciones de artistas {culture}, si y cuando decidan compartirlas. Las líneas de la figura provienen del conjunto de datos original.",
   dayTime:"Día", twilight:"Crepúsculo", night:"Noche", sunUp:"sol a {d}°", sunBelow:"sol a {d}° bajo el horizonte",
   illustrativeLandscape:"paisaje ilustrativo",
@@ -708,7 +708,7 @@ fr: {
   pctLine:"Débris {d}% · Étages de fusée {r}% · Satellites {s}%",
   timelineLabel:"Chronologie{extra} · touchez pour y accéder", first250:" · les 250 premiers",
   genHead:"<b>{long}</b> des {N} objets suivis seront probablement encore en orbite dans sept générations, soit environ {genH} ans. <b>{here}</b> d'entre eux survolent le ciel de {place}.",
-  skyWord:"ciel", artworkCaption:"Illustration : culture céleste {culture} (Stellarium, CC BY-SA)",
+  skyWord:"ciel", cultureSkyLabel:"Ciel {culture}", artworkCaption:"Illustration : culture céleste {culture} (Stellarium, CC BY-SA)",
   emptyArtFrame:"Cet espace est réservé aux illustrations d'artistes {culture}, si et quand ils choisissent de les partager. Les lignes de la figure proviennent du jeu de données source.",
   dayTime:"Jour", twilight:"Crépuscule", night:"Nuit", sunUp:"soleil à {d}°", sunBelow:"soleil à {d}° sous l'horizon",
   illustrativeLandscape:"paysage illustratif",
@@ -2174,7 +2174,7 @@ function arrive(manual){
 }
 function showFigure(){
   const C = CULT[S.cult], k = C && C.cons[S.focus]; if (!k) return;
-  $('figCulture').textContent = `${C.title} ${i18n('skyWord')}`; $('figNat').textContent = k.e; $('figEn').textContent = k.n || '';
+  $('figCulture').textContent = i18n('cultureSkyLabel',{culture:C.title}); $('figNat').textContent = k.e; $('figEn').textContent = k.n || '';
   const fr = $('artFrame'); fr.hidden = C.id === 'western';
   if (k.img && DATA.kimg && DATA.kimg[k.img.f]) fr.innerHTML = `<img alt="Artwork of ${esc(k.e)}" src="data:image/webp;base64,${DATA.kimg[k.img.f]}"><figcaption>${esc(i18n('artworkCaption',{culture:C.title}))}</figcaption>`;
   else fr.innerHTML = `<p class="empty">${esc(i18n('emptyArtFrame',{culture:C.title}))}</p>`;
