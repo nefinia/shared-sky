@@ -1,4 +1,11 @@
 <title>Shared Sky</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-20EEFX7Q6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-20EEFX7Q6N');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;1,400;1,500&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -33,6 +40,9 @@ h1 span{color:var(--ochre)}
 .where .land{font-family:var(--serif);font-size:22px;line-height:1.15;color:var(--text);text-wrap:balance}
 .where .sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .headtools{display:flex;gap:8px;align-items:center}
+.langsw{display:flex;gap:2px;border:1px solid var(--line);border-radius:8px;padding:2px;background:var(--panel)}
+.langsw button{border:none;background:transparent;padding:4px 8px;font-size:11px;font-family:var(--mono);letter-spacing:.03em;border-radius:6px;color:var(--muted);cursor:pointer}
+.langsw button[aria-pressed="true"]{background:var(--panel-2);color:var(--text)}
 
 .app{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:0 28px;max-width:1600px;margin:0 auto;align-items:start}
 .app.closed{grid-template-columns:minmax(0,1fr)}
@@ -195,8 +205,7 @@ button.step{padding:7px 9px;font-family:var(--mono);font-size:12px;flex:none}
 .fold summary::after{content:"+";color:var(--faint);font-family:var(--mono)}
 .fold[open] summary::after{content:"−"}
 .stack{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-footer{color:var(--faint);font-size:12px;padding-top:16px;margin:8px auto 0;border-top:1px solid var(--line);max-width:1600px}
-.about p+p{margin-top:8px}
+footer{grid-column:1/-1;color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
 footer a,.card a{color:var(--muted)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}body{transition:none}}
@@ -207,15 +216,15 @@ footer a,.card a{color:var(--muted)}
   <header class="masthead">
     <div class="mark">
       <h1>Shared <span>Sky</span></h1>
-      <p class="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">source</a> · <a href="paper/shared-sky.pdf" target="_blank" rel="noopener">paper</a></p>
+      <p class="byline" id="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener" id="bylineSrc">source</a></p>
     </div>
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
-    <div class="headtools"><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
+    <div class="headtools"><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
   </header>
   <div class="skywrap">
     <div class="command" role="group" aria-label="Where, when and whose sky">
       <div class="cmd cmd-where">
-        <span class="cmd-label">Where</span>
+        <span class="cmd-label" id="lblWhere">Where</span>
         <div class="cmd-row">
           <div class="searchwrap">
             <input type="text" id="search" placeholder="Search a place, or paste coordinates" autocomplete="off" spellcheck="false" aria-label="Search a place, or paste coordinates or a map link">
@@ -226,7 +235,7 @@ footer a,.card a{color:var(--muted)}
         </div>
       </div>
       <div class="cmd cmd-when">
-        <span class="cmd-label">When <span id="tzName" class="tz"></span></span>
+        <span class="cmd-label"><span id="lblWhen">When</span> <span id="tzName" class="tz"></span></span>
         <div class="cmd-row">
           <input type="datetime-local" id="dt" aria-label="Date and time at this place">
           <button id="bBack" class="step" aria-label="One hour earlier">−1h</button>
@@ -235,7 +244,7 @@ footer a,.card a{color:var(--muted)}
         </div>
       </div>
       <div class="cmd cmd-sky">
-        <span class="cmd-label">Whose sky <span id="skyNote" class="skynote"></span></span>
+        <span class="cmd-label"><span id="lblSky">Whose sky</span> <span id="skyNote" class="skynote"></span></span>
         <div class="cmd-row">
           <select id="culture" aria-label="Sky culture"></select>
           <select id="focusSel" aria-label="Figure"></select>
@@ -259,11 +268,11 @@ footer a,.card a{color:var(--muted)}
       <div class="transport" id="transport" role="group" aria-label="Play time">
         <button id="tPlay" class="tplay" aria-label="Play" aria-pressed="false"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path id="tIcon" d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg></button>
         <span class="ttime" id="tTime">—</span>
-        <select id="tSpeed" aria-label="Playback speed"><option value="1">Real time</option><option value="60">1 min / s</option><option value="600" selected>10 min / s</option><option value="3600">1 hour / s</option></select>
+        <select id="tSpeed" aria-label="Playback speed"><option value="1" id="tSpeedReal">Real time</option><option value="60" id="tSpeed1m">1 min / s</option><option value="600" selected id="tSpeed10m">10 min / s</option><option value="3600" id="tSpeed1h">1 hour / s</option></select>
         <button id="tNight" aria-pressed="false">Play tonight</button>
       </div>
       <div class="arrive" id="arrive">
-        <p class="eyebrow">You are standing in</p>
+        <p class="eyebrow" id="arriveEyebrow">You are standing in</p>
         <p class="arrive-land" id="arriveLand"></p>
         <p class="arrive-sub" id="arriveSub"></p>
         <p class="arrive-line" id="arriveLine">This is your sky tonight.</p>
@@ -273,10 +282,10 @@ footer a,.card a{color:var(--muted)}
     </div>
     <div class="layers" id="layers" hidden></div>
     <div class="legend">
-      <span><i class="dot" style="background:var(--deb)"></i>Debris</span>
-      <span><i class="dot" style="background:var(--rb)"></i>Rocket bodies</span>
-      <span><i class="dot" style="background:var(--pay)"></i>Satellites</span>
-      <span>A line from a dot shows where that object goes next</span>
+      <span><i class="dot" style="background:var(--deb)"></i><span id="legDebris">Debris</span></span>
+      <span><i class="dot" style="background:var(--rb)"></i><span id="legRb">Rocket bodies</span></span>
+      <span><i class="dot" style="background:var(--pay)"></i><span id="legPay">Satellites</span></span>
+      <span id="legLine">A line from a dot shows where that object goes next</span>
       <span id="lensKey" hidden><i class="dot" style="background:transparent;box-shadow:inset 0 0 0 1.5px #CFF5B0;transform:rotate(45deg);border-radius:1px"></i>Seven-generations view: bright dots will still be up in 175 years; a diamond marks the first 20 in line</span>
     </div>
   </div>
@@ -288,37 +297,37 @@ footer a,.card a{color:var(--muted)}
       <figure class="artframe" id="artFrame"></figure>
       <p class="story" id="figStory" hidden></p>
       <details class="fold" id="cultFold">
-        <summary>About this sky culture</summary>
+        <summary id="lblAboutCulture">About this sky culture</summary>
         <p class="small muted" id="cultIntro"></p>
         <p class="small muted" id="cultSource"></p>
-        <p class="missing">Not here yet: <b>Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal, Samburu</b>. We found no open dataset for these skies. They should be added only if those communities choose to share them, and on their terms.</p>
+        <p class="missing" id="missingNote">Not here yet: <b>Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal, Samburu</b>. We found no open dataset for these skies. They should be added only if those communities choose to share them, and on their terms.</p>
       </details>
     </section>
 
     <section class="card" aria-labelledby="hFocus">
       <p class="eyebrow" id="hFocus">Objects passing through</p>
       <div class="row">
-        <label class="f grow">Paths through
-          <select id="scope"><option value="focus">this figure</option><option value="all">every figure of this sky</option></select>
+        <label class="f grow"><span id="lblPathsThrough">Paths through</span>
+          <select id="scope"><option value="focus" id="optScopeFocus">this figure</option><option value="all" id="optScopeAll">every figure of this sky</option></select>
         </label>
-        <label class="f" style="flex:0 1 130px">Look ahead
+        <label class="f" style="flex:0 1 130px"><span id="lblLookAhead1">Look ahead</span>
           <select id="expo">
-            <option value="10" selected>10 minutes</option>
-            <option value="30">30 minutes</option>
-            <option value="60">60 minutes</option>
+            <option value="10" selected id="opt10min">10 minutes</option>
+            <option value="30" id="opt30min">30 minutes</option>
+            <option value="60" id="opt60min">60 minutes</option>
           </select>
         </label>
       </div>
       <div id="focusOut" class="small muted">Tracing orbits…</div>
       <details class="fold">
-        <summary>More options</summary>
+        <summary id="lblMoreOptions">More options</summary>
         <div class="row" style="margin-top:8px"><button id="bBest">Best time tonight</button><button id="bAll" aria-pressed="false">Also show objects that only pass nearby</button></div>
-        <p class="small muted" style="margin-top:8px">Each coloured path is a real object crossing the figure. Bright where it is in sunlight, faint where it is in Earth's shadow.</p>
+        <p class="small muted" style="margin-top:8px" id="pPathsDesc">Each coloured path is a real object crossing the figure. Bright where it is in sunlight, faint where it is in Earth's shadow.</p>
       </details>
     </section>
 
     <section class="card" id="passCard" aria-labelledby="hPass">
-      <p class="eyebrow">Overhead</p>
+      <p class="eyebrow" id="lblOverhead">Overhead</p>
       <h2 id="hPass">Does it pass over <span id="passPlace"></span>?</h2>
       <div id="passOut" class="small"></div>
     </section>
@@ -327,9 +336,9 @@ footer a,.card a{color:var(--muted)}
       <p class="eyebrow" id="hObj">What's up there now</p>
       <div class="toggles" id="typeToggles"></div>
       <div class="stats">
-        <div class="stat"><span class="n" id="nDeb">–</span><span class="l"><i class="dot" style="background:var(--deb)"></i>Debris</span></div>
-        <div class="stat"><span class="n" id="nRb">–</span><span class="l"><i class="dot" style="background:var(--rb)"></i>Rocket bodies</span></div>
-        <div class="stat"><span class="n" id="nPay">–</span><span class="l"><i class="dot" style="background:var(--pay)"></i>Satellites</span></div>
+        <div class="stat"><span class="n" id="nDeb">–</span><span class="l"><i class="dot" style="background:var(--deb)"></i><span id="lblStatDeb">Debris</span></span></div>
+        <div class="stat"><span class="n" id="nRb">–</span><span class="l"><i class="dot" style="background:var(--rb)"></i><span id="lblStatRb">Rocket bodies</span></span></div>
+        <div class="stat"><span class="n" id="nPay">–</span><span class="l"><i class="dot" style="background:var(--pay)"></i><span id="lblStatPay">Satellites</span></span></div>
       </div>
       <div id="selBox" hidden>
         <p class="eyebrow" style="margin-top:4px">Selected object</p>
@@ -339,56 +348,56 @@ footer a,.card a{color:var(--muted)}
     </section>
 
     <section class="card" id="genCard" aria-labelledby="hGen">
-      <p class="eyebrow">Seven generations in orbit</p>
+      <p class="eyebrow" id="lblGenEyebrow">Seven generations in orbit</p>
       <h2 id="hGen">Which pieces should we take responsibility for first?</h2>
       <p class="small" id="genHead">Working out how long each object will stay up…</p>
       <div class="row"><button id="bLens" aria-pressed="false">Show what outlives seven generations</button></div>
-      <p class="small muted">The answer depends on what we value. Each slider sets how much one thing counts, and the list re-ranks.</p>
+      <p class="small muted" id="pGenIntro">The answer depends on what we value. Each slider sets how much one thing counts, and the list re-ranks.</p>
       <div class="stack" id="genW">
-        <label class="f">Future generations · how long it will stay up <input type="range" min="0" max="2" step="0.25" value="1" data-w="t"></label>
-        <label class="f">Crowding · how busy its height band is <input type="range" min="0" max="2" step="0.25" value="1" data-w="c"></label>
-        <label class="f">Size · how many pieces it could break into <input type="range" min="0" max="2" step="0.25" value="1" data-w="m"></label>
-        <label class="f">Shared skies · how much of the Earth it passes over <input type="range" min="0" max="2" step="0.25" value="1" data-w="a"></label>
+        <label class="f"><span id="lblGenT">Future generations · how long it will stay up</span> <input type="range" min="0" max="2" step="0.25" value="1" data-w="t"></label>
+        <label class="f"><span id="lblGenC">Crowding · how busy its height band is</span> <input type="range" min="0" max="2" step="0.25" value="1" data-w="c"></label>
+        <label class="f"><span id="lblGenM">Size · how many pieces it could break into</span> <input type="range" min="0" max="2" step="0.25" value="1" data-w="m"></label>
+        <label class="f"><span id="lblGenA">Shared skies · how much of the Earth it passes over</span> <input type="range" min="0" max="2" step="0.25" value="1" data-w="a"></label>
       </div>
       <div class="toggles" style="margin-top:10px"><button id="bGenHere" aria-pressed="false">Only what crosses this sky</button><button id="bGenPay" aria-pressed="false">Include satellites</button></div>
       <div id="genOut"></div>
       <details class="fold">
-        <summary>How this is worked out</summary>
-        <p class="small muted" style="margin-top:8px"><b>Future generations:</b> a rule-of-thumb decay time from the object's lowest height (roughly a year at 400 km, 25–30 years at 600 km, 150 years at 750 km, many centuries above 900 km). It counts up to seven generations of 25 years, the horizon of the seven-generations principle. Real lifetimes vary several-fold with solar activity and each object's shape and mass.</p>
-        <p class="small muted"><b>Crowding:</b> how many tracked objects share its height band, per unit of volume. More neighbours, more chances of a collision.</p>
-        <p class="small muted"><b>Size:</b> a typical mass for its kind (named for the heaviest rocket-stage families, such as the ~9-tonne SL-16; otherwise ~1.5 t for a rocket body, ~1 t for a satellite, ~10 kg for a fragment), raised to the power 0.75, because that is how the number of fragments from a collision grows with mass in NASA's standard breakup model.</p>
-        <p class="small muted"><b>Shared skies:</b> the share of the Earth's surface its orbit passes over, from its tilt.</p>
-        <p class="small muted">The score multiplies the four, each raised to its slider's weight; a weight of zero leaves that value out. Satellites are left out by default because the public catalogue does not say which still work, though many, like Envisat, do not. These are open, rough estimates for thinking together, not an official risk rating.</p>
+        <summary id="lblHowWorkedOut">How this is worked out</summary>
+        <p class="small muted" style="margin-top:8px" id="pGenT"><b>Future generations:</b> a rule-of-thumb decay time from the object's lowest height (roughly a year at 400 km, 25–30 years at 600 km, 150 years at 750 km, many centuries above 900 km). It counts up to seven generations of 25 years, the horizon this challenge asks us to care for. Real lifetimes vary several-fold with solar activity and each object's shape and mass.</p>
+        <p class="small muted" id="pGenC"><b>Crowding:</b> how many tracked objects share its height band, per unit of volume. More neighbours, more chances of a collision.</p>
+        <p class="small muted" id="pGenM"><b>Size:</b> a typical mass for its kind (named for the heaviest rocket-stage families, such as the ~9-tonne SL-16; otherwise ~1.5 t for a rocket body, ~1 t for a satellite, ~10 kg for a fragment), raised to the power 0.75, because that is how the number of fragments from a collision grows with mass in NASA's standard breakup model.</p>
+        <p class="small muted" id="pGenA"><b>Shared skies:</b> the share of the Earth's surface its orbit passes over, from its tilt.</p>
+        <p class="small muted" id="pGenScore">The score multiplies the four, each raised to its slider's weight; a weight of zero leaves that value out. Satellites are left out by default because the public catalogue does not say which still work, though many, like Envisat, do not. These are open, rough estimates for thinking together, not an official risk rating.</p>
       </details>
     </section>
 
     <section class="card">
       <details class="fold">
-        <summary>Place and time details</summary>
+        <summary id="lblPlaceTimeDetails">Place and time details</summary>
         <div class="stack">
-          <label class="f">Featured places <select id="place"></select></label>
+          <label class="f"><span id="lblFeaturedPlaces">Featured places</span> <select id="place"></select></label>
           <div class="row">
-            <label class="f grow">Latitude °<input type="number" id="lat" step="0.01" min="-90" max="90"></label>
-            <label class="f grow">Longitude °<input type="number" id="lon" step="0.01" min="-180" max="180"></label>
+            <label class="f grow"><span id="lblLat">Latitude °</span><input type="number" id="lat" step="0.01" min="-90" max="90"></label>
+            <label class="f grow"><span id="lblLon">Longitude °</span><input type="number" id="lon" step="0.01" min="-180" max="180"></label>
           </div>
           <button id="bHome">Back to me on the globe</button>
           <div class="time" id="timeLocal">—</div>
           <div class="sub" id="timeUtc">—</div>
-          <label class="f">Scrub 24 hours either side <input type="range" id="slider" aria-label="Scrub 24 hours either side of the chosen moment"></label>
+          <label class="f"><span id="lblScrub">Scrub 24 hours either side</span> <input type="range" id="slider" aria-label="Scrub 24 hours either side of the chosen moment"></label>
           <div class="row"><button id="bPlay" aria-pressed="false">Play</button>
-            <select id="speed" aria-label="Playback speed" style="width:auto;flex:1 1 90px"><option value="1">Real time</option><option value="60">1 min / s</option><option value="600" selected>10 min / s</option><option value="3600">1 hour / s</option></select></div>
+            <select id="speed" aria-label="Playback speed" style="width:auto;flex:1 1 90px"><option value="1" id="speedReal">Real time</option><option value="60" id="speed1m">1 min / s</option><option value="600" selected id="speed10m">10 min / s</option><option value="3600" id="speed1h">1 hour / s</option></select></div>
         </div>
       </details>
     </section>
 
     <section class="card">
       <details class="fold">
-        <summary>Crossings over the next hours</summary>
+        <summary id="lblCrossingsSummary">Crossings over the next hours</summary>
         <div class="stack">
           <div id="nowCross" class="small muted"></div>
           <div class="row">
-            <label class="f grow">Look ahead
-              <select id="scanDur"><option value="1">1 hour</option><option value="3">3 hours</option><option value="6">6 hours</option></select>
+            <label class="f grow"><span id="lblLookAhead2">Look ahead</span>
+              <select id="scanDur"><option value="1" id="optScan1h">1 hour</option><option value="3" id="optScan3h">3 hours</option><option value="6" id="optScan6h">6 hours</option></select>
             </label>
             <button class="primary" id="bScan" style="align-self:flex-end">Find crossings</button>
           </div>
@@ -397,19 +406,12 @@ footer a,.card a{color:var(--muted)}
         </div>
       </details>
     </section>
-    <section class="card about" aria-labelledby="hAbout">
-      <p class="eyebrow" id="hAbout">About this project</p>
-      <p class="small">Shared Sky lays the night sky of any place and moment onto the land below it, with constellations from fifteen sky cultures and every tracked object in orbit passing through them. Each star sits over the place where it is overhead, so space debris stops being an abstract number and becomes something crossing your own sky, and your own constellations.</p>
-      <p class="small">The sky is shared by everyone beneath it, and most of the people under it never chose what now crosses it. Shared Sky is about seeing that. Many skies are still missing; they should be added only if their communities choose to, on their terms.</p>
-      <p class="small muted">By Sofia Gallego, CosmoVentures. Made for the YOHAKU hackathon on space debris, AI and Indigenous knowledge.</p>
-      <p class="small"><a href="paper/shared-sky.pdf" target="_blank" rel="noopener">Read the paper (PDF)</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">Source code</a> · <a href="https://github.com/nefinia/shared-sky/blob/main/FUTURE.md" target="_blank" rel="noopener">What comes next</a></p>
-    </section>
   </aside>
 
-</div>
-<footer>
+  <footer id="footerText">
     Orbits: CelesTrak public catalogue via a GitHub mirror, <span id="epochTxt"></span>, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.
-</footer>
+  </footer>
+</div>
 
 <script type="application/json" id="earthdata">__EARTH__</script>
 <script id="threelib">__THREE__</script>
@@ -418,9 +420,331 @@ footer a,.card a{color:var(--muted)}
 <script>
 (() => {
 const $ = id => document.getElementById(id);
+
+// ---------- i18n ----------
+const TR = {
+en: {
+  bylineTag:"The sky above a place, laid onto its land", bylineBy:"by", bylineSrc:"source",
+  hideTools:"Hide tools", showTools:"Show tools",
+  lblWhere:"Where", lblWhen:"When", lblSky:"Whose sky",
+  searchPh:"Search a place, or paste coordinates", searchAria:"Search a place, or paste coordinates or a map link",
+  pickTitle:"Tap the map to set your spot", locateTitle:"Use my location", dtAria:"Date and time at this place",
+  backAria:"One hour earlier", fwdAria:"One hour later", now:"Now",
+  modeMirror:"Sky on the land", modeLand:"Standing there · 3D", modeFocus:"One figure", modeSky:"Whole sky",
+  saveImage:"Save image",
+  land3dAria:"3D view: the sky above a landscape at the chosen place. Drag to look around, scroll to zoom.",
+  skyAria:"All-sky view. North at top, east at left, zenith in the centre.",
+  optReal:"Real time", opt1m:"1 min / s", opt10m:"10 min / s", opt1h:"1 hour / s",
+  playTonight:"Play tonight", stopNight:"Stop the night",
+  youAreStanding:"You are standing in", arriveLine:"This is your sky tonight.", arriveLineMoment:"This is your sky at this moment.", lookUp:"Look up",
+  loading:"Loading {n} orbits and {m} sky cultures…", preparingOrbits:"Preparing {n} orbits…",
+  browserUnsupported:"This browser could not unpack the data (it needs DecompressionStream). Try a current Chrome, Edge, Firefox or Safari.",
+  legDebris:"Debris", legRb:"Rocket bodies", legPay:"Satellites",
+  legLine:"A line from a dot shows where that object goes next",
+  lensKey:"Seven-generations view: bright dots will still be up in 175 years; a diamond marks the first 20 in line",
+  aboutCulture:"About this sky culture",
+  missingNote:"Not here yet: <b>Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal, Samburu</b>. We found no open dataset for these skies. They should be added only if those communities choose to share them, and on their terms.",
+  objectsPassingThrough:"Objects passing through", pathsThrough:"Paths through",
+  optScopeFocus:"this figure", optScopeAll:"every figure of this sky",
+  lookAhead:"Look ahead", opt10min:"10 minutes", opt30min:"30 minutes", opt60min:"60 minutes",
+  tracingOrbits:"Tracing orbits…", tracingEvery:"Tracing every object over your sky…",
+  debrisAvailable:"Debris positions are available from {from} to {to}, around the date the orbits were measured. Stars and figures work for any date.",
+  moreOptions:"More options", bestTimeTonight:"Best time tonight", alsoShowNearby:"Also show objects that only pass nearby",
+  pathsDesc:"Each coloured path is a real object crossing the figure. Bright where it is in sunlight, faint where it is in Earth's shadow.",
+  overhead:"Overhead", doesItPassOver:"Does it pass over {place}?",
+  whatsUpNow:"What's up there now", selHint:"Tap a dot or a path to see what it is and who launched it.",
+  sevenGenEyebrow:"Seven generations in orbit", hGen:"Which pieces should we take responsibility for first?",
+  workingOut:"Working out how long each object will stay up…", showLens:"Show what outlives seven generations",
+  genIntro:"The answer depends on what we value. Each slider sets how much one thing counts, and the list re-ranks.",
+  genT:"Future generations · how long it will stay up", genC:"Crowding · how busy its height band is",
+  genM:"Size · how many pieces it could break into", genA:"Shared skies · how much of the Earth it passes over",
+  onlyHere:"Only what crosses this sky", includeSat:"Include satellites",
+  howWorkedOut:"How this is worked out",
+  boldFutureGen:"Future generations:", textFutureGen:"a rule-of-thumb decay time from the object's lowest height (roughly a year at 400 km, 25–30 years at 600 km, 150 years at 750 km, many centuries above 900 km). It counts up to seven generations of 25 years, the horizon this challenge asks us to care for. Real lifetimes vary several-fold with solar activity and each object's shape and mass.",
+  boldCrowding:"Crowding:", textCrowding:"how many tracked objects share its height band, per unit of volume. More neighbours, more chances of a collision.",
+  boldSize:"Size:", textSize:"a typical mass for its kind (named for the heaviest rocket-stage families, such as the ~9-tonne SL-16; otherwise ~1.5 t for a rocket body, ~1 t for a satellite, ~10 kg for a fragment), raised to the power 0.75, because that is how the number of fragments from a collision grows with mass in NASA's standard breakup model.",
+  boldSharedSkies:"Shared skies:", textSharedSkies:"the share of the Earth's surface its orbit passes over, from its tilt.",
+  genScoreText:"The score multiplies the four, each raised to its slider's weight; a weight of zero leaves that value out. Satellites are left out by default because the public catalogue does not say which still work, though many, like Envisat, do not. These are open, rough estimates for thinking together, not an official risk rating.",
+  placeTimeDetails:"Place and time details", featuredPlaces:"Featured places", latitude:"Latitude °", longitude:"Longitude °",
+  backToMe:"Back to me on the globe", scrub:"Scrub 24 hours either side", play:"Play", pause:"Pause",
+  crossingsSummary:"Crossings over the next hours",
+  opt1hCross:"1 hour", opt3h:"3 hours", opt6h:"6 hours", findCrossings:"Find crossings",
+  footerText:"Orbits: CelesTrak public catalogue via a GitHub mirror, {epoch}, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.",
+  epochTxt:"orbits measured up to {date} UTC",
+  chipWarnFar:"No debris positions for this date · stars and figures only",
+  chipWarnApprox:"Debris positions are approximate this far from the data date",
+  typeSatellite:"Satellite", typeRocket:"Rocket body", typeDebris:"Debris", typeUnknown:"Unknown",
+  alreadyComing:"already coming down", underYear:"under a year", aboutYear:"about a year",
+  aboutYearsN:"about {n} years", thousandsOrMore:"thousands of years or more",
+  outlivesSeven:" · outlives seven generations", aboutGenN:" · about {n} generations", aboutGen1:" · about 1 generation",
+  kvName:"Name", kvType:"Type", kvRegisteredTo:"Registered to", kvLaunched:"Launched", kvCatalogue:"Catalogue no.",
+  kvPosition:"Position", kvFlyingOver:"Flying over", unknownVal:"unknown",
+  belowHorizon:"below horizon", inSunlight:"in sunlight", inShadow:"in Earth's shadow",
+  upAzimuth:"{alt}° up, azimuth {az}° · {lit}",
+  kvOrbit:"Orbit", kvStaysUp:"Stays up", roughSuffix:" (rough)", kvPassesOver:"Passes over", kvInLine:"In line",
+  inLineOf:"#{r} of {n} with the current weights",
+  coverWhole:"the whole Earth", coverBand:"the ground between {s}°S and {n}°N, {pct}% of the Earth's surface",
+  registeredTo:"Registered to:", firstInLine:"First in line · tap one to find it",
+  first20InLine:"The first 20 in line:", nothingMatches:"Nothing matches these choices.",
+  crossingRightNow:"Crossing a figure line right now (ringed on the sky):",
+  nothingWithin:"Right now, nothing is within 0.4° of a {title} figure line.",
+  yourSky:"your sky", thisView:"this view", figuresOfSky:"the figures of the {title} sky",
+  focusFromTo:"From {t0} to {end} over {place}, <b>{n}</b> objects crossed {target}.",
+  noneTouched:" None touched {target}.",
+  passedThrough:" <b>{n}</b> passed through {target}: {deb} debris, {rb} rocket bodies, {sat} satellites.",
+  byFigure:"By figure", launchedWord:" · launched {y}",
+  followingEvery:"Following every tracked object for {h} h over {place}…",
+  onlyWithin7:"Debris positions are only available within 7 days of the orbit data.",
+  noCrossingsNext:"No crossings of {title} figures in the next {h} h. Try a darker hour or a longer window.",
+  inNextH:"In the next <b>{h} h</b> over {place}: <b>{tot}</b> crossings of {title} figure lines by <b>{objs}</b> objects. Each crossing point is marked in red on the sky.",
+  pctLine:"Debris {d}% · Rocket bodies {r}% · Satellites {s}%",
+  timelineLabel:"Timeline{extra} · tap to jump there", first250:" · first 250",
+  genHead:"<b>{long}</b> of the {N} tracked objects will likely still be in orbit seven generations from now, about {genH} years. <b>{here}</b> of them pass over the sky of {place}.",
+},
+es: {
+  bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
+  hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas",
+  lblWhere:"Dónde", lblWhen:"Cuándo", lblSky:"Cielo de quién",
+  searchPh:"Busca un lugar o pega coordenadas", searchAria:"Busca un lugar, o pega coordenadas o un enlace de mapa",
+  pickTitle:"Toca el mapa para fijar tu ubicación", locateTitle:"Usar mi ubicación", dtAria:"Fecha y hora en este lugar",
+  backAria:"Una hora antes", fwdAria:"Una hora después", now:"Ahora",
+  modeMirror:"El cielo sobre la tierra", modeLand:"De pie allí · 3D", modeFocus:"Una figura", modeSky:"Todo el cielo",
+  saveImage:"Guardar imagen",
+  land3dAria:"Vista 3D: el cielo sobre un paisaje en el lugar elegido. Arrastra para mirar alrededor, usa la rueda para hacer zoom.",
+  skyAria:"Vista de todo el cielo. Norte arriba, este a la izquierda, cenit en el centro.",
+  optReal:"Tiempo real", opt1m:"1 min/s", opt10m:"10 min/s", opt1h:"1 h/s",
+  playTonight:"Reproducir esta noche", stopNight:"Detener la noche",
+  youAreStanding:"Estás de pie en", arriveLine:"Este es tu cielo esta noche.", arriveLineMoment:"Este es tu cielo en este momento.", lookUp:"Mira hacia arriba",
+  loading:"Cargando {n} órbitas y {m} culturas celestes…", preparingOrbits:"Preparando {n} órbitas…",
+  browserUnsupported:"Este navegador no pudo descomprimir los datos (necesita DecompressionStream). Prueba con una versión actual de Chrome, Edge, Firefox o Safari.",
+  legDebris:"Basura espacial", legRb:"Cuerpos de cohete", legPay:"Satélites",
+  legLine:"Una línea desde un punto muestra hacia dónde va ese objeto",
+  lensKey:"Vista de siete generaciones: los puntos brillantes seguirán en órbita dentro de 175 años; un rombo marca los primeros 20 en la lista",
+  aboutCulture:"Sobre esta cultura celeste",
+  missingNote:"Todavía no están aquí: <b>Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal, Samburu</b>. No encontramos ningún conjunto de datos abierto para estos cielos. Deberían añadirse solo si esas comunidades deciden compartirlos, y en sus propios términos.",
+  objectsPassingThrough:"Objetos que pasan por aquí", pathsThrough:"Trayectorias por",
+  optScopeFocus:"esta figura", optScopeAll:"todas las figuras de este cielo",
+  lookAhead:"Mirar hacia adelante", opt10min:"10 minutos", opt30min:"30 minutos", opt60min:"60 minutos",
+  tracingOrbits:"Trazando órbitas…", tracingEvery:"Trazando cada objeto sobre tu cielo…",
+  debrisAvailable:"Las posiciones de la basura espacial están disponibles desde el {from} hasta el {to}, en torno a la fecha en que se midieron las órbitas. Las estrellas y figuras funcionan para cualquier fecha.",
+  moreOptions:"Más opciones", bestTimeTonight:"Mejor momento esta noche", alsoShowNearby:"Mostrar también objetos que solo pasan cerca",
+  pathsDesc:"Cada trayectoria de color es un objeto real que cruza la figura. Brillante donde está bajo la luz del sol, tenue donde está en la sombra de la Tierra.",
+  overhead:"En lo alto", doesItPassOver:"¿Pasa sobre {place}?",
+  whatsUpNow:"Qué hay ahí arriba ahora", selHint:"Toca un punto o una trayectoria para ver qué es y quién lo lanzó.",
+  sevenGenEyebrow:"Siete generaciones en órbita", hGen:"¿De qué piezas deberíamos ocuparnos primero?",
+  workingOut:"Calculando cuánto tiempo permanecerá cada objeto en órbita…", showLens:"Mostrar lo que sobrevive siete generaciones",
+  genIntro:"La respuesta depende de lo que valoremos. Cada control define cuánto cuenta cada cosa, y la lista se reordena.",
+  genT:"Generaciones futuras · cuánto tiempo permanecerá en órbita", genC:"Congestión · cuán concurrida está su franja de altura",
+  genM:"Tamaño · en cuántos fragmentos podría romperse", genA:"Cielos compartidos · cuánto de la Tierra sobrevuela",
+  onlyHere:"Solo lo que cruza este cielo", includeSat:"Incluir satélites",
+  howWorkedOut:"Cómo se calcula esto",
+  boldFutureGen:"Generaciones futuras:", textFutureGen:"una estimación aproximada del tiempo de caída según la altura más baja del objeto (alrededor de un año a 400 km, 25–30 años a 600 km, 150 años a 750 km, varios siglos por encima de 900 km). Se cuenta hasta siete generaciones de 25 años, el horizonte que este desafío nos pide cuidar. Las vidas reales varían varias veces según la actividad solar y la forma y masa de cada objeto.",
+  boldCrowding:"Congestión:", textCrowding:"cuántos objetos rastreados comparten su franja de altura, por unidad de volumen. Más vecinos, más posibilidades de colisión.",
+  boldSize:"Tamaño:", textSize:"una masa típica según su tipo (según las familias de etapas de cohete más pesadas, como el SL-16 de ~9 toneladas; si no, ~1,5 t para una etapa de cohete, ~1 t para un satélite, ~10 kg para un fragmento), elevada a la potencia 0,75, porque así crece el número de fragmentos de una colisión con la masa en el modelo estándar de fragmentación de la NASA.",
+  boldSharedSkies:"Cielos compartidos:", textSharedSkies:"la proporción de la superficie terrestre que sobrevuela su órbita, según su inclinación.",
+  genScoreText:"La puntuación multiplica los cuatro valores, cada uno elevado al peso de su control; un peso de cero deja ese valor fuera. Los satélites se excluyen por defecto porque el catálogo público no indica cuáles siguen funcionando, aunque muchos, como Envisat, no lo hacen. Son estimaciones abiertas y aproximadas para pensar juntos, no una calificación oficial de riesgo.",
+  placeTimeDetails:"Detalles de lugar y hora", featuredPlaces:"Lugares destacados", latitude:"Latitud °", longitude:"Longitud °",
+  backToMe:"Volver a mi posición en el globo", scrub:"Desplazar 24 horas a cada lado", play:"Reproducir", pause:"Pausa",
+  crossingsSummary:"Cruces en las próximas horas",
+  opt1hCross:"1 hora", opt3h:"3 horas", opt6h:"6 horas", findCrossings:"Buscar cruces",
+  footerText:"Órbitas: catálogo público de CelesTrak vía un espejo en GitHub, {epoch}, propagadas con SGP4 (satellite.js). Los propietarios de los objetos provienen del SATCAT de CelesTrak. Constelaciones: culturas celestes de Stellarium (cada una bajo su propia licencia, ver Código). Solo se rastrean objetos de más de unos 10 cm; no se muestran los millones de fragmentos más pequeños. Las posiciones lejos de la fecha de los datos son aproximadas.",
+  epochTxt:"órbitas medidas hasta el {date} UTC",
+  chipWarnFar:"No hay posiciones de basura espacial para esta fecha · solo estrellas y figuras",
+  chipWarnApprox:"Las posiciones de la basura espacial son aproximadas a esta distancia de la fecha de los datos",
+  typeSatellite:"Satélite", typeRocket:"Etapa de cohete", typeDebris:"Basura espacial", typeUnknown:"Desconocido",
+  alreadyComing:"ya está cayendo", underYear:"menos de un año", aboutYear:"cerca de un año",
+  aboutYearsN:"unos {n} años", thousandsOrMore:"miles de años o más",
+  outlivesSeven:" · sobrevive siete generaciones", aboutGenN:" · unas {n} generaciones", aboutGen1:" · alrededor de 1 generación",
+  kvName:"Nombre", kvType:"Tipo", kvRegisteredTo:"Registrado en", kvLaunched:"Lanzado", kvCatalogue:"N.º de catálogo",
+  kvPosition:"Posición", kvFlyingOver:"Sobrevolando", unknownVal:"desconocido",
+  belowHorizon:"bajo el horizonte", inSunlight:"bajo el sol", inShadow:"en la sombra de la Tierra",
+  upAzimuth:"{alt}° de altura, azimut {az}° · {lit}",
+  kvOrbit:"Órbita", kvStaysUp:"Permanece en órbita", roughSuffix:" (aproximado)", kvPassesOver:"Sobrevuela", kvInLine:"En la lista",
+  inLineOf:"n.º {r} de {n} con los pesos actuales",
+  coverWhole:"toda la Tierra", coverBand:"el terreno entre {s}°S y {n}°N, el {pct}% de la superficie terrestre",
+  registeredTo:"Registrado en:", firstInLine:"Primeros en la lista · toca uno para encontrarlo",
+  first20InLine:"Los primeros 20 en la lista:", nothingMatches:"Nada coincide con estas opciones.",
+  crossingRightNow:"Cruzando una línea de la figura ahora mismo (marcado en el cielo):",
+  nothingWithin:"Ahora mismo, nada está a menos de 0,4° de una línea de figura de {title}.",
+  yourSky:"tu cielo", thisView:"esta vista", figuresOfSky:"las figuras del cielo {title}",
+  focusFromTo:"Desde las {t0} hasta las {end} sobre {place}, <b>{n}</b> objetos cruzaron {target}.",
+  noneTouched:" Ninguno tocó {target}.",
+  passedThrough:" <b>{n}</b> pasaron por {target}: {deb} basura espacial, {rb} cuerpos de cohete, {sat} satélites.",
+  byFigure:"Por figura", launchedWord:" · lanzado en {y}",
+  followingEvery:"Siguiendo cada objeto rastreado durante {h} h sobre {place}…",
+  onlyWithin7:"Las posiciones de la basura espacial solo están disponibles dentro de los 7 días de los datos orbitales.",
+  noCrossingsNext:"No hay cruces de figuras de {title} en las próximas {h} h. Prueba una hora más oscura o una ventana más larga.",
+  inNextH:"En las próximas <b>{h} h</b> sobre {place}: <b>{tot}</b> cruces de líneas de figuras de {title} por <b>{objs}</b> objetos. Cada punto de cruce está marcado en rojo en el cielo.",
+  pctLine:"Basura espacial {d}% · Cuerpos de cohete {r}% · Satélites {s}%",
+  timelineLabel:"Cronología{extra} · toca para saltar ahí", first250:" · primeros 250",
+  genHead:"<b>{long}</b> de los {N} objetos rastreados probablemente seguirán en órbita dentro de siete generaciones, unos {genH} años. <b>{here}</b> de ellos sobrevuelan el cielo de {place}.",
+},
+fr: {
+  bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
+  hideTools:"Masquer les outils", showTools:"Afficher les outils",
+  lblWhere:"Où", lblWhen:"Quand", lblSky:"Quel ciel",
+  searchPh:"Cherchez un lieu ou collez des coordonnées", searchAria:"Cherchez un lieu, ou collez des coordonnées ou un lien de carte",
+  pickTitle:"Touchez la carte pour définir votre position", locateTitle:"Utiliser ma position", dtAria:"Date et heure à cet endroit",
+  backAria:"Une heure plus tôt", fwdAria:"Une heure plus tard", now:"Maintenant",
+  modeMirror:"Le ciel sur la terre", modeLand:"Sur place · 3D", modeFocus:"Une figure", modeSky:"Tout le ciel",
+  saveImage:"Enregistrer l'image",
+  land3dAria:"Vue 3D : le ciel au-dessus d'un paysage à l'endroit choisi. Faites glisser pour regarder autour, molette pour zoomer.",
+  skyAria:"Vue du ciel entier. Nord en haut, est à gauche, zénith au centre.",
+  optReal:"Temps réel", opt1m:"1 min/s", opt10m:"10 min/s", opt1h:"1 h/s",
+  playTonight:"Rejouer cette nuit", stopNight:"Arrêter la nuit",
+  youAreStanding:"Vous êtes debout à", arriveLine:"Voici votre ciel ce soir.", arriveLineMoment:"Voici votre ciel en ce moment.", lookUp:"Levez les yeux",
+  loading:"Chargement de {n} orbites et {m} cultures célestes…", preparingOrbits:"Préparation de {n} orbites…",
+  browserUnsupported:"Ce navigateur n'a pas pu décompresser les données (DecompressionStream est requis). Essayez une version récente de Chrome, Edge, Firefox ou Safari.",
+  legDebris:"Débris", legRb:"Étages de fusée", legPay:"Satellites",
+  legLine:"Une ligne partant d'un point indique où va cet objet ensuite",
+  lensKey:"Vue des sept générations : les points brillants seront encore en orbite dans 175 ans ; un losange marque les 20 premiers de la liste",
+  aboutCulture:"À propos de cette culture céleste",
+  missingNote:"Pas encore ici : <b>Mapuche, Lakota, Maya Kaqchikel, Shuar, Gadigal, Samburu</b>. Nous n'avons trouvé aucun jeu de données ouvert pour ces ciels. Ils ne devraient être ajoutés que si ces communautés choisissent de les partager, et selon leurs propres conditions.",
+  objectsPassingThrough:"Objets qui traversent", pathsThrough:"Trajectoires à travers",
+  optScopeFocus:"cette figure", optScopeAll:"toutes les figures de ce ciel",
+  lookAhead:"Regarder à l'avance", opt10min:"10 minutes", opt30min:"30 minutes", opt60min:"60 minutes",
+  tracingOrbits:"Calcul des trajectoires…", tracingEvery:"Calcul de tous les objets au-dessus de votre ciel…",
+  debrisAvailable:"Les positions des débris sont disponibles du {from} au {to}, autour de la date de mesure des orbites. Les étoiles et les figures fonctionnent pour n'importe quelle date.",
+  moreOptions:"Plus d'options", bestTimeTonight:"Meilleur moment ce soir", alsoShowNearby:"Afficher aussi les objets qui ne font que passer à proximité",
+  pathsDesc:"Chaque trajectoire colorée est un objet réel qui traverse la figure. Vive là où il est au soleil, faible là où il est dans l'ombre de la Terre.",
+  overhead:"Au-dessus", doesItPassOver:"Passe-t-il au-dessus de {place} ?",
+  whatsUpNow:"Ce qui est là-haut maintenant", selHint:"Touchez un point ou une trajectoire pour voir ce que c'est et qui l'a lancé.",
+  sevenGenEyebrow:"Sept générations en orbite", hGen:"De quelles pièces devrions-nous nous occuper en premier ?",
+  workingOut:"Calcul de la durée pendant laquelle chaque objet restera en orbite…", showLens:"Afficher ce qui survit à sept générations",
+  genIntro:"La réponse dépend de ce que nous valorisons. Chaque curseur définit le poids de chaque facteur, et la liste se réordonne.",
+  genT:"Générations futures · combien de temps il restera en orbite", genC:"Encombrement · à quel point sa tranche d'altitude est fréquentée",
+  genM:"Taille · en combien de fragments il pourrait se briser", genA:"Ciels partagés · quelle part de la Terre il survole",
+  onlyHere:"Seulement ce qui traverse ce ciel", includeSat:"Inclure les satellites",
+  howWorkedOut:"Comment cela est calculé",
+  boldFutureGen:"Générations futures :", textFutureGen:"une estimation approximative du temps de désorbitation selon l'altitude la plus basse de l'objet (environ un an à 400 km, 25–30 ans à 600 km, 150 ans à 750 km, plusieurs siècles au-delà de 900 km). Le calcul va jusqu'à sept générations de 25 ans, l'horizon que ce défi nous demande de considérer. Les durées réelles varient fortement selon l'activité solaire et la forme et la masse de chaque objet.",
+  boldCrowding:"Encombrement :", textCrowding:"combien d'objets suivis partagent sa tranche d'altitude, par unité de volume. Plus de voisins, plus de risques de collision.",
+  boldSize:"Taille :", textSize:"une masse typique selon son genre (d'après les familles d'étages de fusée les plus lourdes, comme le SL-16 d'environ 9 tonnes ; sinon ~1,5 t pour un étage de fusée, ~1 t pour un satellite, ~10 kg pour un fragment), élevée à la puissance 0,75, car c'est ainsi que le nombre de fragments d'une collision croît avec la masse dans le modèle standard de fragmentation de la NASA.",
+  boldSharedSkies:"Ciels partagés :", textSharedSkies:"la part de la surface terrestre que son orbite survole, déterminée par son inclinaison.",
+  genScoreText:"Le score multiplie les quatre valeurs, chacune élevée au poids de son curseur ; un poids de zéro exclut cette valeur. Les satellites sont exclus par défaut car le catalogue public n'indique pas lesquels fonctionnent encore, bien que beaucoup, comme Envisat, ne fonctionnent plus. Ce sont des estimations ouvertes et approximatives pour réfléchir ensemble, pas une évaluation officielle du risque.",
+  placeTimeDetails:"Détails du lieu et de l'heure", featuredPlaces:"Lieux à découvrir", latitude:"Latitude °", longitude:"Longitude °",
+  backToMe:"Revenir à ma position sur le globe", scrub:"Parcourir 24 heures de part et d'autre", play:"Lecture", pause:"Pause",
+  crossingsSummary:"Passages dans les prochaines heures",
+  opt1hCross:"1 heure", opt3h:"3 heures", opt6h:"6 heures", findCrossings:"Trouver les passages",
+  footerText:"Orbites : catalogue public CelesTrak via un miroir GitHub, {epoch}, propagées avec SGP4 (satellite.js). Les propriétaires des objets proviennent du SATCAT de CelesTrak. Constellations : cultures célestes de Stellarium (chacune sous sa propre licence, voir Code). Seuls les objets de plus de 10 cm environ sont suivis ; les millions de fragments plus petits ne sont pas affichés. Les positions éloignées de la date des données sont approximatives.",
+  epochTxt:"orbites mesurées jusqu'au {date} UTC",
+  chipWarnFar:"Aucune position de débris pour cette date · uniquement étoiles et figures",
+  chipWarnApprox:"Les positions des débris sont approximatives à cette distance de la date des données",
+  typeSatellite:"Satellite", typeRocket:"Étage de fusée", typeDebris:"Débris", typeUnknown:"Inconnu",
+  alreadyComing:"redescend déjà", underYear:"moins d'un an", aboutYear:"environ un an",
+  aboutYearsN:"environ {n} ans", thousandsOrMore:"des milliers d'années ou plus",
+  outlivesSeven:" · survit à sept générations", aboutGenN:" · environ {n} générations", aboutGen1:" · environ 1 génération",
+  kvName:"Nom", kvType:"Type", kvRegisteredTo:"Immatriculé à", kvLaunched:"Lancé", kvCatalogue:"N° de catalogue",
+  kvPosition:"Position", kvFlyingOver:"Survole actuellement", unknownVal:"inconnu",
+  belowHorizon:"sous l'horizon", inSunlight:"au soleil", inShadow:"dans l'ombre de la Terre",
+  upAzimuth:"{alt}° de hauteur, azimut {az}° · {lit}",
+  kvOrbit:"Orbite", kvStaysUp:"Reste en orbite", roughSuffix:" (approximatif)", kvPassesOver:"Survole", kvInLine:"Dans la liste",
+  inLineOf:"n° {r} sur {n} avec les pondérations actuelles",
+  coverWhole:"toute la Terre", coverBand:"le sol entre {s}°S et {n}°N, {pct}% de la surface terrestre",
+  registeredTo:"Immatriculé à :", firstInLine:"Premiers de la liste · touchez-en un pour le localiser",
+  first20InLine:"Les 20 premiers de la liste :", nothingMatches:"Rien ne correspond à ces choix.",
+  crossingRightNow:"Traverse une ligne de la figure en ce moment (entouré sur le ciel) :",
+  nothingWithin:"En ce moment, rien n'est à moins de 0,4° d'une ligne de figure de {title}.",
+  yourSky:"votre ciel", thisView:"cette vue", figuresOfSky:"les figures du ciel {title}",
+  focusFromTo:"De {t0} à {end} au-dessus de {place}, <b>{n}</b> objets ont traversé {target}.",
+  noneTouched:" Aucun n'a touché {target}.",
+  passedThrough:" <b>{n}</b> sont passés par {target} : {deb} débris, {rb} étages de fusée, {sat} satellites.",
+  byFigure:"Par figure", launchedWord:" · lancé en {y}",
+  followingEvery:"Suivi de chaque objet suivi pendant {h} h au-dessus de {place}…",
+  onlyWithin7:"Les positions des débris ne sont disponibles que dans les 7 jours autour des données orbitales.",
+  noCrossingsNext:"Aucun passage de figures de {title} dans les {h} h à venir. Essayez une heure plus sombre ou une fenêtre plus longue.",
+  inNextH:"Dans les <b>{h} h</b> à venir au-dessus de {place} : <b>{tot}</b> passages de lignes de figures de {title} par <b>{objs}</b> objets. Chaque point de passage est marqué en rouge sur le ciel.",
+  pctLine:"Débris {d}% · Étages de fusée {r}% · Satellites {s}%",
+  timelineLabel:"Chronologie{extra} · touchez pour y accéder", first250:" · les 250 premiers",
+  genHead:"<b>{long}</b> des {N} objets suivis seront probablement encore en orbite dans sept générations, soit environ {genH} ans. <b>{here}</b> d'entre eux survolent le ciel de {place}.",
+},
+};
+let LANG = 'en';
+try {
+  const savedLang = localStorage.getItem('sky-lang');
+  if (savedLang && TR[savedLang]) LANG = savedLang;
+  else { const navLang = (navigator.language || '').slice(0,2).toLowerCase(); if (navLang === 'es' || navLang === 'fr') LANG = navLang; }
+} catch(e){}
+function i18n(key, vars){
+  let s = (TR[LANG] && TR[LANG][key] != null) ? TR[LANG][key] : TR.en[key];
+  if (s == null) return '';
+  if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+function applyStaticLang(){
+  document.documentElement.lang = LANG;
+  const setT = (id,key) => { const e = document.getElementById(id); if (e) e.textContent = i18n(key); };
+  const setPh = (id,key) => { const e = document.getElementById(id); if (e) e.placeholder = i18n(key); };
+  const setAria = (id,key) => { const e = document.getElementById(id); if (e) e.setAttribute('aria-label', i18n(key)); };
+  const setTitle = (id,key) => { const e = document.getElementById(id); if (e) e.title = i18n(key); };
+  setT('lblWhere','lblWhere'); setT('lblWhen','lblWhen'); setT('lblSky','lblSky');
+  setPh('search','searchPh'); setAria('search','searchAria');
+  setTitle('bPick','pickTitle'); setAria('bPick','pickTitle');
+  setTitle('bLocate','locateTitle'); setAria('bLocate','locateTitle');
+  setAria('dt','dtAria');
+  setAria('bBack','backAria'); setAria('bFwd','fwdAria'); setT('bNow','now');
+  setT('mMirror','modeMirror'); setT('mLand','modeLand'); setT('mFocus','modeFocus'); setT('mSky','modeSky');
+  setT('bSave','saveImage');
+  setAria('glc','land3dAria'); setAria('sky','skyAria');
+  setT('tSpeedReal','optReal'); setT('tSpeed1m','opt1m'); setT('tSpeed10m','opt10m'); setT('tSpeed1h','opt1h');
+  setT('speedReal','optReal'); setT('speed1m','opt1m'); setT('speed10m','opt10m'); setT('speed1h','opt1h');
+  setT('tNight', document.getElementById('tNight') && document.getElementById('tNight').getAttribute('aria-pressed') === 'true' ? 'stopNight' : 'playTonight');
+  setT('arriveEyebrow','youAreStanding'); setT('bArrive','lookUp');
+  setT('legDebris','legDebris'); setT('legRb','legRb'); setT('legPay','legPay'); setT('legLine','legLine');
+  setT('lensKey','lensKey');
+  setT('lblAboutCulture','aboutCulture');
+  { const e = document.getElementById('missingNote'); if (e) e.innerHTML = i18n('missingNote'); }
+  setT('lblPathsThrough','pathsThrough'); setT('optScopeFocus','optScopeFocus'); setT('optScopeAll','optScopeAll');
+  setT('lblLookAhead1','lookAhead'); setT('lblLookAhead2','lookAhead');
+  setT('opt10min','opt10min'); setT('opt30min','opt30min'); setT('opt60min','opt60min');
+  setT('lblMoreOptions','moreOptions'); setT('bBest','bestTimeTonight'); setT('bAll','alsoShowNearby');
+  setT('pPathsDesc','pathsDesc');
+  setT('lblOverhead','overhead');
+  setT('lblStatDeb','legDebris'); setT('lblStatRb','legRb'); setT('lblStatPay','legPay');
+  setT('selHint','selHint');
+  setT('lblGenEyebrow','sevenGenEyebrow'); setT('hGen','hGen'); setT('bLens','showLens');
+  setT('pGenIntro','genIntro'); setT('lblGenT','genT'); setT('lblGenC','genC'); setT('lblGenM','genM'); setT('lblGenA','genA');
+  setT('bGenHere','onlyHere'); setT('bGenPay','includeSat');
+  setT('lblHowWorkedOut','howWorkedOut');
+  { const e = document.getElementById('pGenT'); if (e) e.innerHTML = `<b>${i18n('boldFutureGen')}</b> ${i18n('textFutureGen')}`; }
+  { const e = document.getElementById('pGenC'); if (e) e.innerHTML = `<b>${i18n('boldCrowding')}</b> ${i18n('textCrowding')}`; }
+  { const e = document.getElementById('pGenM'); if (e) e.innerHTML = `<b>${i18n('boldSize')}</b> ${i18n('textSize')}`; }
+  { const e = document.getElementById('pGenA'); if (e) e.innerHTML = `<b>${i18n('boldSharedSkies')}</b> ${i18n('textSharedSkies')}`; }
+  setT('pGenScore','genScoreText');
+  setT('lblPlaceTimeDetails','placeTimeDetails'); setT('lblFeaturedPlaces','featuredPlaces');
+  setT('lblLat','latitude'); setT('lblLon','longitude'); setT('bHome','backToMe');
+  setT('lblScrub','scrub');
+  setT('lblCrossingsSummary','crossingsSummary');
+  setT('optScan1h','opt1hCross'); setT('optScan3h','opt3h'); setT('optScan6h','opt6h'); setT('bScan','findCrossings');
+  { const e = document.getElementById('footerText'); if (e) e.innerHTML = i18n('footerText', {epoch:'<span id="epochTxt"></span>'}); }
+  { const b = document.getElementById('byline'); if (b) b.innerHTML = i18n('bylineTag') + ' · ' + i18n('bylineBy') + ' <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">' + i18n('bylineSrc') + '</a>'; }
+  { const e = document.getElementById('loading'); if (e && !S.booted) e.textContent = i18n('loading', {n:'31,225', m:'15'}); }
+  document.querySelectorAll('#langsw button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === LANG));
+  if (S.epoch) { const e = document.getElementById('epochTxt'); if (e) e.textContent = i18n('epochTxt', {date: new Date(S.epoch).toISOString().replace('T',' ').slice(0,16)}); }
+}
+function paintTypeToggles(){
+  const box = document.getElementById('typeToggles'); if (!box) return;
+  const cur = {}; box.querySelectorAll('button').forEach(b => cur[b.dataset.t] = b.getAttribute('aria-pressed'));
+  const tg = [[2,i18n('legDebris')],[1,i18n('legRb')],[0,i18n('legPay')]];
+  box.innerHTML = tg.map(([t,l]) => `<button data-t="${t}" aria-pressed="${cur[t] || 'true'}"><i class="dot" style="background:${TYPE_COL[t]}"></i>${l}</button>`).join('');
+}
+function applyLang(lang){
+  if (!TR[lang]) return;
+  LANG = lang;
+  try { localStorage.setItem('sky-lang', lang); } catch(e){}
+  applyStaticLang();
+  if (S.booted){
+    paintTypeToggles();
+    warnChip();
+    syncPlay();
+    if (typeof ORB !== 'undefined' && ORB) renderGen();
+    renderSel();
+    if (S.frame) renderNowCross();
+    if (S.tracks) renderFocusOut();
+  }
+}
 const D2R = Math.PI/180, R2D = 180/Math.PI, FS = 7;
 const TYPE_COL = ['#7CC6E8','#C9A0FF','#FF6F59','#9AA0B5']; // PAY, R/B, DEB, UNK
-const TYPE_NAME = ['Satellite','Rocket body','Debris','Unknown'];
+const typeName = ty => [i18n('typeSatellite'), i18n('typeRocket'), i18n('typeDebris'), i18n('typeUnknown')][ty];
 const OWNER = {US:'United States',CIS:'Russia / former USSR',PRC:'China',FR:'France',JPN:'Japan',IND:'India',ESA:'European Space Agency',UK:'United Kingdom',GER:'Germany',FGER:'West Germany (former)',IT:'Italy',CA:'Canada',ISS:'ISS partners',GLOB:'Globalstar',ORB:'ORBCOMM',SES:'SES',O3B:'O3b / SES',ITSO:'Intelsat',EUTE:'Eutelsat',EUME:'EUMETSAT',SKOR:'South Korea',NKOR:'North Korea',CHLE:'Chile',ARGN:'Argentina',BRAZ:'Brazil',AB:'Arabsat',SPN:'Spain',AUS:'Australia',ISRA:'Israel',IRAN:'Iran',TBD:'Not yet attributed',RP:'Philippines',ROC:'Taiwan',STCT:'Singapore / Taiwan',UAE:'United Arab Emirates',TURK:'Türkiye',UKR:'Ukraine',KAZ:'Kazakhstan',SAFR:'South Africa',SAUD:'Saudi Arabia',NIG:'Nigeria',MEX:'Mexico',INDO:'Indonesia',MALA:'Malaysia',THAI:'Thailand',VTNM:'Vietnam',PAKI:'Pakistan',EGYP:'Egypt',NETH:'Netherlands',SWED:'Sweden',NOR:'Norway',DEN:'Denmark',FIN:'Finland',POL:'Poland',CZCH:'Czechia',BEL:'Belgium',LUXE:'Luxembourg',SWTZ:'Switzerland',POR:'Portugal',GREC:'Greece',EST:'Estonia',PERU:'Peru',BOL:'Bolivia',ECU:'Ecuador',COL:'Colombia',VENZ:'Venezuela',URY:'Uruguay',ALG:'Algeria',AZER:'Azerbaijan',IRAQ:'Iraq',SING:'Singapore',NATO:'NATO',IM:'Inmarsat',CHBZ:'China / Brazil',USBZ:'US / Brazil',FRIT:'France / Italy',ASRA:'Austria',NICO:'New Zealand',SEAL:'Sea Launch',RASC:'RascomStar',ABS:'ABS',AC:'AsiaSat',ORBC:'ORBCOMM',NZ:'New Zealand',LTU:'Lithuania',HUN:'Hungary',KEN:'Kenya',MA:'Morocco',MOR:'Morocco',GHA:'Ghana',BGD:'Bangladesh',NPL:'Nepal',RWA:'Rwanda',ETH:'Ethiopia',SVN:'Slovenia',JOR:'Jordan',QAT:'Qatar',KWT:'Kuwait',BHR:'Bahrain',LKA:'Sri Lanka',GUAT:'Guatemala',CRI:'Costa Rica',PRY:'Paraguay',MNG:'Mongolia',TMMC:'Turkmenistan',BELA:'Belarus',AGO:'Angola',SDN:'Sudan',TUN:'Tunisia',ZWE:'Zimbabwe',UGA:'Uganda',MUS:'Mauritius',DJI:'Djibouti',SEN:'Senegal'};
 const ownerName = c => OWNER[c] || c;
 
@@ -939,7 +1263,7 @@ function arcHit(P, Q, A, B){
 let trkId = 0, trkTimer = null, trkBusy = false, trkPending = false;
 function requestTracks(now){
   if (S.mode === 'sky' || !worker) return;
-  if (!inData(S.t)){ clearTimeout(trkTimer); S.tracks = null; buildStreaks(); $('focusOut').innerHTML = `Debris positions are available from ${fmtDay(S.epoch - DATA_DAYS*86400000)} to ${fmtDay(S.epoch + DATA_DAYS*86400000)}, around the date the orbits were measured. Stars and figures work for any date.`; draw(); return; }
+  if (!inData(S.t)){ clearTimeout(trkTimer); S.tracks = null; buildStreaks(); $('focusOut').innerHTML = i18n('debrisAvailable', {from: fmtDay(S.epoch - DATA_DAYS*86400000), to: fmtDay(S.epoch + DATA_DAYS*86400000)}); draw(); return; }
   clearTimeout(trkTimer);
   if (now && trkBusy) return; // already tracing; the next tick will ask again
   const fire = () => {
@@ -947,17 +1271,17 @@ function requestTracks(now){
     trkBusy = true; trkPending = false;
     const C = consCenter(S.focus), fov = focusFov(S.focus), all = S.scope === 'all';
     // while playing, trace a window that runs ahead of the clock, long enough to cover the time the tracing takes
-    const playing = S.playing, dur = playing ? Math.min(3*3600000, Math.max(S.expo*60000, S.speed*1000*20)) : S.expo*60000;
+    const playing = S.playing, dur = playing ? Math.min(3*3600000, Math.max(S.expo*60000, S.speed*1000*8)) : S.expo*60000;
     const t0 = S.t;
     S.trackMeta = {cult:S.cult, focus:S.focus, t0, expo:dur/60000, all, quiet:playing};
-    if (!playing) $('focusOut').textContent = all ? 'Tracing every object over your sky…' : 'Tracing orbits…';
+    if (!playing) $('focusOut').textContent = all ? i18n('tracingEvery') : i18n('tracingOrbits');
     (worker2 || worker).postMessage({type:'tracks', id:++trkId, t0, dur, lat:S.lat, lon:S.lon, c:C.c, cosL: all ? -2 : Math.cos(fov*0.78 + 3*D2R), show:S.show.slice()});
   };
   if (now) fire(); else trkTimer = setTimeout(fire, 150);
 }
 function onTracks(m){
   trkBusy = false;
-  if (trkPending){ trkPending = false; if (!S.playing){ requestTracks(); return; } setTimeout(() => requestTracks(true), 0); }
+  if (trkPending){ trkPending = false; requestTracks(); return; }
   if (m.id !== trkId) return;
   const d = m.data, list = []; let k = 0;
   const cons = CULT[S.cult].cons, segs = [];
@@ -981,14 +1305,14 @@ function renderFocusOut(){
   const objs = new Set(T.list.map(t => t.i)), hits = T.list.map((t,j) => [t,j]).filter(([t]) => t.cross >= 0).sort((a,b) => a[0].cross - b[0].cross);
   const t0 = T.meta.t0, end = t0 + T.meta.expo*60000;
   const by = [0,0,0,0], own = new Map(); hits.forEach(([t]) => { const s = SAT.list[t.i]; by[s[3]]++; const o = SAT.owners[s[4]]; own.set(o,(own.get(o)||0)+1); });
-  const all = T.meta.all, target = all ? `the figures of the ${esc(CULT[S.cult].title)} sky` : esc(K.e);
-  let html = `<p style="color:var(--text)">From ${fmtTime(t0,true)} to ${fmtTime(end,true)} over ${esc(placeName())}, <b>${objs.size.toLocaleString()}</b> objects crossed ${all ? 'your sky' : 'this view'}.`;
-  if (!hits.length){ $('focusOut').innerHTML = html + ` None touched ${target}.</p>`; return; }
-  html += ` <b>${hits.length}</b> passed through ${target}: ${by[2]} debris, ${by[1]} rocket bodies, ${by[0]+by[3]} satellites.</p>`;
+  const all = T.meta.all, target = all ? i18n('figuresOfSky', {title: esc(CULT[S.cult].title)}) : esc(K.e);
+  let html = `<p style="color:var(--text)">` + i18n('focusFromTo', {t0: fmtTime(t0,true), end: fmtTime(end,true), place: esc(placeName()), n: objs.size.toLocaleString(), target: all ? i18n('yourSky') : i18n('thisView')});
+  if (!hits.length){ $('focusOut').innerHTML = html + i18n('noneTouched', {target}) + `</p>`; return; }
+  html += i18n('passedThrough', {n: hits.length, target, deb: by[2], rb: by[1], sat: by[0]+by[3]}) + `</p>`;
   if (all){ const byFig = new Map(); hits.forEach(([t]) => byFig.set(t.fig, (byFig.get(t.fig)||0)+1));
-    html += `<details><summary>By figure</summary><div style="margin-top:6px">${[...byFig.entries()].sort((a,b) => b[1]-a[1]).map(([ci,n]) => `<div class="consrow"><span>${esc(CULT[S.cult].cons[ci].e)}${CULT[S.cult].cons[ci].n ? ` <span class="native">${esc(CULT[S.cult].cons[ci].n)}</span>` : ''}</span><span class="cnt">${n}</span></div>`).join('')}</div></details>`; }
-  html += `<p class="small"><span class="muted">Registered to:</span> ${[...own.entries()].sort((a,b) => b[1]-a[1]).slice(0,3).map(([o,n]) => `${esc(ownerName(o))} (${n})`).join(' · ')}</p>`;
-  html += `<div class="list" id="trkList">` + hits.map(([t,j]) => { const s = SAT.list[t.i]; return `<button class="trk" data-j="${j}" aria-pressed="${j===S.trackSel}"><span class="t">${fmtTime(t0 + t.cross*1000, true)}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span>${esc(s[0])}</span></span><span class="w">${all ? esc(CULT[S.cult].cons[t.fig].e) + ' · ' : ''}${TYPE_NAME[s[3]]} · ${esc(ownerName(SAT.owners[s[4]]))}${s[5] ? ' · launched ' + s[5] : ''}</span></button>`; }).join('') + `</div>`;
+    html += `<details><summary>${i18n('byFigure')}</summary><div style="margin-top:6px">${[...byFig.entries()].sort((a,b) => b[1]-a[1]).map(([ci,n]) => `<div class="consrow"><span>${esc(CULT[S.cult].cons[ci].e)}${CULT[S.cult].cons[ci].n ? ` <span class="native">${esc(CULT[S.cult].cons[ci].n)}</span>` : ''}</span><span class="cnt">${n}</span></div>`).join('')}</div></details>`; }
+  html += `<p class="small"><span class="muted">${i18n('registeredTo')}</span> ${[...own.entries()].sort((a,b) => b[1]-a[1]).slice(0,3).map(([o,n]) => `${esc(ownerName(o))} (${n})`).join(' · ')}</p>`;
+  html += `<div class="list" id="trkList">` + hits.map(([t,j]) => { const s = SAT.list[t.i]; return `<button class="trk" data-j="${j}" aria-pressed="${j===S.trackSel}"><span class="t">${fmtTime(t0 + t.cross*1000, true)}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span>${esc(s[0])}</span></span><span class="w">${all ? esc(CULT[S.cult].cons[t.fig].e) + ' · ' : ''}${typeName(s[3])} · ${esc(ownerName(SAT.owners[s[4]]))}${s[5] ? i18n('launchedWord',{y:s[5]}) : ''}</span></button>`; }).join('') + `</div>`;
   $('focusOut').innerHTML = html;
   $('trkList').onclick = e => { const b = e.target.closest('.trk'); if (!b) return; selectTrack(+b.dataset.j); };
 }
@@ -1476,12 +1800,12 @@ function drawMirror(){
     if (S.playing && S.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
       for (const [i,a] of S.trail){ if (a.length < 2 || S.frameNo - a[a.length-1][4] > 1) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
         ctx.strokeStyle = TYPE_COL[ty]; ctx.globalAlpha = .45; ctx.beginPath(); let pen = false;
-        let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : ((whole || al > -0.05) ? sxy(al, az) : null);
+        let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : (al > -0.05 ? sxy(al, az) : null);
           if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
         ctx.stroke(); }
       ctx.globalAlpha = 1; }
-    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0 && !whole) continue;
-      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i)*(al < 0 ? .55 : 1); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue;
+      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
     genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
@@ -1750,7 +2074,7 @@ function arrive(manual){
   const el = $('arrive'), p = PLACES[S.place], town = p.lat == null ? '' : p.n.split(',')[0];
   $('arriveLand').textContent = landName(); $('arriveSub').textContent = `${town && town !== landName() ? town + ' · ' : ''}${fmtTime(S.t)}`;
   const sn = sunEq(new Date(S.t)), [sa] = altaz(sn.ra, sn.dec, lstNow(), S.lat*D2R);
-  $('arriveLine').textContent = sa*R2D < -6 ? 'This is your sky tonight.' : 'This is your sky at this moment.';
+  $('arriveLine').textContent = sa*R2D < -6 ? i18n('arriveLine') : i18n('arriveLineMoment');
   el.classList.toggle('toast', !manual); el.classList.remove('gone'); clearTimeout(arrive.tm);
   if (!manual) arrive.tm = setTimeout(() => el.classList.add('gone'), 2600);
 }
@@ -1766,10 +2090,10 @@ function showFigure(){
 S.speed = 600; S.loop = null; let playTimer = null, lastTick = 0;
 function setSpeed(v){ S.speed = v; $('speed').value = v; $('tSpeed').value = v; }
 function syncPlay(){
-  $('bPlay').setAttribute('aria-pressed', S.playing); $('bPlay').textContent = S.playing ? 'Pause' : 'Play';
-  $('tPlay').setAttribute('aria-pressed', S.playing); $('tPlay').setAttribute('aria-label', S.playing ? 'Pause' : 'Play');
+  $('bPlay').setAttribute('aria-pressed', S.playing); $('bPlay').textContent = S.playing ? i18n('pause') : i18n('play');
+  $('tPlay').setAttribute('aria-pressed', S.playing); $('tPlay').setAttribute('aria-label', S.playing ? i18n('pause') : i18n('play'));
   $('tIcon').setAttribute('d', S.playing ? 'M4 2.5h3v11H4zM9 2.5h3v11H9z' : 'M4 2.5v11l9-5.5z');
-  $('tNight').setAttribute('aria-pressed', !!S.loop); $('tNight').textContent = S.loop ? 'Stop the night' : 'Play tonight';
+  $('tNight').setAttribute('aria-pressed', !!S.loop); $('tNight').textContent = S.loop ? i18n('stopNight') : i18n('playTonight');
 }
 function startPlay(){
   if (S.playing) return; S.playing = true; syncPlay(); lastTick = performance.now();
@@ -1840,9 +2164,9 @@ function onFrame(m){
 }
 function renderNowCross(){
   const f = S.frame, C = CULT[S.cult];
-  if (!f.consCount.size){ $('nowCross').innerHTML = `Right now, nothing is within 0.4° of a ${esc(C.title)} figure line.`; return; }
+  if (!f.consCount.size){ $('nowCross').innerHTML = i18n('nothingWithin', {title: esc(C.title)}); return; }
   const rows = [...f.consCount.entries()].sort((a,b) => b[1]-a[1]).map(([ci,n]) => `<div class="consrow"><span>${esc(C.cons[ci].e)}${C.cons[ci].n ? ` <span class="native">${esc(C.cons[ci].n)}</span>` : ''}</span><span class="cnt">${n}</span></div>`).join('');
-  $('nowCross').innerHTML = `<p style="margin-bottom:6px">Crossing a figure line right now (ringed on the sky):</p>${rows}`;
+  $('nowCross').innerHTML = `<p style="margin-bottom:6px">${i18n('crossingRightNow')}</p>${rows}`;
 }
 
 // ---------- seven generations: how long each object stays, and who comes first ----------
@@ -1882,9 +2206,9 @@ function orbitStats(){
 const tiltOf = i => { const t = ORB.inc[i]; return t > 90 ? 180 - t : t; };
 function crossesHere(i){ const h = Math.max(ORB.pe[i], 100), reach = Math.acos(6378.137/(6378.137 + h))*R2D; return tiltOf(i) + reach >= Math.abs(S.lat); }
 function lifeTxt(y){
-  if (y <= 0) return 'already coming down';
-  const t = y < 1 ? 'under a year' : y < 2 ? 'about a year' : y < 100 ? `about ${Math.round(y)} years` : y < 10000 ? `about ${(Math.round(y/(y < 1000 ? 10 : 100))*(y < 1000 ? 10 : 100)).toLocaleString()} years` : 'thousands of years or more';
-  return t + (y > GEN_H ? ' · outlives seven generations' : y >= GEN ? ` · about ${Math.round(y/GEN)} generation${Math.round(y/GEN) > 1 ? 's' : ''}` : '');
+  if (y <= 0) return i18n('alreadyComing');
+  const t = y < 1 ? i18n('underYear') : y < 2 ? i18n('aboutYear') : y < 100 ? i18n('aboutYearsN',{n:Math.round(y)}) : y < 10000 ? i18n('aboutYearsN',{n:(Math.round(y/(y < 1000 ? 10 : 100))*(y < 1000 ? 10 : 100)).toLocaleString()}) : i18n('thousandsOrMore');
+  return t + (y > GEN_H ? i18n('outlivesSeven') : y >= GEN ? (Math.round(y/GEN) > 1 ? i18n('aboutGenN',{n:Math.round(y/GEN)}) : i18n('aboutGen1')) : '');
 }
 const lensA = i => (S.lens && ORB) ? (ORB.life[i] > GEN_H ? 1 : .1) : 1;
 function rankGen(){
@@ -1905,14 +2229,14 @@ function renderGen(){
   const N = SAT.list.length; let here = 0; const own = new Map();
   for (let i=0;i<N;i++) if (ORB.life[i] > GEN_H && crossesHere(i)){ here++; const o = SAT.owners[SAT.list[i][4]]; own.set(o, (own.get(o)||0) + 1); }
   const owners = [...own.entries()].sort((a,b) => b[1]-a[1]).slice(0,4).map(([o,n]) => `${esc(ownerName(o))} <span class="muted">${Math.round(n/here*100)}%</span>`).join(' · ');
-  $('genHead').innerHTML = `<b>${ORB.long.toLocaleString()}</b> of the ${N.toLocaleString()} tracked objects will likely still be in orbit seven generations from now, about ${GEN_H} years. <b>${here.toLocaleString()}</b> of them pass over the sky of ${esc(placeName())}.` + (here ? `<br><span class="muted">Registered to:</span> ${owners}` : '');
+  $('genHead').innerHTML = i18n('genHead', {long: ORB.long.toLocaleString(), N: N.toLocaleString(), genH: GEN_H, here: here.toLocaleString(), place: esc(placeName())}) + (here ? `<br><span class="muted">${i18n('registeredTo')}</span> ${owners}` : '');
   const top = ORB.order.slice(0, 15);
   const fam = new Map(); ORB.order.slice(0, 20).forEach(i => { const s = SAT.list[i], k = s[0].replace(/\s*\(.*\)$/, '') + '|' + SAT.owners[s[4]]; fam.set(k, (fam.get(k)||0) + 1); });
   const famTxt = [...fam.entries()].sort((a,b) => b[1]-a[1]).slice(0,4).map(([k,n]) => { const [nm,o] = k.split('|'); return `${n} × ${esc(nm)} <span class="muted">(${esc(ownerName(o))})</span>`; }).join(' · ');
-  $('genOut').innerHTML = !top.length ? '<p class="small muted">Nothing matches these choices.</p>' : `
-    <p class="small" style="margin-top:10px"><span class="muted">The first 20 in line:</span> ${famTxt}</p>
-    <p class="eyebrow" style="margin-top:4px">First in line · tap one to find it</p>
-    <div class="list" id="genList">${top.map((i,r) => { const s = SAT.list[i]; return `<button class="ev" data-i="${i}"><span class="t">#${r+1}</span><span class="c">${esc(s[0])}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span class="nm">${esc(ownerName(SAT.owners[s[4]]))} · ${Math.round(ORB.pe[i])} km · ${lifeTxt(ORB.life[i]).split(' · ')[0]}${s[5] ? ' · launched ' + s[5] : ''}</span></span></button>`; }).join('')}</div>`;
+  $('genOut').innerHTML = !top.length ? `<p class="small muted">${i18n('nothingMatches')}</p>` : `
+    <p class="small" style="margin-top:10px"><span class="muted">${i18n('first20InLine')}</span> ${famTxt}</p>
+    <p class="eyebrow" style="margin-top:4px">${i18n('firstInLine')}</p>
+    <div class="list" id="genList">${top.map((i,r) => { const s = SAT.list[i]; return `<button class="ev" data-i="${i}"><span class="t">#${r+1}</span><span class="c">${esc(s[0])}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span class="nm">${esc(ownerName(SAT.owners[s[4]]))} · ${Math.round(ORB.pe[i])} km · ${lifeTxt(ORB.life[i]).split(' · ')[0]}${s[5] ? i18n('launchedWord',{y:s[5]}) : ''}</span></span></button>`; }).join('')}</div>`;
   if (S.lens){ if (G.ok){ buildObjects(); buildStreaks(); } draw(); }
   renderSel();
 }
@@ -1932,10 +2256,10 @@ function genRings(){ // ring the objects first in line, when the seven-generatio
 }
 function genRows(i){
   if (!ORB || i < 0) return '';
-  const t = tiltOf(i), cover = t >= 89 ? 'the whole Earth' : `the ground between ${Math.round(t)}°S and ${Math.round(t)}°N, ${Math.round(Math.sin(t*D2R)*100)}% of the Earth's surface`;
-  return (ORB.pe[i] > 0 ? `<dt>Orbit</dt><dd>${Math.round(ORB.pe[i]).toLocaleString()}–${Math.round(ORB.ap[i]).toLocaleString()} km up · tilted ${ORB.inc[i].toFixed(1)}°</dd>` : '') +
-    `<dt>Stays up</dt><dd>${lifeTxt(ORB.life[i])} (rough)</dd><dt>Passes over</dt><dd>${cover}</dd>` +
-    (ORB.rank[i] >= 0 ? `<dt>In line</dt><dd>#${(ORB.rank[i]+1).toLocaleString()} of ${ORB.n.toLocaleString()} with the current weights</dd>` : '');
+  const t = tiltOf(i), cover = t >= 89 ? i18n('coverWhole') : i18n('coverBand', {s:Math.round(t), n:Math.round(t), pct:Math.round(Math.sin(t*D2R)*100)});
+  return (ORB.pe[i] > 0 ? `<dt>${i18n('kvOrbit')}</dt><dd>${Math.round(ORB.pe[i]).toLocaleString()}–${Math.round(ORB.ap[i]).toLocaleString()} km up · tilted ${ORB.inc[i].toFixed(1)}°</dd>` : '') +
+    `<dt>${i18n('kvStaysUp')}</dt><dd>${lifeTxt(ORB.life[i])}${i18n('roughSuffix')}</dd><dt>${i18n('kvPassesOver')}</dt><dd>${cover}</dd>` +
+    (ORB.rank[i] >= 0 ? `<dt>${i18n('kvInLine')}</dt><dd>${i18n('inLineOf', {r:(ORB.rank[i]+1).toLocaleString(), n:ORB.n.toLocaleString()})}</dd>` : '');
 }
 
 // ---------- selection ----------
@@ -1961,20 +2285,20 @@ cv.addEventListener('click', e => {
 function renderSel(){
   if (S.sel < 0){ $('selBox').hidden = true; $('selHint').hidden = false; return; }
   const s = SAT.list[S.sel], ty = s[3];
-  let altTxt = 'below horizon', subTxt = '';
-  if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ subTxt = `<dt>Flying over</dt><dd>${f[k+5].toFixed(2)}°, ${f[k+6].toFixed(2)}°${(() => { const n = nearestPlaceName(f[k+5], f[k+6], 300); return n ? ' · ' + esc(n) : ''; })()}</dd>`; break; } }
-  if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ const [al,az] = altaz(f[k+1],f[k+2],lstNow(),S.lat*D2R); if (al >= 0) altTxt = `${(al*R2D).toFixed(1)}° up, azimuth ${(((az*R2D)%360+360)%360).toFixed(0)}° · ${f[k+4] > 0 ? 'in sunlight' : "in Earth's shadow"}`; break; } }
-  $('selKv').innerHTML = `<dt>Name</dt><dd>${esc(s[0])}</dd><dt>Type</dt><dd><i class="dot" style="background:${TYPE_COL[ty]}"></i> ${TYPE_NAME[ty]}</dd><dt>Registered to</dt><dd>${esc(ownerName(SAT.owners[s[4]]))}</dd><dt>Launched</dt><dd>${s[5] || 'unknown'}</dd><dt>Catalogue no.</dt><dd>${s[1].slice(2,7).trim()}</dd><dt>Position</dt><dd>${altTxt}</dd>${subTxt}${genRows(S.sel)}`;
+  let altTxt = i18n('belowHorizon'), subTxt = '';
+  if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ subTxt = `<dt>${i18n('kvFlyingOver')}</dt><dd>${f[k+5].toFixed(2)}°, ${f[k+6].toFixed(2)}°${(() => { const n = nearestPlaceName(f[k+5], f[k+6], 300); return n ? ' · ' + esc(n) : ''; })()}</dd>`; break; } }
+  if (S.frame){ const f = S.frame.data; for (let k=0;k<f.length;k+=FS) if (f[k]===S.sel){ const [al,az] = altaz(f[k+1],f[k+2],lstNow(),S.lat*D2R); if (al >= 0) altTxt = i18n('upAzimuth', {alt:(al*R2D).toFixed(1), az:(((az*R2D)%360+360)%360).toFixed(0), lit: f[k+4] > 0 ? i18n('inSunlight') : i18n('inShadow')}); break; } }
+  $('selKv').innerHTML = `<dt>${i18n('kvName')}</dt><dd>${esc(s[0])}</dd><dt>${i18n('kvType')}</dt><dd><i class="dot" style="background:${TYPE_COL[ty]}"></i> ${typeName(ty)}</dd><dt>${i18n('kvRegisteredTo')}</dt><dd>${esc(ownerName(SAT.owners[s[4]]))}</dd><dt>${i18n('kvLaunched')}</dt><dd>${s[5] || i18n('unknownVal')}</dd><dt>${i18n('kvCatalogue')}</dt><dd>${s[1].slice(2,7).trim()}</dd><dt>${i18n('kvPosition')}</dt><dd>${altTxt}</dd>${subTxt}${genRows(S.sel)}`;
   $('selBox').hidden = false; $('selHint').hidden = true;
 }
 
 // ---------- scan ----------
 function startScan(){
   if (!worker) return;
-  if (!inData(S.t)){ $('scanOut').innerHTML = '<p class="small muted">Debris positions are only available within 7 days of the orbit data.</p>'; return; }
+  if (!inData(S.t)){ $('scanOut').innerHTML = `<p class="small muted">${i18n('onlyWithin7')}</p>`; return; }
   const hours = +$('scanDur').value;
   $('bScan').disabled = true; $('prog').hidden = false; $('progBar').style.width = '0%';
-  $('scanOut').innerHTML = `<p class="small muted">Following every tracked object for ${hours} h over ${esc(placeName())}…</p>`;
+  $('scanOut').innerHTML = `<p class="small muted">${i18n('followingEvery', {h:hours, place:esc(placeName())})}</p>`;
   S.events = []; draw();
   (worker2 || worker).postMessage({type:'scan', t0:S.t, dur:hours*3600000, lat:S.lat, lon:S.lon, segs:segArray(S.cult), show:S.show.slice(), meta:{cult:S.cult, hours, t0:S.t, place:placeName()}});
 }
@@ -1983,7 +2307,7 @@ function onScan(m){
   if (m.meta.cult !== S.cult){ return; }
   S.events = m.events; S.scanMeta = m.meta; draw();
   const C = CULT[m.meta.cult], ev = m.events;
-  if (!ev.length){ $('scanOut').innerHTML = `<p class="small muted">No crossings of ${esc(C.title)} figures in the next ${m.meta.hours} h. Try a darker hour or a longer window.</p>`; return; }
+  if (!ev.length){ $('scanOut').innerHTML = `<p class="small muted">${i18n('noCrossingsNext', {title:esc(C.title), h:m.meta.hours})}</p>`; return; }
   const objs = new Set(ev.map(e => e[1]));
   const byType = [0,0,0,0], byOwner = new Map(), byCons = new Map();
   ev.forEach(e => { const s = SAT.list[e[1]]; byType[s[3]]++; const o = SAT.owners[s[4]]; byOwner.set(o,(byOwner.get(o)||0)+1); byCons.set(e[2],(byCons.get(e[2])||0)+1); });
@@ -1992,12 +2316,12 @@ function onScan(m){
   const cons = [...byCons.entries()].sort((a,b) => b[1]-a[1]).map(([ci,n]) => `<div class="consrow"><span>${esc(C.cons[ci].e)}${C.cons[ci].n ? ` <span class="native">${esc(C.cons[ci].n)}</span>` : ''}</span><span class="cnt">${n.toLocaleString()}</span></div>`).join('');
   const rows = ev.slice(0,250).map((e,k) => { const s = SAT.list[e[1]]; const c = C.cons[e[2]]; return `<button class="ev" data-k="${k}"><span class="t">${fmtTime(e[0], true)}</span><span class="c">${esc(c.e)}${c.n ? ` · <i>${esc(c.n)}</i>` : ''}</span><span class="o"><i class="dot" style="background:${TYPE_COL[s[3]]}"></i><span class="nm">${esc(s[0])} · ${esc(SAT.owners[s[4]])}</span></span></button>`; }).join('');
   $('scanOut').innerHTML = `
-    <p class="small">In the next <b>${m.meta.hours} h</b> over ${esc(m.meta.place)}: <b>${tot.toLocaleString()}</b> crossings of ${esc(C.title)} figure lines by <b>${objs.size.toLocaleString()}</b> objects. Each crossing point is marked in red on the sky.</p>
+    <p class="small">${i18n('inNextH', {h:m.meta.hours, place:esc(m.meta.place), tot:tot.toLocaleString(), title:esc(C.title), objs:objs.size.toLocaleString()})}</p>
     <div class="bar" aria-hidden="true"><i style="width:${pct(byType[2])}%;background:var(--deb)"></i><i style="width:${pct(byType[1])}%;background:var(--rb)"></i><i style="width:${pct(byType[0])}%;background:var(--pay)"></i><i style="width:${pct(byType[3])}%;background:var(--unk)"></i></div>
-    <p class="small muted">Debris ${pct(byType[2])}% · Rocket bodies ${pct(byType[1])}% · Satellites ${pct(byType[0])}%</p>
-    <p class="small"><span class="muted">Registered to:</span> ${owners}</p>
-    <details><summary>By figure</summary><div style="margin-top:6px">${cons}</div></details>
-    <p class="eyebrow" style="margin-top:4px">Timeline${ev.length > 250 ? ' · first 250' : ''} · tap to jump there</p>
+    <p class="small muted">${i18n('pctLine', {d:pct(byType[2]), r:pct(byType[1]), s:pct(byType[0])})}</p>
+    <p class="small"><span class="muted">${i18n('registeredTo')}</span> ${owners}</p>
+    <details><summary>${i18n('byFigure')}</summary><div style="margin-top:6px">${cons}</div></details>
+    <p class="eyebrow" style="margin-top:4px">${i18n('timelineLabel', {extra: ev.length > 250 ? i18n('first250') : ''})}</p>
     <div class="list" id="evList">${rows}</div>`;
   $('evList').addEventListener('click', e => { const b = e.target.closest('.ev'); if (!b) return; const ev = S.events[+b.dataset.k]; S.sel = ev[1]; setTime(ev[0]); });
 }
@@ -2005,7 +2329,7 @@ function onScan(m){
 // ---------- UI ----------
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function fmtDay(t){ return new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'short', year:'numeric', timeZone:S.tz}).format(new Date(t)); }
-function warnChip(){ const d = Math.abs(S.t - S.epoch); $('chipWarn').hidden = d < 3*86400000; $('chipWarn').textContent = d > DATA_DAYS*86400000 ? 'No debris positions for this date · stars and figures only' : 'Debris positions are approximate this far from the data date'; }
+function warnChip(){ const d = Math.abs(S.t - S.epoch); $('chipWarn').hidden = d < 3*86400000; $('chipWarn').textContent = d > DATA_DAYS*86400000 ? i18n('chipWarnFar') : i18n('chipWarnApprox'); }
 function placeName(){ const p = PLACES[S.place]; return p.lat == null ? (S.customName || `${S.lat.toFixed(2)}°, ${S.lon.toFixed(2)}°`) : p.n.split(',')[0]; }
 function fmtTime(t, short){
   const o = short ? {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:S.tz} : {weekday:'short', day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZone:S.tz, timeZoneName:'short'};
@@ -2021,7 +2345,7 @@ function setTime(t){
   $('timeUtc').textContent = new Date(S.t).toISOString().replace('T',' ').slice(0,16) + ' UTC';
   requestFrame();
   if (!S.playing) requestTracks();
-  else { const T = S.tracks; if (!T || !T.meta.quiet || S.t < T.meta.t0 || S.t - T.meta.t0 > T.meta.expo*60000*.35) requestTracks(true); }
+  else { const T = S.tracks; if (!T || S.t < T.meta.t0 || S.t - T.meta.t0 > T.meta.expo*60000*.7) requestTracks(true); }
   if (S.mode === 'land') need3d(); updateWhere(); if ($('tTime')) $('tTime').textContent = fmtTime(S.t, true) + ' · ' + new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'short', timeZone:S.tz}).format(new Date(S.t));
 }
 function setPlace(i){
@@ -2046,6 +2370,7 @@ function setCulture(id){
 function showStory(){ showFigure(); const k = CULT[S.cult] && CULT[S.cult].cons[S.focus]; $('figStory').textContent = k && k.s ? k.s : ''; $('figStory').hidden = !(k && k.s); }
 function onFocusChange(){ S.tracks = null; S.trackSel = -1; requestTracks(); buildFigures(); buildStreaks(); showStory(); renderPass(); if (S.mode === 'land') faceFigure(); if (S.mode === 'mirror') fitFigure(); draw(); }
 function initUI(){
+  applyStaticLang();
   $('place').innerHTML = PLACES.map((p,i) => `<option value="${i}">${esc(p.n)}</option>`).join('');
   const AUS = {kamilaroi:'New South Wales, Australia', boorong:'Victoria, Australia'};
   const order = Object.values(CULT).sort((a,b) => a.title.localeCompare(b.title));
@@ -2072,8 +2397,7 @@ function initUI(){
   const onCoord = () => { const la = parseFloat($('lat').value), lo = parseFloat($('lon').value); if (!isFinite(la) || !isFinite(lo)) return; setCustom(la, lo); };
   $('lat').onchange = onCoord; $('lon').onchange = onCoord;
   $('culture').onchange = e => { S.cultPinned = e.target.value !== S.localCult; setCulture(e.target.value); updateSkyNote(); };
-  const tg = [[2,'Debris'],[1,'Rocket bodies'],[0,'Satellites']];
-  $('typeToggles').innerHTML = tg.map(([t,l]) => `<button data-t="${t}" aria-pressed="true"><i class="dot" style="background:${TYPE_COL[t]}"></i>${l}</button>`).join('');
+  paintTypeToggles();
   $('typeToggles').onclick = e => { const b = e.target.closest('button'); if (!b) return; const t = +b.dataset.t; S.show[t] = !S.show[t]; if (t===2) S.show[3] = S.show[t]; b.setAttribute('aria-pressed', S.show[t]); requestFrame(); requestTracks(); };
   $('bPlay').onclick = () => S.playing ? stopPlay() : startPlay();
   $('tPlay').onclick = () => S.playing ? stopPlay() : startPlay();
@@ -2090,7 +2414,8 @@ function initUI(){
   $('scope').onchange = e => { S.scope = e.target.value; S.tracks = null; requestTracks(); draw(); };
   $('bAll').onclick = () => { S.showAll = !S.showAll; $('bAll').setAttribute('aria-pressed', S.showAll); draw(); };
   $('bBest').addEventListener('click', () => { if (S.mode === 'land') setTimeout(faceFigure, 0); });
-  $('epochTxt').textContent = 'orbits measured up to ' + new Date(S.epoch).toISOString().replace('T',' ').slice(0,16) + ' UTC';
+  $('epochTxt').textContent = i18n('epochTxt', {date: new Date(S.epoch).toISOString().replace('T',' ').slice(0,16)});
+  document.getElementById('langsw').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; applyLang(b.dataset.lang); });
   new ResizeObserver(resize).observe($('canvasbox'));
 }
 
@@ -2098,7 +2423,7 @@ function initUI(){
 (async function boot(){
   try {
     DATA = await loadData();
-  } catch(e){ $('loading').textContent = 'This browser could not unpack the data (it needs DecompressionStream). Try a current Chrome, Edge, Firefox or Safari.'; return; }
+  } catch(e){ $('loading').textContent = i18n('browserUnsupported'); return; }
   prepare();
   SAT = {list:DATA.sats, types:DATA.sats.map(s => s[3]), owners:DATA.owners};
   initUI();
@@ -2111,8 +2436,8 @@ function initUI(){
   if (EARTH.global) loadRaster('global', EARTH.global, null);
   showStory(); renderPass(); setMode('mirror'); initDownloads(); S.booted = true; arrive(true);
   $('bArrive').onclick = () => $('arrive').classList.add('gone');
-  $('bDrawer').onclick = () => { const closed = $('app').classList.toggle('closed'); $('bDrawer').setAttribute('aria-expanded', !closed); $('bDrawer').textContent = closed ? 'Show tools' : 'Hide tools'; setTimeout(resize, 50); };
-  $('loading').textContent = 'Preparing 31,225 orbits…';
+  $('bDrawer').onclick = () => { const closed = $('app').classList.toggle('closed'); $('bDrawer').setAttribute('aria-expanded', !closed); $('bDrawer').textContent = closed ? i18n('showTools') : i18n('hideTools'); setTimeout(resize, 50); };
+  $('loading').textContent = i18n('preparingOrbits', {n:'31,225'});
   const url = URL.createObjectURL(new Blob([workerSource()], {type:'text/javascript'}));
   worker = new Worker(url);
   worker.onmessage = e => {
