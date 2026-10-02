@@ -1,0 +1,719 @@
+{
+ "es": {
+  "western": {
+   "figures": {
+    "Sculptor": {
+     "e": "Escultor"
+    },
+    "Altar": {
+     "e": "Altar"
+    },
+    "Hercules": {
+     "e": "Hércules"
+    },
+    "Lynx": {
+     "e": "Lince"
+    },
+    "Peacock": {
+     "e": "Pavo real"
+    },
+    "Phoenix": {
+     "e": "Fénix"
+    }
+   }
+  },
+  "maori": {
+   "figures": {
+    "Taki-o-Autahi": {
+     "e": "Taki-o-Autahi"
+    },
+    "Te Taura-o-te-waka-o-tamarereti": {
+     "e": "Te Taura-o-te-waka-o-tamarereti"
+    },
+    "Tau-toro": {
+     "e": "Tau-toro"
+    },
+    "Matakarehu": {
+     "e": "Matakarehu"
+    }
+   }
+  },
+  "boorong": {
+   "figures": {
+    "Crow": {
+     "s": "Cuervo · Canopus"
+    },
+    "Owlet nightjar": {
+     "s": "Egotelo australiano · Achernar"
+    },
+    "Jacky lizard": {
+     "s": "Lagarto jacky · Sigma Canis Majoris"
+    },
+    "Galaxy": {
+     "e": "Galaxia",
+     "s": "Galaxia · Vía Láctea"
+    },
+    "Boomerang": {
+     "s": "Bumerán · Corona Austral"
+    }
+   }
+  },
+  "tupi": {
+   "figures": {
+    "White Ostrich": {
+     "s": "El nombre tupí de esta constelación es Iandutim (Guirá Nhandu en guaraní), que se traduce literalmente como Avestruz Blanco. La constelación representa un ave grande. En las dos primeras semanas de junio esta constelación es plenamente visible en el cielo del este al anochecer, lo que indica el comienzo del invierno en el sur de Brasil y el inicio de la estación seca en el norte."
+    },
+    "Old Man": {
+     "s": "Esta constelación representa a un anciano que sostiene un bastón. En la segunda quincena de diciembre, la constelación es plenamente visible en el cielo del este al anochecer. Esto marca el comienzo del verano en las regiones del sur de Brasil y el inicio de la temporada de lluvias en el norte."
+    },
+    "Joykexo": {
+     "e": "Joykexo"
+    }
+   }
+  },
+  "aztec": {
+   "figures": {
+    "New fire": {
+     "s": "Los antiguos aztecas llamaban 'Mamalhuaztli' al Cinturón de Orión. Representaba los palos de madera usados para encender el fuego nuevo en la conmemoración que celebraban cada 52 años los mexicas y sus vecinos. Esta celebración se llamaba toxiuh molpilia, que significa 'atadura de los años', y coincidía con el comienzo del año nuevo, llamado xiuhtzitzquilo. ![](mamalhuaztliimage.webp)"
+    },
+    "Market": {
+     "s": "Para los mexicas, el grupo de estrellas conocido como las Pléyades simbolizaba Tianquiztli (el Mercado), quizá por la multitud que se reúne en ellas. Normalmente se representan con una o dos personas dentro de un círculo con mercancías. ![](tiaquitztliimage.webp) Hoy en día, en México, el mercado informal o los mercados callejeros se llaman tianguis."
+    },
+    "Ball game of the stars": {
+     "s": "La constelación de Géminis se llamaba Citlaltlachtli, que significa el juego de pelota de las estrellas. Este juego tenía un significado ritual y se jugaba con una pelota de hule natural. Se dice que el movimiento de la pelota dentro del campo de juego alude al movimiento del Sol y la Luna."
+    },
+    "Twisted foot": {
+     "s": "La constelación de la Osa Menor se identifica como Xonecuilli (el Pie torcido). Está relacionada con Nanahuatzin, un personaje representado con los pies torcidos, cubierto de llagas y pústulas. Este dios enfermo y pobre se sacrificó para convertirse en Tonatiuh, el dios Sol. ![](nanahuatzin.webp) Al parecer, el nombre de esta constelación también puede asociarse con la Cruz del Sur y las estrellas que la rodean (sobre todo en textos de Tezozómoc). El sacerdote misionero español Sahagún relata [#7] que la forma de esta constelación se asemeja a un pan en forma de letra S y que los aztecas la llaman xonecuilli. !Xonecuilli Xonecuilli {: .imgandcaption }"
+    },
+    "Scorpion face": {
+     "s": "Según el Códice Florentino, los informantes de Sahagún identificaban un grupo de estrellas conocido como Citlalcolotl con las estrellas del Escorpión. A su vez, Tezozómoc también menciona la estrella escorpión y la llamó Colotlixayac, que significa cara de escorpión. !Paris Codex En una sección del Códice de París llamada páginas del zodiaco [#3],[#10], también se menciona al escorpión. En este códice los íconos muestran figuras de animales colgando del cuerpo del Dragón Celeste. {: .imgandcaption }"
+    }
+   }
+  },
+  "hawaiian_starlines": {
+   "figures": {
+    "Leo": {
+     "e": "León"
+    },
+    "The Canoe Bailer of Makali`i": {
+     "s": "La traducción directa significa “el Achicador de canoa de Makali’i”. Las líneas tienen forma de achicador que recoge a Ka Hei-Hei o Na Keiki (Orión) y a Makali’i (Pléyades) hacia el cielo nocturno. En la navegación, el achicador sirve para sacar el agua de los cascos. Las estrellas principales de Ke Ka o Makali’i, de norte a sur, son Hokulei (Capella), Nanamua (Cástor), Nanahope (Pólux), Puana (Proción) y ‘A’a (Sirio). Juntas forman el achicador en el cielo. Mintaka, en Orión, es una estrella importante de esta línea porque sale/se pone justo al este o al oeste, lo que da al navegante una estrella guía sencilla para orientarse. Mirzim (junto a ‘A’a (Sirio)) y Ke Ali’i Kona i Ka Lewa (Canopus) se un"
+    },
+    "The Backbone": {
+     "s": "Ka Iwikuamo’o se traduce como la columna vertebral (literalmente: hueso espalda-lagarto). Esta línea estelar se representa como la columna de un lagarto o mo’o en esta cultura del cielo. También puede representar una columna genealógica, en la que cada estrella es una generación. La línea comienza con Hokupa’a (Estrella Polar), la guía definitiva hacia el norte porque nunca se mueve en el cielo y está siempre sobre el norte. Hokupa’a se une hacia abajo con Na Hiku (Osa Mayor). Na Hiku significa “Las Siete”, pues la Osa Mayor tiene siete estrellas. Hokule’a (Arturo) y Hikianalia (Espiga) son las dos estrellas centrales de la línea. Las dos canoas de la PVS llevan sus nombres. Hokule’a es la estrella “cenital” de Hawai"
+    },
+    "The Chief's Fishline": {
+     "s": "Manaiakalani se traduce como “El sedal del jefe”. Alude a la leyenda del semidiós Maui y su anzuelo, con el que, según se cuenta, sacó las islas del mar. Esta línea estelar consta de dos constelaciones: el Triángulo del Navegante al norte y el anzuelo de Maui al sur. El Triángulo del Navegante está formado por tres estrellas: Hawaiki (Deneb), Keoe (Vega) y Humu (Altair). (Es la misma figura que el Triángulo de Verano de los astrónomos aficionados modernos.) Estas estrellas también representan el triángulo polinesio: Hawai’i (Hawaiki), Rapanui (Keoe) y Aotearoa (Humu). Estas tres islas son arrastradas por el anzuelo de Maui (Escorpio). La guía hacia el norte se encuentra en el Na"
+    },
+    "Kite of Kawelo": {
+     "s": "Ka Lupe o Kawelo se traduce como “La cometa de Kawelo”. Kawelo fue un gran jefe de Kaua’i y O’ahu, y esta línea estelar representa la cometa que perdió de niño. Comienza con ‘Iwakeli’i, que significa Ave fragata jefe (Fregata minor). La forma de esta constelación (la W de Casiopea en Occidente) recuerda al ave ‘iwa, conocida por guiar a los navegantes hacia tierra. El centro de la línea es la Cometa de Kawelo (el Gran Cuadrado de Pegaso). Sus cuatro estrellas llevan los nombres de los mayores ancestros de Kawelo: Manokalanipo (δ Peg, Alpheratz), Kakuhihewa (β Peg, Scheat), Pi’ilani (γ Peg, Algenib) y Keawe (α Peg, Markab). Los cuatro fueron jefes célebres de"
+    }
+   }
+  },
+  "tukano": {
+   "figures": {
+    "Jararaca": {
+     "e": "Jararaca",
+     "s": "Una gran serpiente que se encuentra en parte de nuestras constelaciones de Escorpio, Sagitario y Corona Austral. Su ocaso junto con la puesta del sol corresponde al comienzo del año para este grupo de tukanos."
+    },
+    "Armadillo": {
+     "e": "Armadillo",
+     "s": "Esta constelación se encuentra en las constelaciones modernas del Delfín y en partes de la constelación del Águila. Este grupo de estrellas débiles se sitúa en un campo estelar pobre, con excepción de la brillante Altair (Alfa Aquilae)."
+    },
+    "Crenicichla": {
+     "e": "Crenicichla",
+     "s": "Ambas constelaciones se unen en unas pocas estrellas brillantes de la zona de Acuario y Piscis. Como son débiles, intentar verlas durante la noche es un desafío maravilloso."
+    },
+    "Jaguar": {
+     "e": "Jaguar",
+     "s": "Es una constelación grande, una de las más grandes, en las regiones norte del cielo nocturno. Durante toda la noche, cerca del horizonte, el gran puma se dibuja dentro de nuestras constelaciones de Cefeo, Casiopea y Perseo."
+    },
+    "Group of Stars": {
+     "s": "La traducción de nhorkoatero es literalmente 'grupo de estrellas'. Identificado con nuestras Pléyades, es muy importante como marcador del tiempo dentro de un calendario complejo para el pueblo tukano. También se usa como anuncio del período de lluvias."
+    },
+    "Moquém": {
+     "e": "Moquém",
+     "s": "Un Waikase (Moquém en portugués) es una especie de parrilla para cocinar pescado. Se identifica con el cúmulo abierto de las Híades en Tauro y con la brillante estrella Aldebarán, que sigue a las Pléyades. Es un asterismo fácil de ver en todo el cielo."
+    },
+    "Adze Handle": {
+     "s": "Formada por parte del cinturón de Orión y otras dos de las estrellas más brillantes de esta constelación, nuestras Betelgeuse y Bellatrix, esta constelación representa una parte de una herramienta que se usa para tallar madera."
+    },
+    "Egret": {
+     "s": "La posición real de esta constelación sigue en discusión: ¿están esas estrellas en la región de la Cabellera de Berenice o dentro del Cuervo? Elegimos la primera región porque así la presentaron como la verdadera los tukanos de la tribu São José II."
+    },
+    "Tortoise": {
+     "s": "Esta constelación se describe como la constelación occidental de la Cruz del Sur. A veces, esta constelación occidental tradicional también representaba una nutria o una tortuga para el pueblo tukano."
+    }
+   }
+  },
+  "kamilaroi": {
+   "figures": {
+    "Gawaargay": {
+     "e": "Gawaargay",
+     "s": "Gawaargay es el espíritu Emú en el Cielo, con la cabeza en el Saco de Carbón y el cuello y el cuerpo extendidos a lo largo de las franjas de polvo de la Vía Láctea (Warrambul), más allá de Escorpio. Los euahlayi y los kamilaroi lo ven con patas en abril y mayo, cuando es hembra y persigue a los machos. De junio a agosto es macho y está sentado en su nido sin patas (los machos incuban a las crías), y esa es la señal para recoger los huevos. Al anochecer, a fines de agosto, está vertical en el cielo, y la cabeza y el cuerpo forman dos \"huevos\", es decir, que no deben recogerse los huevos. Más tarde en el año aparece sobre el horizonte, por lo que se cree que está sentado en una charca, lo que significa que las charcas están llenas. Cuando",
+     "n": "Emú en el cielo"
+    },
+    "Birray Birray": {
+     "e": "Birray Birray",
+     "s": "Los Birray Birray son un grupo de muchachos no iniciados que están enamorados de las siete jóvenes (hermanas), las Miyay Miyay, que forman el cúmulo estelar de las Pléyades. Persiguieron a las Miyay Miyay, que terminaron en el cielo, y por eso fueron colocados en Orión, como las tres estrellas que forman el cinturón de Orión. Rigel es su fuego, y la espada de Orión es su atizador. El Wiringin, el viejo Dthillar, que es Aldebarán, los mantiene alejados de las Miyay Miyay."
+    },
+    "Birringoloo": {
+     "e": "Birringoloo",
+     "s": "Birringoloo es la segunda esposa de Byaame, el creador y héroe cultural. Se sienta junto a la fogata del campamento de Byaame (la estrella Alfa Muscae), y todas las mujeres con hijas que mueren llegan a este campamento antes de seguir hacia Bulimah (el Cielo detrás de Warrambul). Esperan en este campamento hasta que todas sus hijas hayan muerto y llegado al campamento, y entonces pueden seguir hacia Bulimah."
+    },
+    "Yarran": {
+     "e": "Yarran",
+     "s": "Yarran (también llamado mingga) son las raíces del árbol Yarran, una acacia, el árbol que Byaame llevó al Warrambul con el primer hombre que murió (y las cacatúas). En realidad está centrado en el Saco de Carbón, y la nebulosa oscura es el hueco del árbol visto desde abajo, con las raíces extendiéndose alrededor. Cuando alguien muere y va a Bulimah, pasa por el hueco del Yarran."
+    },
+    "Old Wiringin": {
+     "s": "Un Wiringin es un \"Hombre Sabio\" o médico aborigen. Este Wiringin, situado en la Pequeña Nube de Magallanes, está allí porque controla quién puede seguir hacia Bulimah. Si la persona que murió no está iniciada, no se le permite, porque no conoce las reglas, así que él la envía a Wadhaagudjaaylwan, en la Gran Nube de Magallanes. Este espíritu del nacimiento enviará a los no iniciados de regreso a la Tierra como un nuevo bebé, para que puedan ser iniciados. Este Wiringin está representado en cada cementerio aborigen por el árbol wilga (sauce nativo)."
+    },
+    "Old Dthillar and gunya": {
+     "s": "El viejo Dthillar es un Wiringin, en este caso el Wiringin de los Birray Birray, los muchachos no iniciados en Orión que suspiran por las Miyaay Miyaay (las Siete Hermanas) en las Pléyades. El viejo Dthillar es la estrella Aldebarán, también llamada Alfa Tauri, y está allí para proteger a las Miyaay Miyaay de los Birray Birray. La forma de \"V\" invertida que forman Alfa, Épsilon y Gamma Tauri es el gunya (choza) del viejo Dthillar."
+    },
+    "Wamba Wamba": {
+     "e": "Wamba Wamba",
+     "s": "\"Wamba\" significa \"loco\" o \"demente\". En este caso, la estrella Canopus se llama Wamba Wamba por diversas razones, según quién cuente la historia. El planeta Venus también se llama Wamba. Una hipótesis es que tanto Canopus como Venus se ven cerca del horizonte en verano y, debido a la refracción atmosférica, pueden \"centellear\" (titilar intensamente), lo que provoca rápidos cambios de color. Esto podría interpretarse como locura."
+    },
+    "Miyay Miyay": {
+     "e": "Miyay Miyay",
+     "s": "Las Miyay Miyay son las siete jóvenes (hermanas) que fueron perseguidas hasta el cielo, según la historia, por los Birray Birray, o por diversos Wiringins u otras personas malvadas. Forman el cúmulo estelar de las Pléyades, y como una de las hermanas es tímida, normalmente solo vemos seis estrellas. El Wiringin, el viejo Dthillar, que es Aldebarán, las protege de los Birray Birray en Orión."
+    },
+    "Wadhaagudjaaylwan": {
+     "e": "Wadhaagudjaaylwan",
+     "s": "Wadhaagudjaaylwan es la tercera esposa de Byaame; está en la Gran Nube de Magallanes y canta a las mujeres que van a tener bebés. Ella \"canta\" los bebés a las mujeres en la Tierra, y recibe a las personas que le envía el viejo Wiringin de la Pequeña Nube de Magallanes, y las devuelve a la Tierra como bebés."
+    },
+    "Bandaarr": {
+     "e": "Bandaarr",
+     "s": "Bandaarr significa canguro en kamilaroi/euahlayi, y este canguro se encuentra bajo el vientre del Emú en la Vía Láctea, mirando en dirección opuesta al Emú. Bandaarr es un canguro gris o rojo, según la cultura, y tiene importancia en las ceremonias."
+    },
+    "Muraay Muyaay": {
+     "e": "Muraay Muyaay",
+     "s": "Muraay en kamilaroi y Muyaay en euahlayi designan la cacatúa galerita, que son las estrellas Punteras (Alfa Centauri y Hadar/Beta Centauri). Terminaron en la constelación de la Cruz del Sur cuando su árbol, el Yarran, fue arrastrado al cielo con el primer hombre que murió, y siempre persiguen al Yarran."
+    },
+    "Warrawilbaarru": {
+     "e": "Warrawilbaarru",
+     "s": "Warrawilbaarru es el espíritu del remolino que vive en la constelación de Escorpio. Byaame normalmente le impide venir a la Tierra, pero en septiembre sale por uno de los tres agujeros (nebulosas oscuras) de Escorpio durante septiembre, y no regresa hasta alrededor de marzo. Durante este tiempo está en la Tierra como el \"willy willy\" o remolino, y puede ser peligroso para los niños y los hombres no iniciados."
+    }
+   }
+  },
+  "lokono": {
+   "figures": {
+    "Spirit of the black curassow": {
+     "s": "La constelación Hithikoya es el ‘Espíritu del paují negro’ (Crax alector), un ave muy cazada, a menudo criada por sus plumas y huevos. Según un mito lokono, Hithikoya vivía en la tierra, pero los lokono le disparaban sin cesar.[#11] Por eso subió al cielo para advertir a los paujíes de la llegada del cazador (ver Yokhârhin) y su compañero con una antorcha (ver Alêti). Los lokono identifican Hithikoya con la constelación occidental de la Cruz del Sur. Cuando aparece justo sobre los árboles en enero, los paujíes andan por el suelo y son fáciles de atrapar. En los meses siguientes, cuanto más alto sube Hithikoya por la mañana, más alto trepan las aves en los árboles. Hacia marzo aparece al"
+    },
+    "Grill": {
+     "s": "La constelación Yorhada ‘Parrilla’, o Wiwa yorhadale ‘Parrilla de la estrella’, representa una parrilla de madera sobre la que se asa carne [#4][#11][#21]. Su origen se explica en un mito relatado por Walter Roth sobre un hombre que mató a su esposa, la asó y dio su hígado a su suegra porque ella lo llamó cazador inútil [#10]. En venganza, la madre pidió a su hermano, Kamodo, que matara al hombre cuando fuera de caza. El hombre sospechó una trampa y escapó de la muerte enviando a su hermano en su lugar. La parrilla en la que se asó a la esposa se convirtió en la constelación occidental de Pegaso, según los lokono actuales, y marca el inicio de la pequeña estación seca (abril), cuando los lokono"
+    },
+    "Scores of stars": {
+     "s": "La constelación Yôkoro wiwa o Wiwa yôkoro, literalmente ‘Veintena de estrellas’, corresponde a las Pléyades y los lokono actuales la reconocen fácilmente. Probablemente se deba a que Yôkoro wiwa se describe como la constelación lokono más importante, pues anuncia el comienzo del año lokono [#17]. Tras aparecer por primera vez en junio por el este, le siguen las numerosas constelaciones koya, que aluden a los espíritus de animales y plantas que componen el calendario lokono. En esa época del año, los lokono dicen Yôkoro wiwa kayaran, ‘el nacimiento de Yôkoro wiwa’. Se dice que si Yôkoro wiwa brilla con fuerza cuando aparece por primera vez, mucha gente morirá ese año [#5]."
+    },
+    "Man without a thigh": {
+     "s": "La constelación Mabukuli ‘Hombre sin muslo’ es muy conocida entre los lokono y aparece en algunos mitos. Según Charles Dance, un cazador sin suerte se cortó la pierna, la envolvió en una hoja y se la dio a su madrastra para que tuviera algo que comer, y subió al cielo.[#16] Del mismo modo, los hermanos Penard hablan de un cazador sin suerte que se cortó la pierna y se la dio a su esposa y a su suegra, diciéndoles que era carne de tapir.[#17] Luego pidió a otros que siguieran su rastro para ayudarle a traer el resto del tapir, pero al llegar solo encontraron la planta akalali con la que había curado sus heridas. Su cuerpo se convirtió en la constelación Kama tâla y"
+    },
+    "Jaw of the tapir": {
+     "s": "La constelación Kama tâla ‘Mandíbula del tapir’ es una de las pocas que los lokono actuales identifican fácilmente, al igual que Mabukuli, con la que se relaciona en un mito.[#8],[#15] Los hermanos Penard cuentan la historia de un cazador sin suerte que se corta carne de la pierna y se la da a su esposa y a su suegra, diciéndoles que es carne de tapir (Tapirus terrestris).[#17] Luego pide a los suyos que lo sigan para traer el resto del tapir, pero al llegar solo encuentran la planta akalali con la que había curado sus heridas. Su cuerpo se convirtió en Kama tâla y su espíritu en Mabukuli. En cambio, en un relato kari’na, Kama tâla eran los restos de un tap"
+    },
+    "Spirit of the awara palm": {
+     "s": "La constelación Awarhakoya ‘Espíritu de la palma awara’ tiene la forma de una palma awara (Astrocaryum vulgare). Su aparición en lo alto del cielo en enero indica que los frutos de awara están madurando. En los meses siguientes, Awarhakoya se acerca al horizonte, señal de que los frutos pronto caerán al suelo para ser recogidos. Esto ocurre en la pequeña estación seca (de mediados de febrero a abril), llamada awarhadlithe, término derivado del nombre de la palma.[#7],[#17] No hay mitos sobre Awarhakoya, pero se dice que a la constelación le siguen las de Hadorhikoya ‘Espíritu del acuchí rojo’ y Hokorherokoya ‘Espíritu del agutí de rabadilla roja’. Su aparición indica que los roedores ga"
+    },
+    "Spirit of the blue crab": {
+     "s": "La constelación Kwakoya ‘Espíritu del cangrejo azul’ aún es conocida en las comunidades lokono más cercanas a la costa, que celebran las fiestas anuales del cangrejo. La especie es probablemente la misma que representa la constelación kari’na Kusa yumï ‘Padre del cangrejo azul’ (Ucides cordatus). La constelación aparece por el este a mediados de julio. A comienzos de agosto está alta en el cielo, señal de que los cangrejos llegan a las playas a poner sus huevos. En ese momento, los lokono y otros grupos indígenas de la zona se reúnen en la orilla del Atlántico para atrapar a los cangrejos en marcha. Los cangrejos se consideran un manjar y cuando los aldeanos regresan a las comunidades con los can"
+    },
+    "Spirit of the cocoi heron": {
+     "s": "La constelación Anorhâkoya representa el espíritu de la garza cuca (Ardea cocoi). Los lokono actuales la reconocen como la Osa Mayor, en consonancia con identificaciones anteriores.[#11],[#15] Claudius de Geoje relata que cuando brilla con fuerza, los lokono creen que vendrán vientos fuertes que llevarán polvo a los ojos de la gente y, con ello, enfermedades: se dice que la garza les pica los ojos con el pico.[#11] Del mismo modo, según Cornelius van Coll, Anorhâkoya es una garza con el pico hacia arriba. Si el pico se girara hacia abajo, la gente sufriría todo tipo de enfermedades oculares.[#7] Esto aún puede ocurrir cuando soplan vientos fuertes que llevan la luz del pico a los ojos de la gente, ya que el"
+    },
+    "Spirit of green sea turtle": {
+     "s": "La constelación Katarhokoya ‘Espíritu de la tortuga verde’ aún es conocida en el río Pomeroon, en Guyana. Representa a la tortuga katarho (Chelonia mydas) nadando hacia la orilla, representada a su vez por la Vía Láctea. Cuando la constelación aparece alta en el cielo por la mañana, indica que las tortugas llegan a las playas a poner huevos. Fuentes anteriores la identificaron con la Corona Boreal y el cinturón de Orión. [#8],[#11] Si bien la primera coincide con las estrellas señaladas por los lokono del Pomeroon, la segunda es probablemente un error, pues el cinturón de Orión se reconoce siempre como Mabukuli ‘Hombre sin muslo’. La constelación Katarhokoya sale temprano en el"
+    },
+    "Spirit of the Muscovy duck": {
+     "s": "La constelación Ifakoya ‘Espíritu del pato criollo’ (Cairina moschata) fue mencionada por los hermanos Penard y Claudius de Goeje, pero no se había identificado hasta ahora.[#11],[#17] Los lokono actuales del río Pomeroon, en Guyana, la reconocen en partes de la constelación occidental de la Corona Austral. No hay mitos sobre esta constelación, pero los lokono dicen que cuando la cabeza del pato apunta hacia el suelo, como si el pato tuviera la cabeza bajo el agua, los patos están ocupados comiendo plantas. La constelación adopta esta posición a partir de mediados de mayo. Se dice que entonces las aves son más fáciles de atrapar. El pato criollo se considera un manjar y también se cría a me"
+    }
+   }
+  }
+ },
+ "fr": {
+  "western": {
+   "figures": {
+    "Eagle": {
+     "e": "Aigle"
+    },
+    "Chained Maiden": {
+     "e": "Femme enchaînée"
+    },
+    "Sculptor": {
+     "e": "Sculpteur"
+    },
+    "Altar": {
+     "e": "Autel"
+    },
+    "Scales": {
+     "e": "Balance"
+    },
+    "Sea Monster": {
+     "e": "Monstre marin"
+    },
+    "Ram": {
+     "e": "Bélier"
+    },
+    "Shield": {
+     "e": "Écu"
+    },
+    "Compass": {
+     "e": "Compas"
+    },
+    "Herdsman": {
+     "e": "Bouvier"
+    },
+    "Engraving Tool": {
+     "e": "Burin"
+    },
+    "Chameleon": {
+     "e": "Caméléon"
+    },
+    "Crab": {
+     "e": "Crabe"
+    },
+    "Sea Goat": {
+     "e": "Capricorne"
+    },
+    "Keel": {
+     "e": "Carène"
+    },
+    "Seated Queen": {
+     "e": "Reine assise"
+    },
+    "Centaur": {
+     "e": "Centaure"
+    },
+    "King": {
+     "e": "Roi"
+    },
+    "Bernice's Hair": {
+     "e": "Chevelure de Bérénice"
+    },
+    "Hunting Dogs": {
+     "e": "Chiens de chasse"
+    },
+    "Charioteer": {
+     "e": "Cocher"
+    },
+    "Dove": {
+     "e": "Colombe"
+    },
+    "Cup": {
+     "e": "Coupe"
+    },
+    "Southern Crown": {
+     "e": "Couronne australe"
+    },
+    "Northern Crown": {
+     "e": "Couronne boréale"
+    },
+    "Crow": {
+     "e": "Corbeau"
+    },
+    "Southern Cross": {
+     "e": "Croix du Sud"
+    },
+    "Swan": {
+     "e": "Cygne"
+    },
+    "Dolphin": {
+     "e": "Dauphin"
+    },
+    "Swordfish": {
+     "e": "Dorade"
+    },
+    "Dragon": {
+     "e": "Dragon"
+    },
+    "Carpenter's Square": {
+     "e": "Équerre"
+    },
+    "River": {
+     "e": "Fleuve"
+    },
+    "Arrow": {
+     "e": "Flèche"
+    },
+    "Furnace": {
+     "e": "Fourneau"
+    },
+    "Twins": {
+     "e": "Gémeaux"
+    },
+    "Giraffe": {
+     "e": "Girafe"
+    },
+    "Great Dog": {
+     "e": "Grand Chien"
+    },
+    "Great Bear": {
+     "e": "Grande Ourse"
+    },
+    "Crane": {
+     "e": "Grue"
+    },
+    "Hercules": {
+     "e": "Hercule"
+    },
+    "Clock": {
+     "e": "Horloge"
+    },
+    "Female Water Snake": {
+     "e": "Hydre femelle"
+    },
+    "Male Water Snake": {
+     "e": "Hydre mâle"
+    },
+    "Indian": {
+     "e": "Indien"
+    },
+    "Lizard": {
+     "e": "Lézard"
+    },
+    "Unicorn": {
+     "e": "Licorne"
+    },
+    "Hare": {
+     "e": "Lièvre"
+    },
+    "Lion": {
+     "e": "Lion"
+    },
+    "Wolf": {
+     "e": "Loup"
+    },
+    "Lynx": {
+     "e": "Lynx"
+    },
+    "Lyre": {
+     "e": "Lyre"
+    },
+    "Air Pump": {
+     "e": "Machine pneumatique"
+    },
+    "Microscope": {
+     "e": "Microscope"
+    },
+    "Fly": {
+     "e": "Mouche"
+    },
+    "Octant": {
+     "e": "Octant"
+    },
+    "Bird of Paradise": {
+     "e": "Oiseau de paradis"
+    },
+    "Serpent Bearer": {
+     "e": "Serpentaire"
+    },
+    "Hunter": {
+     "e": "Chasseur"
+    },
+    "Peacock": {
+     "e": "Paon"
+    },
+    "Winged Horse": {
+     "e": "Cheval ailé"
+    },
+    "Painter's Easel": {
+     "e": "Chevalet du peintre"
+    },
+    "Hero": {
+     "e": "Héros"
+    },
+    "Little Horse": {
+     "e": "Petit Cheval"
+    },
+    "Lesser Dog": {
+     "e": "Petit Chien"
+    },
+    "Lesser Lion": {
+     "e": "Petit Lion"
+    },
+    "Fox": {
+     "e": "Renard"
+    },
+    "Little Bear": {
+     "e": "Petite Ourse"
+    },
+    "Phoenix": {
+     "e": "Phénix"
+    },
+    "Fishes": {
+     "e": "Poissons"
+    },
+    "Southern Fish": {
+     "e": "Poisson austral"
+    },
+    "Flying Fish": {
+     "e": "Poisson volant"
+    },
+    "Stern": {
+     "e": "Poupe"
+    },
+    "Reticle": {
+     "e": "Réticule"
+    },
+    "Archer": {
+     "e": "Archer"
+    },
+    "Scorpion": {
+     "e": "Scorpion"
+    },
+    "Serpent": {
+     "e": "Serpent"
+    },
+    "Sextant": {
+     "e": "Sextant"
+    },
+    "Table Mountain": {
+     "e": "Montagne de la Table"
+    },
+    "Bull": {
+     "e": "Taureau"
+    },
+    "Telescope": {
+     "e": "Télescope"
+    },
+    "Toucan": {
+     "e": "Toucan"
+    },
+    "Triangle": {
+     "e": "Triangle"
+    },
+    "Southern Triangle": {
+     "e": "Triangle austral"
+    },
+    "Water Bearer": {
+     "e": "Verseau"
+    },
+    "Maiden": {
+     "e": "Vierge"
+    },
+    "Sails": {
+     "e": "Voiles"
+    }
+   }
+  },
+  "maori": {
+   "figures": {
+    "Taki-o-Autahi": {
+     "e": "Taki-o-Autahi"
+    },
+    "Te Taura-o-te-waka-o-tamarereti": {
+     "e": "Te Taura-o-te-waka-o-tamarereti"
+    },
+    "Tau-toro": {
+     "e": "Tau-toro"
+    },
+    "Matakarehu": {
+     "e": "Matakarehu"
+    }
+   }
+  },
+  "navajo": {
+   "figures": {
+    "Dilyehe": {
+     "e": "Dilyehe"
+    }
+   }
+  },
+  "boorong": {
+   "figures": {
+    "Crow": {
+     "s": "Corbeau · Canopus"
+    },
+    "Galaxy": {
+     "s": "Galaxie · Voie lactée"
+    },
+    "Boomerang": {
+     "e": "Boomerang",
+     "s": "Boomerang · Couronne australe"
+    }
+   }
+  },
+  "tupi": {
+   "figures": {
+    "White Ostrich": {
+     "s": "Le nom tupi de cette constellation est Iandutim (Guirá Nhandu en guarani), ce qui se traduit littéralement par Autruche blanche. La constellation représente un grand oiseau. Durant les deux premières semaines de juin, elle est entièrement visible dans le ciel de l'est en soirée, ce qui annonce le début de l'hiver dans le sud du Brésil et le début de la saison sèche dans le nord."
+    },
+    "Old Man": {
+     "s": "Cette constellation représente un vieil homme tenant un bâton. Dans la seconde moitié de décembre, elle est entièrement visible dans le ciel de l'est en soirée. Cela marque le début de l'été dans le sud du Brésil et le début de la saison des pluies dans le nord."
+    },
+    "Joykexo": {
+     "e": "Joykexo"
+    },
+    "Tapir's Jaw": {
+     "e": "Mâchoire du tapir"
+    }
+   }
+  },
+  "inuit": {
+   "figures": {
+    "Caribou": {
+     "e": "Caribou"
+    }
+   }
+  },
+  "aztec": {
+   "figures": {
+    "New fire": {
+     "s": "Les anciens Aztèques appelaient la Ceinture d'Orion « Mamalhuaztli ». Elle représentait les bâtons de bois utilisés pour allumer le feu nouveau lors de la commémoration célébrée tous les 52 ans par les Mexicas et leurs voisins. Cette célébration s'appelait toxiuh molpilia, ce qui signifie « ligature des années », et coïncidait avec le début de la nouvelle année, appelée xiuhtzitzquilo. ![](mamalhuaztliimage.webp)"
+    },
+    "Market": {
+     "s": "Pour les Mexicas, le groupe d'étoiles connu sous le nom de Pléiades symbolisait Tianquiztli (le Marché), peut-être en raison de la foule qui s'y rassemble. On les représente généralement par une ou deux personnes à l'intérieur d'un cercle avec des marchandises. ![](tiaquitztliimage.webp) Aujourd'hui, au Mexique, le marché informel ou les marchés de rue s'appellent Tianguis."
+    },
+    "Ball game of the stars": {
+     "s": "La constellation des Gémeaux s'appelait Citlaltlachtli, ce qui signifie le jeu de balle des étoiles. Ce jeu avait une portée rituelle et se jouait avec une balle en caoutchouc naturel. On dit que le mouvement de la balle sur le terrain évoque le mouvement du Soleil et de la Lune."
+    },
+    "Twisted foot": {
+     "s": "La constellation de la Petite Ourse est identifiée à Xonecuilli (le Pied tordu). Elle est liée à Nanahuatzin, un personnage représenté avec les pieds tordus, couvert de furoncles et de plaies. Ce dieu malade et pauvre s'est sacrifié pour devenir Tonatiuh, le dieu Soleil. ![](nanahuatzin.webp) Ce nom de constellation peut aussi, semble-t-il, être associé à la Croix du Sud et aux étoiles voisines (surtout dans les textes de Tezozomoc). Le prêtre missionnaire espagnol Sahagún rapporte [#7] que sa forme ressemble à un pain en forme de lettre S et que les Aztèques l'appellent xonecuilli. !Xonecuilli Xonecuilli {: .imgandcaption }"
+    },
+    "Scorpion face": {
+     "s": "Selon le Codex de Florence, les informateurs de Sahagún identifiaient un groupe d'étoiles appelé Citlalcolotl aux étoiles du Scorpion. Tezozomoc mentionne lui aussi l'étoile du scorpion et l'appelle Colotlixayac, ce qui signifie face de scorpion. !Paris Codex Dans une section du Codex de Paris appelée pages du zodiaque [#3],[#10], le scorpion est également mentionné. Dans ce codex, les icônes montrent des figures d'animaux suspendues au corps du Dragon céleste. {: .imgandcaption }"
+    }
+   }
+  },
+  "hawaiian_starlines": {
+   "figures": {
+    "Leo": {
+     "e": "Lion"
+    },
+    "The Canoe Bailer of Makali`i": {
+     "s": "La traduction directe signifie « l’Écope de canoë de Makali’i ». Les lignes dessinent une écope qui recueille Ka Hei-Hei o Na Keiki (Orion) et Makali’i (Pléiades) dans le ciel nocturne. En navigation, l’écope sert à vider l’eau des coques. Les étoiles principales de Ke Ka o Makali’i, du nord au sud, sont Hokulei (Capella), Nanamua (Castor), Nanahope (Pollux), Puana (Procyon) et ‘A’a (Sirius). Reliées, elles forment l’écope dans le ciel. Mintaka, dans Orion, est une étoile importante de cette ligne car elle se lève/se couche plein est ou plein ouest, offrant au navigateur un repère simple pour s’orienter. Mirzim (à côté de ‘A’a (Sirius)) et Ke Ali’i Kona i Ka Lewa (Canopus) se rel"
+    },
+    "The Backbone": {
+     "s": "Ka Iwikuamo’o se traduit par la colonne vertébrale (littéralement : os dos-lézard). Cette ligne d’étoiles figure la colonne d’un lézard ou mo’o dans cette culture du ciel. Elle peut aussi représenter une lignée généalogique, chaque étoile étant une génération. La ligne commence par Hokupa’a (l’étoile Polaire), repère ultime du nord car elle ne bouge jamais dans le ciel et se tient toujours au-dessus du nord. Hokupa’a rejoint vers le bas Na Hiku (la Grande Casserole). Na Hiku signifie « Les Sept », car la Grande Casserole compte sept étoiles. Hokule’a (Arcturus) et Hikianalia (Spica) sont les deux étoiles du milieu de la ligne. Les deux pirogues de la PVS portent leurs noms. Hokule’a est l’étoile « zénithale » d’Hawai"
+    },
+    "The Chief's Fishline": {
+     "s": "Manaiakalani se traduit par « La ligne de pêche du chef ». Cela renvoie à la légende du demi-dieu Maui et de son hameçon magique, avec lequel il aurait tiré les îles de la mer. Cette ligne d’étoiles réunit deux constellations : le Triangle du navigateur au nord et l’hameçon de Maui au sud. Le Triangle du navigateur est formé de trois étoiles : Hawaiki (Deneb), Keoe (Véga) et Humu (Altaïr). (C’est la même figure que le Triangle d’été des astronomes amateurs modernes.) Ces étoiles représentent aussi le triangle polynésien : Hawai’i (Hawaiki), Rapanui (Keoe) et Aotearoa (Humu). Ces trois îles sont tirées par l’hameçon de Maui (Scorpion). Le repère du nord se trouve dans le Na"
+    },
+    "Kite of Kawelo": {
+     "s": "Ka Lupe o Kawelo se traduit par « Le cerf-volant de Kawelo ». Kawelo fut un grand chef de Kaua’i et d’O’ahu, et cette ligne d’étoiles représente le cerf-volant qu’il perdit enfant. Elle commence par ‘Iwakeli’i, qui signifie Frégate chef (Fregata minor). La forme de cette constellation (le W de Cassiopée en Occident) rappelle l’oiseau ‘iwa, connu pour guider les navigateurs vers la terre. Le centre de la ligne est le Cerf-volant de Kawelo (le Grand Carré de Pégase). Ses quatre étoiles portent les noms des plus grands ancêtres de Kawelo : Manokalanipo (δ Peg, Alpheratz), Kakuhihewa (β Peg, Scheat), Pi’ilani (γ Peg, Algenib) et Keawe (α Peg, Markab). Tous quatre furent des chefs célèbres d"
+    }
+   }
+  },
+  "tukano": {
+   "figures": {
+    "Jararaca": {
+     "e": "Jararaca",
+     "s": "Un grand serpent qui occupe une partie de nos constellations du Scorpion, du Sagittaire et de la Couronne australe. Son coucher au crépuscule correspond au début de l'année pour ce groupe de Tukanos."
+    },
+    "Armadillo": {
+     "s": "Cette constellation se trouve dans les constellations modernes du Dauphin et dans une partie de l'Aigle. Ce groupe d'étoiles faibles se situe dans un champ stellaire pauvre, à l'exception de la brillante Altaïr (Alpha Aquilae)."
+    },
+    "Crenicichla": {
+     "e": "Crenicichla",
+     "s": "Les deux constellations se rejoignent en quelques étoiles brillantes de la région du Verseau et des Poissons. Comme elles sont faibles, essayer de les voir la nuit est un merveilleux défi."
+    },
+    "Jaguar": {
+     "e": "Jaguar",
+     "s": "C'est une grande constellation – l'une des plus grandes – dans les régions nord du ciel nocturne. Toute la nuit, près de l'horizon, le grand puma se dessine dans nos constellations de Céphée, Cassiopée et Persée."
+    },
+    "Group of Stars": {
+     "s": "Nhorkoatero se traduit littéralement par « groupe d'étoiles ». Identifié à nos Pléiades, il joue un rôle très important comme repère du temps dans le calendrier complexe du peuple tukano. Il sert aussi à annoncer la période des pluies."
+    },
+    "Moquém": {
+     "e": "Moquém",
+     "s": "Un Waikase (Moquém en portugais) est une sorte de gril pour cuire le poisson. Il est identifié à l'amas ouvert des Hyades dans le Taureau et à l'étoile brillante Aldébaran, qui suit les Pléiades. C'est un astérisme facile à voir dans tout le ciel."
+    },
+    "Adze Handle": {
+     "s": "Formée d'une partie de la ceinture d'Orion et de deux autres des étoiles les plus brillantes de cette constellation – nos Bételgeuse et Bellatrix –, cette constellation représente une partie d'un outil servant à tailler le bois."
+    },
+    "Egret": {
+     "s": "La position réelle de cette constellation est encore discutée : ces étoiles se trouvent-elles dans la région de la Chevelure de Bérénice ou dans le Corbeau ? Nous avons choisi la première région, car c'est celle que les Tukanos de la tribu São José II ont présentée comme la vraie."
+    },
+    "Tortoise": {
+     "s": "Cette constellation est décrite comme la constellation occidentale de la Croix du Sud. Parfois, cette constellation occidentale traditionnelle représentait aussi une loutre ou une tortue pour le peuple tukano."
+    }
+   }
+  },
+  "kamilaroi": {
+   "figures": {
+    "Gawaargay": {
+     "e": "Gawaargay",
+     "s": "Gawaargay est l’esprit Émeu dans le Ciel ; sa tête est dans le Sac à charbon et son cou et son corps s’étirent le long des bandes de poussière de la Voie lactée (Warrambul), au-delà du Scorpion. Les Euahlayi et les Kamilaroi le voient avec des pattes en avril et mai, quand il est femelle et poursuit les mâles. De juin à août, il est mâle et couve son nid, sans pattes (ce sont les mâles qui couvent les petits), et c’est le signal pour ramasser les œufs. Le soir, fin août, il est vertical dans le ciel, et la tête et le corps forment deux « œufs » : il ne faut alors pas ramasser les œufs. Plus tard dans l’année, il apparaît sur l’horizon et l’on pense qu’il est assis dans un point d’eau, ce qui signifie que les points d’eau sont pleins. Quand",
+     "n": "Émeu dans le ciel"
+    },
+    "Birray Birray": {
+     "e": "Birray Birray",
+     "s": "Les Birray Birray sont un groupe de garçons non initiés, amoureux des sept jeunes femmes (sœurs), les Miyay Miyay, qui forment l'amas des Pléiades. Ils ont poursuivi les Miyay Miyay, qui ont fini dans le ciel, et pour cela ils ont été placés dans Orion, comme les trois étoiles qui forment la ceinture d'Orion. Rigel est leur feu, et l'épée d'Orion est leur tisonnier. Le Wiringin, le vieux Dthillar, qui est Aldébaran, les tient à l'écart des Miyay Miyay."
+    },
+    "Birringoloo": {
+     "e": "Birringoloo",
+     "s": "Birringoloo est la deuxième épouse de Byaame, le créateur et héros culturel. Elle est assise près du feu du camp de Byaame (l'étoile Alpha Muscae), et toutes les femmes ayant des filles qui meurent viennent à ce camp avant de poursuivre vers Bulimah (le Ciel derrière Warrambul). Elles attendent dans ce camp que toutes leurs filles soient mortes et les aient rejointes, puis elles peuvent continuer vers Bulimah."
+    },
+    "Yarran": {
+     "e": "Yarran",
+     "s": "Yarran (aussi appelé mingga) désigne les racines de l'arbre Yarran, un acacia, l'arbre que Byaame a emporté jusqu'au Warrambul avec le premier homme mort (et les cacatoès). Il est en fait centré sur le Sac à charbon, et la nébuleuse obscure est le creux de l'arbre vu d'en dessous, avec les racines qui s'étendent tout autour. Quand quelqu'un meurt et part pour Bulimah, il passe par le creux du Yarran."
+    },
+    "Old Wiringin": {
+     "s": "Un Wiringin est un « Homme sage » ou médecin aborigène. Ce Wiringin, situé dans le Petit Nuage de Magellan, s'y trouve parce qu'il décide qui peut poursuivre vers Bulimah. Si la personne décédée n'est pas initiée, elle n'y est pas admise, car elle ne connaît pas les règles ; il l'envoie donc à Wadhaagudjaaylwan, dans le Grand Nuage de Magellan. Cet esprit de la naissance renverra les non-initiés sur Terre sous la forme d'un nouveau bébé, afin qu'ils puissent être initiés. Ce Wiringin est représenté dans chaque cimetière aborigène par l'arbre wilga (saule indigène)."
+    },
+    "Old Dthillar and gunya": {
+     "s": "Le vieux Dthillar est un Wiringin, ici le Wiringin des Birray Birray, les garçons non initiés d'Orion qui languissent après les Miyaay Miyaay (les Sept Sœurs) des Pléiades. Le vieux Dthillar est l'étoile Aldébaran, aussi appelée Alpha Tauri, et il se tient là pour protéger les Miyaay Miyaay des Birray Birray. Le « V » inversé formé par Alpha, Epsilon et Gamma Tauri est le gunya (hutte) du vieux Dthillar."
+    },
+    "Wamba Wamba": {
+     "e": "Wamba Wamba",
+     "s": "« Wamba » signifie « fou » ou « insensé ». Ici, l'étoile Canopus est appelée Wamba Wamba pour diverses raisons, selon la personne qui raconte l'histoire. La planète Vénus s'appelle aussi Wamba. Une hypothèse est que Canopus et Vénus apparaissent toutes deux près de l'horizon en été et que, à cause de la réfraction atmosphérique, elles peuvent « scintiller » fortement, ce qui produit de rapides changements de couleur. Cela pourrait être interprété comme de la folie."
+    },
+    "Miyay Miyay": {
+     "e": "Miyay Miyay",
+     "s": "Les Miyay Miyay sont les sept jeunes femmes (sœurs) qui ont été poursuivies jusque dans le ciel, selon les récits, par les Birray Birray, ou par divers Wiringins ou d'autres personnes malveillantes. Elles forment l'amas des Pléiades, et comme l'une des sœurs est timide, on ne voit normalement que six étoiles. Le Wiringin, le vieux Dthillar, qui est Aldébaran, les protège des Birray Birray d'Orion."
+    },
+    "Wadhaagudjaaylwan": {
+     "e": "Wadhaagudjaaylwan",
+     "s": "Wadhaagudjaaylwan est la troisième épouse de Byaame ; elle se trouve dans le Grand Nuage de Magellan et chante pour les femmes qui vont avoir un bébé. Elle « chante » les bébés vers les femmes sur Terre, accueille les personnes que lui envoie le vieux Wiringin du Petit Nuage de Magellan, et les renvoie sur Terre sous forme de bébés."
+    },
+    "Bandaarr": {
+     "e": "Bandaarr",
+     "s": "Bandaarr signifie kangourou en kamilaroi/euahlayi ; ce kangourou se trouve sous le ventre de l'Émeu dans la Voie lactée, tournant le dos à l'Émeu. Bandaarr est un kangourou gris ou roux, selon la culture, et il a une importance cérémonielle."
+    },
+    "Muraay Muyaay": {
+     "e": "Muraay Muyaay",
+     "s": "Muraay en kamilaroi et Muyaay en euahlayi désignent le cacatoès à huppe jaune ; ce sont les étoiles Pointeuses (Alpha Centauri et Hadar/Bêta Centauri). Ils se sont retrouvés dans la constellation de la Croix du Sud lorsque leur arbre, le Yarran, a été entraîné dans le ciel avec le premier homme mort, et ils poursuivent sans cesse le Yarran."
+    },
+    "Warrawilbaarru": {
+     "e": "Warrawilbaarru",
+     "s": "Warrawilbaarru est l'esprit du tourbillon qui vit dans la constellation du Scorpion. Byaame l'empêche normalement de venir sur Terre, mais en septembre il sort par l'un des trois trous (nébuleuses obscures) du Scorpion pendant le mois de septembre, et n'y retourne que vers mars. Pendant ce temps, il est sur Terre sous la forme du « willy willy », ou tourbillon, et peut être dangereux pour les enfants et les hommes non initiés."
+    }
+   }
+  },
+  "lokono": {
+   "figures": {
+    "Spirit of the black curassow": {
+     "s": "La constellation Hithikoya est l’‘Esprit du hocco alector’ (Crax alector), un oiseau très chassé, souvent gardé pour ses plumes et ses œufs. Selon un mythe lokono, Hithikoya vivait sur terre, mais les Lokono ne cessaient de lui tirer dessus.[#11] Il monta donc au ciel pour avertir les hoccos de l’approche du chasseur (voir Yokhârhin) et de son compagnon muni d’une torche (voir Alêti). Les Lokono identifient Hithikoya à la constellation occidentale de la Croix du Sud. Quand elle apparaît juste au-dessus des arbres en janvier, les hoccos errent au sol et sont faciles à attraper. Les mois suivants, plus Hithikoya monte haut le matin, plus les oiseaux grimpent haut dans les arbres. En mars, elle apparaît ha"
+    },
+    "Grill": {
+     "s": "La constellation Yorhada ‘Gril’, ou Wiwa yorhadale ‘Gril de l’étoile’, représente un gril en bois sur lequel on fait rôtir la viande [#4][#11][#21]. Son origine est expliquée par un mythe rapporté par Walter Roth : un homme tua sa femme, la fit rôtir et donna son foie à sa belle-mère parce qu’elle l’avait traité de chasseur bon à rien [#10]. Pour se venger, la mère demanda à son frère, Kamodo, de tuer l’homme lorsqu’il irait chasser. L’homme soupçonna un piège et échappa à la mort en envoyant son frère à sa place. Le gril sur lequel la femme avait rôti devint la constellation occidentale de Pégase, selon les Lokono actuels, et marque le début de la petite saison sèche (avril), quand les Lokono"
+    },
+    "Scores of stars": {
+     "s": "La constellation Yôkoro wiwa ou Wiwa yôkoro, littéralement ‘Vingtaine d’étoiles’, désigne les Pléiades et les Lokono actuels la reconnaissent aisément. C’est sans doute parce que Yôkoro wiwa est décrite comme la plus importante des constellations lokono, puisqu’elle annonce le début de l’année lokono [#17]. Après sa première apparition en juin à l’est, viennent les nombreuses constellations koya, qui renvoient aux esprits des animaux et des plantes formant le calendrier lokono. À cette période, les Lokono disent Yôkoro wiwa kayaran, ‘la naissance de Yôkoro wiwa’. On dit que si Yôkoro wiwa brille fort lors de sa première apparition, beaucoup de gens mourront dans l’année [#5]."
+    },
+    "Man without a thigh": {
+     "s": "La constellation Mabukuli ‘Homme sans cuisse’ est bien connue des Lokono et apparaît dans quelques mythes. Selon Charles Dance, un chasseur malchanceux se coupa la jambe, l’enveloppa dans une feuille et la donna à sa belle-mère pour qu’elle ait de quoi manger, puis monta au ciel.[#16] De même, les frères Penard parlent d’un chasseur malchanceux qui se coupa la jambe et la donna à sa femme et à sa belle-mère en leur disant que c’était de la viande de tapir.[#17] Il demanda ensuite à d’autres de suivre ses traces pour l’aider à rapporter le reste du tapir, mais sur place ils ne trouvèrent que la plante akalali avec laquelle il avait soigné ses plaies. Son corps devint la constellation Kama tâla e"
+    },
+    "Jaw of the tapir": {
+     "s": "La constellation Kama tâla ‘Mâchoire du tapir’ est l’une des rares que les Lokono actuels identifient facilement, tout comme Mabukuli, à laquelle un mythe la relie.[#8],[#15] Les frères Penard racontent l’histoire d’un chasseur malchanceux qui se coupe de la chair de la jambe et la donne à sa femme et à sa belle-mère en leur disant que c’est de la viande de tapir (Tapirus terrestris).[#17] Il demande ensuite aux siens de le suivre pour rapporter le reste du tapir, mais sur place ils ne trouvent que la plante akalali avec laquelle il avait soigné ses plaies. Son corps devint Kama tâla et son esprit Mabukuli. Dans un récit kari’na, en revanche, Kama tâla était les restes d’un tap"
+    },
+    "Spirit of the awara palm": {
+     "s": "La constellation Awarhakoya ‘Esprit du palmier awara’ a la forme d’un palmier awara (Astrocaryum vulgare). Son apparition haut dans le ciel en janvier signifie que les fruits d’awara mûrissent. Les mois suivants, Awarhakoya se rapproche de l’horizon : les fruits vont bientôt tomber au sol pour être ramassés. Cela se produit pendant la petite saison sèche (de mi-février à avril), appelée awarhadlithe, terme dérivé du nom du palmier.[#7],[#17] Il n’existe pas de mythes sur Awarhakoya, mais on dit que la constellation est suivie de celles de Hadorhikoya ‘Esprit de l’acouchi rouge’ et de Hokorherokoya ‘Esprit de l’agouti à croupion roux’. Leur apparition signale que les rongeurs pr"
+    },
+    "Spirit of the blue crab": {
+     "s": "La constellation Kwakoya ‘Esprit du crabe bleu’ est encore connue dans les communautés lokono les plus proches de la côte, qui célèbrent les fêtes annuelles du crabe. L’espèce est probablement la même que celle de la constellation kari’na Kusa yumï ‘Père du crabe bleu’ (Ucides cordatus). La constellation apparaît à l’est à la mi-juillet. Début août, elle est haut dans le ciel, signe que les crabes arrivent sur les plages pour pondre. Les Lokono et d’autres groupes autochtones de la région se rassemblent alors sur le rivage de l’Atlantique pour attraper les crabes en marche. Les crabes sont considérés comme un mets délicat et, quand les villageois rentrent dans leurs communautés avec les cr"
+    },
+    "Spirit of the cocoi heron": {
+     "s": "La constellation Anorhâkoya représente l’esprit du héron cocoi (Ardea cocoi). Les Lokono actuels la reconnaissent comme la Grande Ourse, conformément aux identifications antérieures.[#11],[#15] Claudius de Geoje rapporte que lorsqu’elle brille fort, les Lokono croient que des vents violents vont venir, portant la poussière dans les yeux des gens et donc des maladies : le héron leur pique les yeux de son bec, dit-on.[#11] De même, selon Cornelius van Coll, Anorhâkoya est un héron au bec tourné vers le haut. Si son bec se tournait vers le bas, les gens attraperaient toutes sortes de maladies des yeux.[#7] Cela peut encore arriver quand des vents violents portent la lumière du bec dans les yeux des gens, car le"
+    },
+    "Spirit of green sea turtle": {
+     "s": "La constellation Katarhokoya ‘Esprit de la tortue verte’ est encore connue sur le fleuve Pomeroon, au Guyana. Elle représente la tortue katarho (Chelonia mydas) nageant vers le rivage, lui-même figuré par la Voie lactée. Quand la constellation apparaît haut dans le ciel le matin, c’est le signal que les tortues arrivent sur les plages pour pondre. Des sources plus anciennes l’ont identifiée à la Couronne boréale et à la ceinture d’Orion. [#8],[#11] Si la première coïncide avec les étoiles indiquées par les Lokono du Pomeroon, la seconde est sans doute une erreur, car la ceinture d’Orion est toujours reconnue comme Mabukuli ‘Homme sans cuisse’. La constellation Katarhokoya se lève tôt dans le"
+    },
+    "Spirit of the Muscovy duck": {
+     "s": "La constellation Ifakoya ‘Esprit du canard musqué’ (Cairina moschata) a été mentionnée par les frères Penard et Claudius de Goeje, mais n’avait pas été identifiée jusqu’à présent.[#11],[#17] Les Lokono actuels du fleuve Pomeroon, au Guyana, la reconnaissent dans une partie de la constellation occidentale de la Couronne australe. Aucun mythe ne s’y rattache, mais les Lokono disent que lorsque la tête du canard pointe vers le sol, comme si le canard avait la tête sous l’eau, les canards sont occupés à se nourrir de plantes. La constellation prend cette position à partir de la mi-mai. On dit qu’alors les oiseaux sont plus faciles à attraper. Le canard musqué est considéré comme un mets délicat et il est aussi souvent é"
+    }
+   }
+  }
+ }
+}
