@@ -80,6 +80,37 @@ canvas#sky{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .arrive.toast .arrive-land{font-size:26px;text-shadow:0 2px 12px #000}
 .arrive.toast button,.arrive.toast .arrive-line{display:none}
 @media (prefers-reduced-motion: reduce){.arrive{transition:none}}
+/* guide: what this is and how to read it */
+.helpbtn{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.helpbtn i{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;border:1.3px solid currentColor;font:600 10.5px/1 var(--sans);font-style:normal}
+.arrive-what{max-width:46ch;font-size:14.5px;line-height:1.5;color:color-mix(in srgb, var(--text) 82%, transparent);text-wrap:pretty;margin:2px 0 0}
+.arrive-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.arrive .arrive-btns .ghost{background:transparent;color:var(--text);border-color:color-mix(in srgb, var(--text) 35%, transparent);font-weight:500}
+.arrive.toast .arrive-what,.arrive.toast .arrive-btns{display:none}
+.modehint{margin:-4px 0 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+dialog.guide{width:min(680px, calc(100vw - 32px));max-height:calc(100dvh - 48px);padding:0;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);box-shadow:0 30px 80px #000c}
+dialog.guide::backdrop{background:#03050ad0;backdrop-filter:blur(3px)}
+.guide-in{padding:28px 30px 24px;overflow:auto;max-height:calc(100dvh - 50px)}
+.guide-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.guide h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;margin:0}
+.guide h3{font:600 11px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ochre);margin:24px 0 8px}
+.guide p,.guide li{font-size:14.5px;line-height:1.6;color:color-mix(in srgb, var(--text) 88%, transparent)}
+.guide p{margin:0}
+.guide .lead{font-family:var(--serif);font-size:17px;line-height:1.55;margin-top:14px;color:var(--text)}
+.guide ul,.guide ol{margin:0;padding-left:20px}
+.guide li{margin:4px 0}
+.guide li::marker{color:var(--faint)}
+.guide b{color:var(--text);font-weight:600}
+.guide a{color:var(--ochre)}
+.guide .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 3px 1px 1px;vertical-align:middle}
+.guide .x{border:0;background:none;font-size:22px;line-height:1;padding:2px 6px;color:var(--muted)}
+.guide .x:hover{color:var(--text)}
+.guide-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
+.guide-foot p{font-size:13px;color:var(--muted)}
+.guide-foot button{padding:9px 20px;border-radius:999px;background:var(--ochre);color:var(--night);border-color:var(--ochre);font-weight:600}
+@media (max-width: 600px){.guide-in{padding:22px 18px 18px}.guide h2{font-size:25px}}
+.headtools{flex-wrap:wrap}
+
 
 /* layers and legend under the map */
 .layers{display:flex;flex-wrap:wrap;gap:6px 6px;align-items:center}
@@ -219,7 +250,7 @@ footer a,.card a{color:var(--muted)}
       <p class="byline" id="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener" id="bylineSrc">source</a></p>
     </div>
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
-    <div class="headtools"><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
+    <div class="headtools"><button id="bHelp" class="helpbtn" aria-haspopup="dialog" aria-controls="guide"><i aria-hidden="true">?</i><span id="lblHelp">How it works</span></button><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
   </header>
   <div class="skywrap">
     <div class="command" role="group" aria-label="Where, when and whose sky">
@@ -257,6 +288,7 @@ footer a,.card a{color:var(--muted)}
       <button id="mFocus" aria-pressed="false">One figure</button>
       <button id="mSky" aria-pressed="false">Whole sky</button>
     </div><div class="saver"><span id="saveMsg" class="small muted" aria-live="polite"></span><button id="bSave" hidden>Save image</button></div></div>
+    <p class="modehint" id="modeHint" aria-live="polite"></p>
     <div class="canvasbox" id="canvasbox">
       <div id="land3d" hidden><canvas id="glc" aria-label="3D view: the sky above a landscape at the chosen place. Drag to look around, scroll to zoom."></canvas><div id="labels3d"></div></div>
       <canvas id="sky" aria-label="All-sky view. North at top, east at left, zenith in the centre." role="img"></canvas>
@@ -276,7 +308,8 @@ footer a,.card a{color:var(--muted)}
         <p class="arrive-land" id="arriveLand"></p>
         <p class="arrive-sub" id="arriveSub"></p>
         <p class="arrive-line" id="arriveLine">This is your sky tonight.</p>
-        <button id="bArrive">Look up</button>
+        <p class="arrive-what" id="arriveWhat"></p>
+        <div class="arrive-btns"><button id="bArrive">Look up</button><button id="bArriveHow" class="ghost">How it works</button></div>
       </div>
       <div class="loading" id="loading">Loading 31,225 orbits and 15 sky cultures…</div>
     </div>
@@ -408,6 +441,19 @@ footer a,.card a{color:var(--muted)}
     </section>
   </aside>
 
+
+  <dialog class="guide" id="guide" aria-labelledby="guideTitle">
+    <div class="guide-in">
+      <div class="guide-top"><h2 id="guideTitle"></h2><button class="x" id="guideX" aria-label="Close">×</button></div>
+      <p class="lead" id="guideLead"></p>
+      <h3 id="guideMapH"></h3><ul id="guideMap"></ul>
+      <h3 id="guideStepsH"></h3><ol id="guideSteps"></ol>
+      <h3 id="guideViewsH"></h3><ul id="guideViews"></ul>
+      <h3 id="guideGenH"></h3><p id="guideGen"></p>
+      <h3 id="guideWhyH"></h3><p id="guideWhy"></p>
+      <div class="guide-foot"><p id="guideMore"></p><button id="guideGo"></button></div>
+    </div>
+  </dialog>
   <footer id="footerText">
     Orbits: CelesTrak public catalogue via a GitHub mirror, <span id="epochTxt"></span>, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.
   </footer>
@@ -526,6 +572,29 @@ en: {
   passNoLine:"<b>No.</b> {name} never passes over {place}. At its highest it stays {km} km to the {side} on the map, {alt}.",
   aboveHorizonDeg:"about {n}° above your horizon", belowYourHorizon:"below your horizon",
   highestDarkSky:"Highest in a dark sky:", dirNorth:"north", dirSouth:"south",
+  helpBtn:"How it works",
+  arriveWhat:"Each star is drawn over the place on Earth where it stands overhead, so the globe holds both the land and its sky. The moving dots are satellites and space debris crossing it.",
+  guideTitle:"How Shared Sky works",
+  guideLead:"Shared Sky lays the night sky onto the Earth, one to one. A star straight above Sydney is drawn over Sydney; a star low on the horizon is drawn far away, in the direction you would see it. One globe then holds a place and its whole sky: the constellations of fifteen sky cultures, Indigenous and Western, and the 31,000 tracked objects in orbit that pass through them.",
+  guideMapH:"Reading the map",
+  guideMap:["The centre is your spot, with the sky straight above it.", "The green ring is your horizon. Whatever lies inside it is in your sky.", "One degree of sky spans 111 km of ground, at every zoom.", "Coloured dots are objects in orbit: {deb} debris, {rb} rocket bodies and {pay} satellites. The line from a dot shows where it goes next.", "Day and night on the globe follow the real sun."],
+  guideStepsH:"Start here",
+  guideSteps:["<b>{where}.</b> Search a city, paste coordinates, or tap the pin and then the map.", "<b>{when}.</b> Pick a date and time, step an hour at a time, or press <i>{play}</i> to watch the night move.", "<b>{sky}.</b> Choose a sky culture and one of its figures. Its story and artwork appear in the panel beside the map.", "<b>Look closer.</b> Tap a dot or a path to see what the object is, who launched it and how long it will stay up."],
+  guideViewsH:"Four ways to look",
+  vMirror:"the one-to-one map, with the sky spread over the globe.",
+  vLand:"the same sky seen from the ground, above an illustrative landscape.",
+  vFocus:"a long exposure of every object crossing the chosen constellation.",
+  vSky:"the classic dome above you, with the horizon at the edge.",
+  guideGen:"Further down the panel, each tracked object gets an estimate of how long it will stay up, measured against seven generations (about 175 years). Four sliders set what matters most to you (the future, crowding, size, or how much of the Earth an object passes over) and the list of what to take responsibility for first re-ranks. The ranking is there to think with, together.",
+  guideWhyH:"Why",
+  guideWhy:"The sky above any place is shared by everyone who has looked up from it, and now also by everything we have left in orbit. Seeing constellations and debris in the same frame, over real land, keeps both in view. Skies from cultures with no open dataset are left out until their communities choose to share them, on their terms.",
+  guideMore:"Read the <a href=\"paper/shared-sky.pdf\" target=\"_blank\" rel=\"noopener\">paper</a> or the <a href=\"https://github.com/nefinia/shared-sky\" target=\"_blank\" rel=\"noopener\">source code</a>.",
+  guideGo:"Start exploring",
+  close:"Close",
+  hintMirror:"The sky spread over the Earth: each star sits above the place where it is overhead. Drag to turn the globe, scroll or pinch to zoom.",
+  hintLand:"Your sky from the ground, above an illustrative landscape. Drag to look around, scroll to zoom.",
+  hintFocus:"A long exposure of the chosen figure: every object that crosses it in the next minutes.",
+  hintSky:"The whole dome above you, zenith at the centre and the horizon at the edge. North is up, east is left.",
 },
 es: {
   bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
@@ -630,6 +699,29 @@ es: {
   passNoLine:"<b>No.</b> {name} nunca pasa sobre {place}. En su punto más alto se queda a {km} km al {side} en el mapa, {alt}.",
   aboveHorizonDeg:"unos {n}° sobre tu horizonte", belowYourHorizon:"bajo tu horizonte",
   highestDarkSky:"Punto más alto en cielo oscuro:", dirNorth:"norte", dirSouth:"sur",
+  helpBtn:"Cómo funciona",
+  arriveWhat:"Cada estrella se dibuja sobre el lugar de la Tierra donde está en el cenit, así el globo reúne la tierra y su cielo. Los puntos que se mueven son satélites y basura espacial que lo cruzan.",
+  guideTitle:"Cómo funciona Shared Sky",
+  guideLead:"Shared Sky extiende el cielo nocturno sobre la Tierra, a escala uno a uno. Una estrella justo encima de Sídney se dibuja sobre Sídney; una estrella baja en el horizonte se dibuja lejos, en la dirección en que la verías. Así un solo globo reúne un lugar y todo su cielo: las constelaciones de quince culturas del cielo, indígenas y occidentales, y los 31.000 objetos en órbita rastreados que las atraviesan.",
+  guideMapH:"Cómo leer el mapa",
+  guideMap:["El centro es tu lugar, con el cielo justo encima.", "El anillo verde es tu horizonte. Lo que queda dentro está en tu cielo.", "Un grado de cielo abarca 111 km de suelo, con cualquier zoom.", "Los puntos de colores son objetos en órbita: {deb} basura espacial, {rb} cuerpos de cohete y {pay} satélites. La línea que sale de cada punto muestra hacia dónde va.", "El día y la noche en el globo siguen al sol real."],
+  guideStepsH:"Para empezar",
+  guideSteps:["<b>{where}.</b> Busca una ciudad, pega coordenadas o toca el marcador y luego el mapa.", "<b>{when}.</b> Elige fecha y hora, avanza de hora en hora o pulsa <i>{play}</i> para ver moverse la noche.", "<b>{sky}.</b> Elige una cultura del cielo y una de sus figuras. Su historia y su ilustración aparecen en el panel junto al mapa.", "<b>Mira de cerca.</b> Toca un punto o una trayectoria para ver qué objeto es, quién lo lanzó y cuánto tiempo seguirá en órbita."],
+  guideViewsH:"Cuatro maneras de mirar",
+  vMirror:"el mapa uno a uno, con el cielo extendido sobre el globo.",
+  vLand:"el mismo cielo visto desde el suelo, sobre un paisaje ilustrativo.",
+  vFocus:"una larga exposición de todos los objetos que cruzan la constelación elegida.",
+  vSky:"la clásica bóveda sobre ti, con el horizonte en el borde.",
+  guideGen:"Más abajo en el panel, cada objeto rastreado recibe una estimación de cuánto tiempo seguirá en órbita, medida frente a siete generaciones (unos 175 años). Cuatro controles fijan lo que más te importa (el futuro, la congestión, el tamaño o cuánta Tierra sobrevuela un objeto) y la lista de lo que conviene atender primero se reordena. Es una clasificación para pensar en conjunto.",
+  guideWhyH:"Por qué",
+  guideWhy:"El cielo sobre cualquier lugar lo comparten todas las personas que alguna vez lo miraron desde allí, y ahora también todo lo que hemos dejado en órbita. Ver constelaciones y basura espacial en un mismo marco, sobre tierra real, mantiene ambas a la vista. Los cielos de culturas sin datos abiertos quedan fuera hasta que sus comunidades decidan compartirlos, en sus propios términos.",
+  guideMore:"Lee el <a href=\"paper/shared-sky.pdf\" target=\"_blank\" rel=\"noopener\">artículo</a> o el <a href=\"https://github.com/nefinia/shared-sky\" target=\"_blank\" rel=\"noopener\">código fuente</a>.",
+  guideGo:"Empezar a explorar",
+  close:"Cerrar",
+  hintMirror:"El cielo extendido sobre la Tierra: cada estrella está sobre el lugar donde se ve en el cenit. Arrastra para girar el globo; usa la rueda o pellizca para acercarte.",
+  hintLand:"Tu cielo desde el suelo, sobre un paisaje ilustrativo. Arrastra para mirar alrededor; usa la rueda para acercarte.",
+  hintFocus:"Una larga exposición de la figura elegida: cada objeto que la cruza en los próximos minutos.",
+  hintSky:"Toda la bóveda sobre ti, con el cenit en el centro y el horizonte en el borde. El norte arriba, el este a la izquierda.",
 },
 fr: {
   bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
@@ -734,6 +826,29 @@ fr: {
   passNoLine:"<b>Non.</b> {name} ne passe jamais au-dessus de {place}. À son plus haut, il reste à {km} km au {side} sur la carte, {alt}.",
   aboveHorizonDeg:"environ {n}° au-dessus de votre horizon", belowYourHorizon:"sous votre horizon",
   highestDarkSky:"Point le plus haut dans un ciel sombre :", dirNorth:"nord", dirSouth:"sud",
+  helpBtn:"Comment ça marche",
+  arriveWhat:"Chaque étoile est dessinée au-dessus du lieu de la Terre où elle passe au zénith : le globe réunit ainsi la terre et son ciel. Les points en mouvement sont des satellites et des débris spatiaux qui le traversent.",
+  guideTitle:"Comment fonctionne Shared Sky",
+  guideLead:"Shared Sky pose le ciel nocturne sur la Terre, à l'échelle un pour un. Une étoile juste au-dessus de Sydney est dessinée sur Sydney ; une étoile basse sur l'horizon est dessinée loin, dans la direction où vous la verriez. Un seul globe réunit alors un lieu et tout son ciel : les constellations de quinze cultures célestes, autochtones et occidentales, et les 31 000 objets en orbite suivis qui les traversent.",
+  guideMapH:"Lire la carte",
+  guideMap:["Le centre est votre position, avec le ciel juste au-dessus.", "L'anneau vert est votre horizon. Ce qui se trouve à l'intérieur est dans votre ciel.", "Un degré de ciel couvre 111 km de sol, à tous les niveaux de zoom.", "Les points colorés sont des objets en orbite : {deb} débris, {rb} corps de fusée et {pay} satellites. La ligne qui part de chaque point montre où il va ensuite.", "Le jour et la nuit sur le globe suivent le vrai soleil."],
+  guideStepsH:"Pour commencer",
+  guideSteps:["<b>{where}.</b> Cherchez une ville, collez des coordonnées, ou touchez l'épingle puis la carte.", "<b>{when}.</b> Choisissez une date et une heure, avancez heure par heure, ou appuyez sur <i>{play}</i> pour voir la nuit tourner.", "<b>{sky}.</b> Choisissez une culture céleste et l'une de ses figures. Son histoire et son illustration apparaissent dans le panneau à côté de la carte.", "<b>Regarder de près.</b> Touchez un point ou une trajectoire pour savoir de quel objet il s'agit, qui l'a lancé et combien de temps il restera en orbite."],
+  guideViewsH:"Quatre façons de regarder",
+  vMirror:"la carte un pour un, avec le ciel étendu sur le globe.",
+  vLand:"le même ciel vu depuis le sol, au-dessus d'un paysage illustratif.",
+  vFocus:"une longue pose de tous les objets qui traversent la constellation choisie.",
+  vSky:"la voûte classique au-dessus de vous, l'horizon sur le bord.",
+  guideGen:"Plus bas dans le panneau, chaque objet suivi reçoit une estimation de sa durée en orbite, mesurée à l'aune de sept générations (environ 175 ans). Quatre curseurs règlent ce qui compte le plus pour vous (l'avenir, l'encombrement, la taille, ou la part de la Terre qu'un objet survole) et la liste de ce qu'il faudrait prendre en charge d'abord se réordonne. Ce classement sert à réfléchir ensemble.",
+  guideWhyH:"Pourquoi",
+  guideWhy:"Le ciel au-dessus de chaque lieu est partagé par toutes celles et ceux qui l'ont regardé depuis là, et désormais aussi par tout ce que nous avons laissé en orbite. Voir constellations et débris dans un même cadre, au-dessus d'une terre réelle, garde les deux sous les yeux. Les ciels des cultures sans données ouvertes restent absents jusqu'à ce que leurs communautés choisissent de les partager, selon leurs propres termes.",
+  guideMore:"Lire l'<a href=\"paper/shared-sky.pdf\" target=\"_blank\" rel=\"noopener\">article</a> ou le <a href=\"https://github.com/nefinia/shared-sky\" target=\"_blank\" rel=\"noopener\">code source</a>.",
+  guideGo:"Commencer l'exploration",
+  close:"Fermer",
+  hintMirror:"Le ciel étendu sur la Terre : chaque étoile se trouve au-dessus du lieu où elle passe au zénith. Faites glisser pour tourner le globe ; molette ou pincement pour zoomer.",
+  hintLand:"Votre ciel vu du sol, au-dessus d'un paysage illustratif. Faites glisser pour regarder autour ; molette pour zoomer.",
+  hintFocus:"Une longue pose de la figure choisie : chaque objet qui la traverse dans les prochaines minutes.",
+  hintSky:"Toute la voûte au-dessus de vous, zénith au centre et horizon sur le bord. Nord en haut, est à gauche.",
 },
 };
 let LANG = 'en';
@@ -748,6 +863,34 @@ function i18n(key, vars){
   if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
   return s;
 }
+function renderGuide(){
+  const g = document.getElementById('guide'); if (!g) return;
+  const set = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+  const dot = c => `<i class="dot" style="background:var(${c})"></i>`;
+  const lab = {where:i18n('lblWhere'), when:i18n('lblWhen'), sky:i18n('lblSky'), play:i18n('playTonight'), deb:dot('--deb'), rb:dot('--rb'), pay:dot('--pay')};
+  const fill = s => s.replace(/\{(\w+)\}/g, (m, k) => lab[k] != null ? lab[k] : m);
+  const li = arr => arr.map(x => `<li>${fill(x)}</li>`).join('');
+  set('guideTitle', i18n('guideTitle')); set('guideLead', i18n('guideLead'));
+  set('guideMapH', i18n('guideMapH')); set('guideMap', li(i18n('guideMap')));
+  set('guideStepsH', i18n('guideStepsH')); set('guideSteps', li(i18n('guideSteps')));
+  set('guideViewsH', i18n('guideViewsH'));
+  set('guideViews', [['modeMirror','vMirror'],['modeLand','vLand'],['modeFocus','vFocus'],['modeSky','vSky']].map(([a,b]) => `<li><b>${i18n(a)}</b>${LANG === 'fr' ? ' : ' : ': '}${i18n(b)}</li>`).join(''));
+  set('guideGenH', i18n('sevenGenEyebrow')); set('guideGen', i18n('guideGen'));
+  set('guideWhyH', i18n('guideWhyH')); set('guideWhy', i18n('guideWhy'));
+  set('guideMore', i18n('guideMore')); set('guideGo', i18n('guideGo'));
+  const x = document.getElementById('guideX'); if (x) x.setAttribute('aria-label', i18n('close'));
+}
+function paintModeHint(){
+  const e = document.getElementById('modeHint'); if (!e) return;
+  const m = (typeof S !== 'undefined' && S.mode) || 'mirror';
+  e.textContent = i18n({mirror:'hintMirror', land:'hintLand', focus:'hintFocus', sky:'hintSky'}[m]);
+}
+function openGuide(){
+  const g = document.getElementById('guide'); if (!g) return;
+  renderGuide();
+  if (g.showModal) { if (!g.open) g.showModal(); } else g.setAttribute('open', '');
+}
+function closeGuide(){ const g = document.getElementById('guide'); if (!g) return; if (g.close) g.close(); else g.removeAttribute('open'); }
 function applyStaticLang(){
   document.documentElement.lang = LANG;
   const setT = (id,key) => { const e = document.getElementById(id); if (e) e.textContent = i18n(key); };
@@ -767,6 +910,10 @@ function applyStaticLang(){
   setT('speedReal','optReal'); setT('speed1m','opt1m'); setT('speed10m','opt10m'); setT('speed1h','opt1h');
   setT('tNight', document.getElementById('tNight') && document.getElementById('tNight').getAttribute('aria-pressed') === 'true' ? 'stopNight' : 'playTonight');
   setT('arriveEyebrow','youAreStanding'); setT('bArrive','lookUp');
+  setT('lblHelp','helpBtn'); setT('bArriveHow','helpBtn'); setT('arriveWhat','arriveWhat');
+  if (typeof renderGuide === 'function') renderGuide();
+  if (typeof paintModeHint === 'function') paintModeHint();
+
   setT('legDebris','legDebris'); setT('legRb','legRb'); setT('legPay','legPay'); setT('legLine','legLine');
   setT('lensKey','lensKey');
   setT('lblAboutCulture','aboutCulture');
@@ -1432,7 +1579,7 @@ function bestTime(){
 }
 function setMode(m){
   if (m === 'land' && !init3d()){ m = 'focus'; $('mLand').disabled = true; $('mLand').title = 'This browser cannot show 3D (WebGL).'; }
-  S.mode = m; $('mMirror').setAttribute('aria-pressed', m === 'mirror'); $('mFocus').setAttribute('aria-pressed', m === 'focus'); $('mSky').setAttribute('aria-pressed', m === 'sky'); $('mLand').setAttribute('aria-pressed', m === 'land');
+  S.mode = m; paintModeHint(); $('mMirror').setAttribute('aria-pressed', m === 'mirror'); $('mFocus').setAttribute('aria-pressed', m === 'focus'); $('mSky').setAttribute('aria-pressed', m === 'sky'); $('mLand').setAttribute('aria-pressed', m === 'land');
   $('focusCard').hidden = m === 'sky';
   $('land3d').hidden = m !== 'land'; $('sky').hidden = m === 'land'; $('layers').hidden = false;
   if (!S.touched.has('objects')) S.M.objects = m === 'sky' || m === 'land'; // sensible default per view until the viewer chooses
@@ -2530,6 +2677,10 @@ function initUI(){
   if (EARTH.global) loadRaster('global', EARTH.global, null);
   showStory(); renderPass(); setMode('mirror'); initDownloads(); S.booted = true; arrive(true);
   $('bArrive').onclick = () => $('arrive').classList.add('gone');
+  $('bArriveHow').onclick = () => { $('arrive').classList.add('gone'); openGuide(); };
+  $('bHelp').onclick = openGuide;
+  $('guideX').onclick = closeGuide; $('guideGo').onclick = closeGuide;
+  $('guide').addEventListener('click', e => { if (e.target === e.currentTarget) closeGuide(); });
   $('bDrawer').onclick = () => { const closed = $('app').classList.toggle('closed'); $('bDrawer').setAttribute('aria-expanded', !closed); $('bDrawer').textContent = closed ? i18n('showTools') : i18n('hideTools'); setTimeout(resize, 50); };
   $('loading').textContent = i18n('preparingOrbits', {n:'31,225'});
   const url = URL.createObjectURL(new Blob([workerSource()], {type:'text/javascript'}));
