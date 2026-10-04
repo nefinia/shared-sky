@@ -238,7 +238,8 @@ button.step{padding:7px 9px;font-family:var(--mono);font-size:12px;flex:none}
 .fold summary::after{content:"+";color:var(--faint);font-family:var(--mono)}
 .fold[open] summary::after{content:"−"}
 .stack{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-footer{grid-column:1/-1;color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
+.footwrap{max-width:1600px;margin:0 auto}
+footer{color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
 footer a,.card a{color:var(--muted)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}body{transition:none}}
@@ -456,6 +457,9 @@ footer a,.card a{color:var(--muted)}
       <div class="guide-foot"><p id="guideMore"></p><button id="guideGo"></button></div>
     </div>
   </dialog>
+</div>
+
+<div class="footwrap">
   <footer id="footerText">
     Orbits: CelesTrak public catalogue via a GitHub mirror, <span id="epochTxt"></span>, propagated with SGP4 (satellite.js). Object owners from the CelesTrak SATCAT. Constellations: Stellarium sky cultures (each under its own licence, see Source). Only objects larger than about 10 cm are tracked; millions of smaller fragments are not shown. Positions far from the data date are approximate.
   </footer>
