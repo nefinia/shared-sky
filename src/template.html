@@ -1416,12 +1416,14 @@ function draw(){
     for (const ev of S.events){ const [al,az] = altaz(ev[3],ev[4],lst,phi); if (al < 0) continue; const [x,y] = proj(al,az); ctx.moveTo(x+1.6,y); ctx.arc(x,y,1.6,0,Math.PI*2); }
     ctx.fill();
   }
-  // culture lines
+  // culture lines (or artwork, for cultures like Kamilaroi whose figures are anchored illustrations, not star-to-star lines)
   const C = CULT[S.cult];
   const crossingCons = S.frame ? S.frame.crossCons : new Set();
+  const artMonth = new Date(S.t).getUTCMonth();
   if (S.M.figures) C.cons.forEach((k,ci) => {
     if (!S.M.allfigs && ci !== S.focus) return;
     const hot = crossingCons.has(ci) || ci === S.focus;
+    if (k.img){ drawArtAt(k, i => SP[i], hot ? .95 : .6, artMonth); return; }
     ctx.strokeStyle = hot ? 'rgba(240,190,110,.95)' : 'rgba(227,168,87,.62)'; ctx.lineWidth = hot ? 1.8 : 1.25;
     ctx.beginPath(); k.lines.forEach(([a,b]) => { const A = SP[a], B = SP[b]; if (A && B){ ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); } }); ctx.stroke();
   });
@@ -1529,8 +1531,9 @@ function drawFocus(){
   const line = (a,b) => { const A = SP.get(a), B = SP.get(b); if (A && B){ ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); } };
   { const OVs = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; if (OVs){ ctx.strokeStyle = 'rgba(160,185,255,.7)'; ctx.setLineDash([4,4]); ctx.lineWidth = 1.1; ctx.beginPath(); OVs.cons.forEach(k => k.lines.forEach(([a,b]) => line(a,b))); ctx.stroke(); ctx.setLineDash([]); } }
   // neighbouring figures of the same culture, quietly
-  if (S.M.figures && S.M.allfigs){ ctx.strokeStyle = 'rgba(227,168,87,.45)'; ctx.lineWidth = 1.2; ctx.beginPath();
-  CULT[S.cult].cons.forEach((o,ci) => { if (ci !== S.focus) o.lines.forEach(([a,b]) => line(a,b)); }); ctx.stroke(); }
+  if (S.M.figures && S.M.allfigs){ const nbMonth = new Date(S.t).getUTCMonth();
+  ctx.strokeStyle = 'rgba(227,168,87,.45)'; ctx.lineWidth = 1.2; ctx.beginPath();
+  CULT[S.cult].cons.forEach((o,ci) => { if (ci === S.focus) return; if (o.img){ drawArtAt(o, i => SP.get(i), .35, nbMonth); return; } o.lines.forEach(([a,b]) => line(a,b)); }); ctx.stroke(); }
   // stars
   if (starA > 0 && S.M.stars) for (const [i,p] of SP){ const s = STARS[i]; const r = Math.max(.7, (6.6 - s.mag)*.8);
     ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.2); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill(); }
@@ -1563,10 +1566,12 @@ function drawFocus(){
     for (let q=0;q<f.length;q+=FS){ const ty = SAT.types[f[q]]; if (!S.show[ty]) continue; const p = projEq(cam, f[q+1], f[q+2]); if (!p || p[2] < 0 || p[0] < 0 || p[1] < 0 || p[0] > W || p[1] > H) continue;
       ctx.globalAlpha = (f[q+4] > 0 ? .95 : .35)*lensA(f[q]); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], 2, 0, Math.PI*2); ctx.fill(); }
     ctx.globalAlpha = 1; }
-  // the figure itself
-  if (S.M.figures){ ctx.save(); ctx.strokeStyle = 'rgba(5,8,18,.75)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke();
-  ctx.shadowColor = 'rgba(227,168,87,.7)'; ctx.shadowBlur = 10;
-  ctx.strokeStyle = 'rgba(245,195,115,1)'; ctx.lineWidth = 2.6; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke(); ctx.restore();
+  // the figure itself (artwork for cultures like Kamilaroi, lines otherwise)
+  if (S.M.figures){
+    if (k.img){ drawArtAt(k, i => SP.get(i), .95, new Date(S.t).getUTCMonth()); }
+    else { ctx.save(); ctx.strokeStyle = 'rgba(5,8,18,.75)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke();
+    ctx.shadowColor = 'rgba(227,168,87,.7)'; ctx.shadowBlur = 10;
+    ctx.strokeStyle = 'rgba(245,195,115,1)'; ctx.lineWidth = 2.6; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke(); ctx.restore(); }
   }
   if (S.M.figures) k.ids.forEach(i => { const p = SP.get(i); if (!p) return; ctx.fillStyle = '#FFF4DE'; ctx.beginPath(); ctx.arc(p[0],p[1], Math.max(1.6,(6.6-STARS[i].mag)*.9),0,Math.PI*2); ctx.fill(); });
   // labels of figure and bright stars
@@ -2225,6 +2230,16 @@ function tinted(fn){
   im.onload = () => { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; const g = c.getContext('2d');
     g.drawImage(im, 0, 0); g.globalCompositeOperation = 'multiply'; g.fillStyle = '#FFD9A0'; g.fillRect(0, 0, c.width, c.height); o.c = c; o.ready = true; draw(); };
   im.src = 'data:image/webp;base64,' + (DATA.kimg || {})[fn]; return null;
+}
+// draws an artwork-anchored figure (e.g. Kamilaroi) wherever a getPt(hip-index) projector is available;
+// used by draw() and drawFocus() as well as drawMirror(), so artwork figures show in every view, not only the globe
+function drawArtAt(k, getPt, alpha, month){
+  const im = (k.img2 && (month === 3 || month === 4)) ? k.img2 : k.img;
+  const dst = im.a.map(a => { const i = HIPIDX.get(a[2]); return i != null ? getPt(i) : null; });
+  if (dst.some(p => !p)) return false;
+  const M = affine(im.a.map(a => [a[0], a[1]]), dst); const tex = tinted(im.f); if (!M || !tex) return false;
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = alpha; ctx.setTransform(DPR*M[0], DPR*M[1], DPR*M[2], DPR*M[3], DPR*M[4], DPR*M[5]);
+  ctx.drawImage(tex, 0, 0, im.size[0], im.size[1]); ctx.restore(); return true;
 }
 
 // ---------- pan, zoom and pinch on the map ----------
