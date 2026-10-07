@@ -1429,7 +1429,7 @@ function draw(){
   });
   // stars
   if (starA > 0 && S.M.stars){
-    for (let i=0;i<STARS.length;i++){ const p = SP[i]; if (!p || p[3] < 0) continue; const s = STARS[i]; const r = Math.max(.55, (6.4 - s.mag)*.62);
+    for (let i=0;i<STARS.length;i++){ const p = SP[i]; if (!p || p[3] < 0) continue; const s = STARS[i]; const r = Math.min(1.9, Math.max(.4, (6.4 - s.mag)*.4));
       ctx.globalAlpha = starA * Math.min(1, .45 + (6 - s.mag)*.22); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill(); }
     ctx.globalAlpha = 1;
   }
@@ -1535,7 +1535,7 @@ function drawFocus(){
   ctx.strokeStyle = 'rgba(227,168,87,.45)'; ctx.lineWidth = 1.2; ctx.beginPath();
   CULT[S.cult].cons.forEach((o,ci) => { if (ci === S.focus) return; if (o.img){ drawArtAt(o, i => SP.get(i), .35, nbMonth); return; } o.lines.forEach(([a,b]) => line(a,b)); }); ctx.stroke(); }
   // stars
-  if (starA > 0 && S.M.stars) for (const [i,p] of SP){ const s = STARS[i]; const r = Math.max(.7, (6.6 - s.mag)*.8);
+  if (starA > 0 && S.M.stars) for (const [i,p] of SP){ const s = STARS[i]; const r = Math.min(2.1, Math.max(.45, (6.6 - s.mag)*.45));
     ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.2); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill(); }
   ctx.globalAlpha = 1;
   // the exposure: streaks of every object that crossed this patch of sky
@@ -2122,7 +2122,7 @@ function drawMirror(){
   const OV = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; // a second sky culture, for comparison
   if (OV){ ctx.strokeStyle = 'rgba(160,185,255,.75)'; ctx.setLineDash([4,4]); ctx.lineWidth = 1.2; ctx.beginPath(); OV.cons.forEach(k => k.lines.forEach(([a,b]) => seg(a,b))); ctx.stroke(); ctx.setLineDash([]); }
   if (S.M.stars) for (let i=0;i<STARS.length;i++){ const p = SP[i]; if (!on(p, 4)) continue; const s = STARS[i];
-    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(.8, (6.3 - s.mag)*.72)*zoomK, 0, Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0], p[1], Math.min(2, Math.max(.5, (6.3 - s.mag)*.42))*zoomK, 0, Math.PI*2); ctx.fill(); }
   ctx.globalAlpha = 1;
   trackPolys = [];
   if (S.M.streaks && S.tracks){
