@@ -1867,16 +1867,23 @@ function segGeo(pairs){ const P = new Float32Array(pairs.length*6); pairs.forEac
 function buildFigures(){
   if (!G.ok) return;
   ['figs','focusFig','west'].forEach(k => { if (G[k]){ G.cel.remove(G[k]); G[k].geometry.dispose(); } });
-  const C = CULT[S.cult], pairs = [], fpairs = [];
-  C.cons.forEach((k,ci) => k.lines.forEach(([a,b]) => (ci === S.focus ? fpairs : pairs).push([STARS[a].v, STARS[b].v])));
+  ['figArt','focusFigArt','westArt'].forEach(k => { if (G[k]){ G.cel.remove(G[k]); disposeArtGroup(G[k]); } });
+  const month = new Date(S.t).getUTCMonth();
+  const C = CULT[S.cult], pairs = [], fpairs = []; G.figArt = new THREE.Group(); G.focusFigArt = new THREE.Group();
+  C.cons.forEach((k,ci) => { if (k.img){ const mesh = artMesh3d(k, ci === S.focus ? .95 : .6, month); if (mesh) (ci === S.focus ? G.focusFigArt : G.figArt).add(mesh); }
+    else k.lines.forEach(([a,b]) => (ci === S.focus ? fpairs : pairs).push([STARS[a].v, STARS[b].v])); });
   G.figs = new THREE.LineSegments(segGeo(pairs), new THREE.LineBasicMaterial({color:0xE3A857, transparent:true, opacity:.6, depthTest:false})); G.figs.renderOrder = 4; G.cel.add(G.figs);
+  G.figArt.renderOrder = 4; G.cel.add(G.figArt);
   // the chosen figure is drawn several times with tiny offsets so it reads as a bold line
   G.focusFig = new THREE.Group(); G.focusFig.renderOrder = 5;
   const fg = segGeo(fpairs), fm = new THREE.LineBasicMaterial({color:0xFFD08A, transparent:true, opacity:.95, depthTest:false});
   [[0,0,0],[1.4,0,0],[0,1.4,0],[0,0,1.4],[-1.4,0,0],[0,-1.4,0]].forEach(o => { const l = new THREE.LineSegments(fg, fm); l.position.set(...o); l.renderOrder = 5; G.focusFig.add(l); });
   G.focusFig.geometry = fg; G.cel.add(G.focusFig);
-  const w = [], OVc = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; if (OVc) OVc.cons.forEach(k => k.lines.forEach(([a,b]) => w.push([STARS[a].v, STARS[b].v])));
+  G.focusFigArt.renderOrder = 5; G.cel.add(G.focusFigArt);
+  const w = [], OVc = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; G.westArt = new THREE.Group();
+  if (OVc) OVc.cons.forEach(k => { if (k.img){ const mesh = artMesh3d(k, .6, month); if (mesh) G.westArt.add(mesh); } else k.lines.forEach(([a,b]) => w.push([STARS[a].v, STARS[b].v])); });
   G.west = new THREE.LineSegments(segGeo(w), new THREE.LineBasicMaterial({color:0xA0B9FF, transparent:true, opacity:.6, depthTest:false})); G.cel.add(G.west);
+  G.westArt.renderOrder = 4; G.cel.add(G.westArt);
   // labels
   const box = $('labels3d'); box.innerHTML = '';
   G.labels = C.cons.map((k,ci) => { const c = consCenter(ci).c; const el = document.createElement('div'); el.className = 'lbl' + (ci === S.focus ? ' focus' : '');
@@ -1940,6 +1947,7 @@ function render3d(){
   G.stars.material.uniforms.uFade.value = starA; G.mw.material.uniforms.uFade.value = starA;
   if (G.objs) G.objs.material.uniforms.uFade.value = 1 - day*.6;
   G.stars.visible = S.M.stars; G.mw.visible = S.M.mw; G.figs.visible = S.M.figures && S.M.allfigs; G.focusFig.visible = S.M.figures; G.west.visible = !!S.overlay;
+  G.figArt.visible = S.M.figures && S.M.allfigs; G.focusFigArt.visible = S.M.figures; G.westArt.visible = !!S.overlay;
   if (G.objs) G.objs.visible = S.M.objects; if (G.hot){ G.hot.visible = S.M.streaks; G.cold.visible = S.M.streaks && S.showAll; }
   G.ring.visible = S.M.rings && !S.M.earth;
   // light the land: sun by day, a faint sky glow by night so the land stays readable
@@ -2228,9 +2236,38 @@ function tinted(fn){
   if (TINT[fn]) return TINT[fn].ready ? TINT[fn].c : null;
   const o = TINT[fn] = {ready:false}; const im = new Image();
   im.onload = () => { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; const g = c.getContext('2d');
-    g.drawImage(im, 0, 0); g.globalCompositeOperation = 'multiply'; g.fillStyle = '#FFD9A0'; g.fillRect(0, 0, c.width, c.height); o.c = c; o.ready = true; draw(); };
+    g.drawImage(im, 0, 0); g.globalCompositeOperation = 'multiply'; g.fillStyle = '#FFD9A0'; g.fillRect(0, 0, c.width, c.height); o.c = c; o.ready = true; draw();
+    if (typeof G !== 'undefined' && G.ok) buildFigures(); };
   im.src = 'data:image/webp;base64,' + (DATA.kimg || {})[fn]; return null;
 }
+// ---------- 3D artwork figures (same Kamilaroi-style artwork, extruded into the WebGL globe) ----------
+function affine3(src, dst){ // image points -> 3D points, exact for three pairs; point(u,v) = O + u*U + v*V
+  const [[u0,v0],[u1,v1],[u2,v2]] = src, det = u0*(v1-v2) - v0*(u1-u2) + (u1*v2 - u2*v1); if (Math.abs(det) < 1e-9) return null;
+  const sol = (p0,p1,p2) => [(p0*(v1-v2) + p1*(v2-v0) + p2*(v0-v1))/det, (p0*(u2-u1) + p1*(u0-u2) + p2*(u1-u0))/det, (p0*(u1*v2-u2*v1) + p1*(u2*v0-u0*v2) + p2*(u0*v1-u1*v0))/det];
+  const O = [0,0,0], U = [0,0,0], V = [0,0,0];
+  for (let ax=0; ax<3; ax++){ const [cu,cv,co] = sol(dst[0][ax], dst[1][ax], dst[2][ax]); U[ax] = cu; V[ax] = cv; O[ax] = co; }
+  return {O,U,V};
+}
+function artQuad3d(k, month){
+  const im = (k.img2 && (month === 3 || month === 4)) ? k.img2 : k.img;
+  const dst = im.a.map(a => { const i = HIPIDX.get(a[2]); const s = i != null ? STARS[i] : null; return s ? [s.v[0]*1000, s.v[1]*1000, s.v[2]*1000] : null; });
+  if (dst.some(p => !p)) return null;
+  const M = affine3(im.a.map(a => [a[0], a[1]]), dst); if (!M) return null;
+  const [w,h] = im.size, pt = (u,v) => [M.O[0]+u*M.U[0]+v*M.V[0], M.O[1]+u*M.U[1]+v*M.V[1], M.O[2]+u*M.U[2]+v*M.V[2]];
+  return {corners: [pt(0,0), pt(w,0), pt(0,h), pt(w,h)], fn: im.f};
+}
+function artMesh3d(k, alpha, month){
+  const q = artQuad3d(k, month); if (!q) return null;
+  const tex = tinted(q.fn); if (!tex) return null;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(q.corners.flat()), 3));
+  geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([0,1, 1,1, 0,0, 1,0]), 2));
+  geo.setIndex([0,1,2, 1,3,2]);
+  const texObj = new THREE.CanvasTexture(tex); texObj.needsUpdate = true;
+  const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({map:texObj, transparent:true, opacity:alpha, blending:THREE.AdditiveBlending, depthTest:false, side:THREE.DoubleSide}));
+  mesh.renderOrder = 4.5; return mesh;
+}
+function disposeArtGroup(g){ if (!g) return; g.children.forEach(m => { m.geometry.dispose(); if (m.material.map) m.material.map.dispose(); m.material.dispose(); }); }
 // draws an artwork-anchored figure (e.g. Kamilaroi) wherever a getPt(hip-index) projector is available;
 // used by draw() and drawFocus() as well as drawMirror(), so artwork figures show in every view, not only the globe
 function drawArtAt(k, getPt, alpha, month){
