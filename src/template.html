@@ -1324,10 +1324,12 @@ function workerSource(){
             if (!L){ flush(); prev = null; continue; }
             const gg = satellite.eciToGeodetic(L[5], satellite.gstime(d));
             const P = [Math.atan2(L[1],L[0]), Math.asin(Math.max(-1,Math.min(1,L[2]))), L[4], (t-t0)/1000, gg.latitude*180/Math.PI, gg.longitude*180/Math.PI];
-            const inCone = L[3] > 0 && (L[0]*c[0] + L[1]*c[1] + L[2]*c[2]) > cosL;
+            // cone membership alone decides whether a point belongs to the exposure path: a pass is
+            // not cut off at the physical horizon, so it still draws through when the land is hidden
+            const inCone = (L[0]*c[0] + L[1]*c[1] + L[2]*c[2]) > cosL;
             if (inCone){ if (!pts.length && prev) pts.push(...prev); pts.push(...P); }
-            else if (pts.length){ if (L[3] > 0) pts.push(...P); flush(); }
-            prev = L[3] > 0 ? P : null;
+            else if (pts.length){ pts.push(...P); flush(); }
+            prev = P;
           }
           flush();
         }
