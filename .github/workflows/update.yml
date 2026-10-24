@@ -27,38 +27,25 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch the orbit catalogue (one query per launch year) and SATCAT
+      - name: Fetch the orbit catalogue and SATCAT (Space-Track, falling back to CelesTrak)
         if: github.event_name != 'push'
+        env:
+          SPACETRACK_USER: ${{ secrets.SPACETRACK_USER }}
+          SPACETRACK_PASS: ${{ secrets.SPACETRACK_PASS }}
         run: |
           set -uo pipefail
-          UA="shared-sky-bot/1.0 (+https://github.com/nefinia/shared-sky)"
-          : > /tmp/catalog.tle
-          stopped_early=""
-          for y in $(seq 1958 "$(date -u +%Y)"); do
-            code=$(curl -sS -A "$UA" --retry 2 --retry-delay 5 --max-time 60 -w "%{http_code}" "https://celestrak.org/NORAD/elements/gp.php?INTDES=${y}&FORMAT=tle" -o /tmp/year.tle) || code=000
-            if [ "$code" = "200" ] && grep -qE '^1 ' /tmp/year.tle; then
-              cat /tmp/year.tle >> /tmp/catalog.tle
-            elif [ "$code" = "404" ]; then
-              : # no objects catalogued for this launch year; not an error, keep going
-            else
-              # CelesTrak's usage policy says to stop querying immediately on any non-200 response and
-              # report it, rather than hammer it further and risk the IP getting firewalled — that silent
-              # repeated violation is what stalled this workflow for weeks before, so we stop at the first sign.
-              echo "::warning::CelesTrak returned HTTP ${code} for INTDES=${y}; stopping here, per celestrak.org/usage-policy.php"
-              stopped_early="${y} (HTTP ${code})"
-              break
-            fi
-            sleep 0.5
-          done
-          curl -fsS -A "$UA" --retry 3 --max-time 120 https://celestrak.org/pub/satcat.csv -o /tmp/satcat.csv || true
-          n=$(grep -cE '^1 ' /tmp/catalog.tle || true)
-          echo "catalogue: ${n} objects${stopped_early:+, stopped at ${stopped_early}}"
-          if [ -z "$stopped_early" ] && [ "$n" -ge 20000 ] && head -1 /tmp/satcat.csv | grep -q NORAD_CAT_ID; then
+          # Space-Track.org (the official source) answers with the whole catalogue in one
+          # authenticated request; CelesTrak's public endpoint needs one request per launch
+          # year (~68/day) and is what got silently blocked before. tools/fetch_catalog.py
+          # tries Space-Track first and only falls back to CelesTrak if that isn't set up
+          # or fails, stopping immediately on any bad response either way per each site's
+          # usage policy, rather than hammering through errors.
+          if python tools/fetch_catalog.py --tle-out /tmp/catalog.tle --satcat-out /tmp/satcat.csv; then
             python tools/build_orbits.py --tle /tmp/catalog.tle --satcat /tmp/satcat.csv
           else
             # Fail the run loudly instead of silently keeping stale orbit data: a red X (and, if notifications
             # are on, an email) is what surfaces this instead of the site quietly going stale for weeks.
-            echo "::error::Could not refresh the orbit catalogue today (${stopped_early:-SATCAT download or object-count check failed}). Leaving the previous data in place and failing this run so it doesn't go unnoticed."
+            echo "::error::Could not refresh the orbit catalogue today from either source. Leaving the previous data in place and failing this run so it doesn't go unnoticed."
             exit 1
           fi
 
