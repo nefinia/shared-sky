@@ -45,6 +45,7 @@ h1 span{color:var(--ochre)}
 .langsw{display:flex;gap:2px;border:1px solid var(--line);border-radius:8px;padding:2px;background:var(--panel)}
 .langsw button{border:none;background:transparent;padding:4px 8px;font-size:11px;font-family:var(--mono);letter-spacing:.03em;border-radius:6px;color:var(--muted);cursor:pointer}
 .langsw button[aria-pressed="true"]{background:var(--panel-2);color:var(--text)}
+#app.simple .adv-only{display:none!important}
 
 .app{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:0 28px;max-width:1600px;margin:0 auto;align-items:start}
 .app.closed{grid-template-columns:minmax(0,1fr)}
@@ -252,7 +253,7 @@ footer a,.card a{color:var(--muted)}
       <p class="byline" id="byline">The sky above a place, laid onto its land · by <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener" id="bylineSrc">source</a></p>
     </div>
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
-    <div class="headtools"><button id="bHelp" class="helpbtn" aria-haspopup="dialog" aria-controls="guide"><i aria-hidden="true">?</i><span id="lblHelp">How it works</span></button><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
+    <div class="headtools"><button id="bHelp" class="helpbtn" aria-haspopup="dialog" aria-controls="guide"><i aria-hidden="true">?</i><span id="lblHelp">How it works</span></button><div class="langsw" id="levelsw" role="group" aria-label="Interface level"><button data-level="simple" id="lvlSimple" aria-pressed="true">Simple</button><button data-level="advanced" id="lvlAdvanced" aria-pressed="false">Advanced</button></div><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
   </header>
   <div class="skywrap">
     <div class="command" role="group" aria-label="Where, when and whose sky">
@@ -315,7 +316,7 @@ footer a,.card a{color:var(--muted)}
       </div>
       <div class="loading" id="loading">Loading 31,225 orbits and 15 sky cultures…</div>
     </div>
-    <div class="layers" id="layers" hidden></div>
+    <div class="layers adv-only" id="layers" hidden></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--deb)"></i><span id="legDebris">Debris</span></span>
       <span><i class="dot" style="background:var(--rb)"></i><span id="legRb">Rocket bodies</span></span>
@@ -341,7 +342,7 @@ footer a,.card a{color:var(--muted)}
 
     <section class="card" aria-labelledby="hFocus">
       <p class="eyebrow" id="hFocus">Objects passing through</p>
-      <div class="row">
+      <div class="row adv-only">
         <label class="f grow"><span id="lblPathsThrough">Paths through</span>
           <select id="scope"><option value="focus" id="optScopeFocus">this figure</option><option value="all" id="optScopeAll">every figure of this sky</option></select>
         </label>
@@ -354,7 +355,7 @@ footer a,.card a{color:var(--muted)}
         </label>
       </div>
       <div id="focusOut" class="small muted">Tracing orbits…</div>
-      <details class="fold">
+      <details class="fold adv-only">
         <summary id="lblMoreOptions">More options</summary>
         <div class="row" style="margin-top:8px"><button id="bBest">Best time tonight</button><button id="bAll" aria-pressed="false">Also show objects that only pass nearby</button></div>
         <p class="small muted" style="margin-top:8px" id="pPathsDesc">Each coloured path is a real object crossing the figure. Bright where it is in sunlight, faint where it is in Earth's shadow.</p>
@@ -382,7 +383,7 @@ footer a,.card a{color:var(--muted)}
       <p class="small" id="selHint" style="color:var(--faint)">Tap a dot or a path to see what it is and who launched it.</p>
     </section>
 
-    <section class="card" id="genCard" aria-labelledby="hGen">
+    <section class="card adv-only" id="genCard" aria-labelledby="hGen">
       <p class="eyebrow" id="lblGenEyebrow">Seven generations in orbit</p>
       <h2 id="hGen">Which pieces should we take responsibility for first?</h2>
       <p class="small" id="genHead">Working out how long each object will stay up…</p>
@@ -406,7 +407,7 @@ footer a,.card a{color:var(--muted)}
       </details>
     </section>
 
-    <section class="card">
+    <section class="card adv-only">
       <details class="fold">
         <summary id="lblPlaceTimeDetails">Place and time details</summary>
         <div class="stack">
@@ -425,7 +426,7 @@ footer a,.card a{color:var(--muted)}
       </details>
     </section>
 
-    <section class="card">
+    <section class="card adv-only">
       <details class="fold">
         <summary id="lblCrossingsSummary">Crossings over the next hours</summary>
         <div class="stack">
@@ -474,6 +475,7 @@ const TR = {
 en: {
   bylineTag:"The sky above a place, laid onto its land", bylineBy:"by", bylineSrc:"source",
   hideTools:"Hide tools", showTools:"Show tools",
+  lvlSimple:"Simple", lvlAdvanced:"Advanced", levelAria:"Interface level",
   lblWhere:"Where", lblWhen:"When", lblSky:"Whose sky",
   searchPh:"Search a place, or paste coordinates", searchAria:"Search a place, or paste coordinates or a map link",
   pickTitle:"Tap the map to set your spot", locateTitle:"Use my location", dtAria:"Date and time at this place",
@@ -616,6 +618,7 @@ en: {
 es: {
   bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
   hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas",
+  lvlSimple:"Simple", lvlAdvanced:"Avanzado", levelAria:"Nivel de la interfaz",
   lblWhere:"Dónde", lblWhen:"Cuándo", lblSky:"Cielo de quién",
   searchPh:"Busca un lugar o pega coordenadas", searchAria:"Busca un lugar, o pega coordenadas o un enlace de mapa",
   pickTitle:"Toca el mapa para fijar tu ubicación", locateTitle:"Usar mi ubicación", dtAria:"Fecha y hora en este lugar",
@@ -758,6 +761,7 @@ es: {
 fr: {
   bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
   hideTools:"Masquer les outils", showTools:"Afficher les outils",
+  lvlSimple:"Simple", lvlAdvanced:"Avancé", levelAria:"Niveau de l'interface",
   lblWhere:"Où", lblWhen:"Quand", lblSky:"Quel ciel",
   searchPh:"Cherchez un lieu ou collez des coordonnées", searchAria:"Cherchez un lieu, ou collez des coordonnées ou un lien de carte",
   pickTitle:"Touchez la carte pour définir votre position", locateTitle:"Utiliser ma position", dtAria:"Date et heure à cet endroit",
@@ -904,6 +908,16 @@ try {
   if (savedLang && TR[savedLang]) LANG = savedLang;
   else { const navLang = (navigator.language || '').slice(0,2).toLowerCase(); if (navLang === 'es' || navLang === 'fr') LANG = navLang; }
 } catch(e){}
+// Simple hides the layer toggles and the deeper side-panel sections, for a first visit; Advanced shows everything.
+let LEVEL = 'simple';
+try { const savedLevel = localStorage.getItem('sky-level'); if (savedLevel === 'simple' || savedLevel === 'advanced') LEVEL = savedLevel; } catch(e){}
+function applyLevel(level){
+  if (level !== 'simple' && level !== 'advanced') return;
+  LEVEL = level;
+  const app = document.getElementById('app'); if (app) app.classList.toggle('simple', level === 'simple');
+  document.querySelectorAll('#levelsw button').forEach(b => b.setAttribute('aria-pressed', b.dataset.level === LEVEL));
+  try { localStorage.setItem('sky-level', level); } catch(e){}
+}
 function i18n(key, vars){
   let s = (TR[LANG] && TR[LANG][key] != null) ? TR[LANG][key] : TR.en[key];
   if (s == null) return '';
@@ -979,6 +993,7 @@ function applyStaticLang(){
 
   setT('legDebris','legDebris'); setT('legRb','legRb'); setT('legPay','legPay'); setT('legLine','legLine');
   setT('lensKeyTxt','lensKey'); setT('lblSelObj','selectedObject');
+  setT('lvlSimple','lvlSimple'); setT('lvlAdvanced','lvlAdvanced'); setAria('levelsw','levelAria');
   { const g = document.querySelector('.command'); if (g) g.setAttribute('aria-label', i18n('commandAria')); }
   { const g = document.querySelector('.modes'); if (g) g.setAttribute('aria-label', i18n('viewAria')); }
   setAria('langsw','langAria'); setAria('transport','transportAria'); setAria('tSpeed','speedAria'); setAria('speed','speedAria');
@@ -1216,12 +1231,13 @@ function workerSource(){
       return [ux,uy,uz,sa,lit,p];
     }
     function frame(m){
+      // every tracked object's position is sent, not just the ones above this observer's horizon: the globe view
+      // ("objects physically overhead") plots the whole Earth's debris and satellites at once, wherever you're standing
       const date = new Date(m.t), ob = observer(m.lat, m.lon, date), sun = sunVec(date);
       const out = new Float32Array(recs.length*7); let k = 0; const gm = satellite.gstime(date);
-      const minS = Math.sin(-1*D2R);
       for (let i=0;i<recs.length;i++){
         if (!recs[i]) continue;
-        const L = look(i, date, ob, sun); if (!L || L[3] < minS) continue;
+        const L = look(i, date, ob, sun); if (!L) continue;
         out[k++] = i; out[k++] = Math.atan2(L[1], L[0]); out[k++] = Math.asin(Math.max(-1,Math.min(1,L[2]))); out[k++] = L[3]; out[k++] = L[4];
         const g = satellite.eciToGeodetic(L[5], gm); out[k++] = g.latitude*180/Math.PI; out[k++] = g.longitude*180/Math.PI;
       }
@@ -2156,8 +2172,10 @@ function drawMirror(){
           if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
         ctx.stroke(); }
       ctx.globalAlpha = 1; }
-    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue; const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue;
-      const p = S.dmode === 'ground' ? gxy(f[k+5], f[k+6]) : sxy(al, az); if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+    for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue;
+      // "as seen in your sky" only makes sense above your horizon; "physically overhead" plots every object worldwide
+      let p; if (S.dmode === 'ground') p = gxy(f[k+5], f[k+6]); else { const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue; p = sxy(al, az); }
+      if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
     genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
@@ -2785,6 +2803,8 @@ function initUI(){
   $('bBest').addEventListener('click', () => { if (S.mode === 'land') setTimeout(faceFigure, 0); });
   $('epochTxt').textContent = i18n('epochTxt', {date: new Date(S.epoch).toISOString().replace('T',' ').slice(0,16)});
   document.getElementById('langsw').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; applyLang(b.dataset.lang); });
+  document.getElementById('levelsw').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; applyLevel(b.dataset.level); });
+  applyLevel(LEVEL);
   new ResizeObserver(resize).observe($('canvasbox'));
 }
 
