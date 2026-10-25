@@ -46,7 +46,10 @@ def main():
         year = (r.get('LAUNCH_DATE') or '')[:4]
         out.append([name, l1, l2, TYPES.index(t) if t in TYPES else 3, idx[o], int(year) if year.isdigit() else 0])
     data = {'sats': out, 'types': TYPES, 'owners': owners, 'epoch': a.updated}
-    (ROOT / 'data/orbits.json.gz').write_bytes(gzip.compress(json.dumps(data, separators=(',', ':'), ensure_ascii=False).encode(), 9))
+    # mtime=0 keeps the gzip output byte-identical for byte-identical input; gzip.compress()'s
+    # default embeds the current wall-clock time in the header, which made every rebuild look like
+    # a data change (even when nothing had actually changed) and triggered needless bot commits.
+    (ROOT / 'data/orbits.json.gz').write_bytes(gzip.compress(json.dumps(data, separators=(',', ':'), ensure_ascii=False).encode(), 9, mtime=0))
     print(f'{len(out):,} objects, updated {a.updated}')
 
 if __name__ == '__main__':
