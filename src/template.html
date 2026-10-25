@@ -1976,7 +1976,7 @@ try { EARTH = JSON.parse($('earthdata').textContent); } catch(e){}
 const RE = 6371.0, KM_PER_DEG = RE*D2R;
 S.touched = new Set();
 S.M = {earth:true, night:true, places:true, stars:true, mw:true, figures:true, allfigs:true, names:true, western:false, objects:true, sphere:true, streaks:false, rings:true};
-S.view = RE*1.1; S.gc = [0,0]; S.dmode = 'sky'; // view half-size in km, view centre offset from you (km east, north), debris placement
+S.view = RE*1.1; S.gc = [0,0]; S.dmode = 'ground'; // view half-size in km, view centre offset from you (km east, north), debris placement; 'ground' = true worldwide positions, so rotating the globe reveals objects everywhere, not just above your local horizon
 const RASTER = {};
 const MAPCACHE = {key:'', canvas:null};
 function loadRaster(key, b64, b){
