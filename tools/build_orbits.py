@@ -10,6 +10,18 @@ import argparse, csv, datetime, gzip, json, pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TYPES = ['PAY', 'R/B', 'DEB', 'UNK']
 
+# TLE lines only have 5 characters for the catalogue number, which ran out once the
+# catalogue passed 99999 objects. The Alpha-5 scheme (used by Space-Track and CelesTrak
+# alike) replaces the leading digit with a letter (skipping I and O, to avoid confusion
+# with 1 and 0) for numbers from 100000 up, e.g. 'A0000' -> 100000, 'A0001' -> 100001.
+ALPHA5 = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+
+def parse_catnum(field):
+    field = field.strip()
+    if field[:1].isalpha():
+        return (10 + ALPHA5.index(field[0].upper())) * 10000 + int(field[1:])
+    return int(field)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--tle', required=True)
@@ -21,7 +33,7 @@ def main():
     i = 0
     while i < len(lines) - 2:
         if lines[i+1].startswith('1 ') and lines[i+2].startswith('2 '):
-            sats[int(lines[i+1][2:7])] = (lines[i].strip(), lines[i+1].rstrip(), lines[i+2].rstrip()); i += 3
+            sats[parse_catnum(lines[i+1][2:7])] = (lines[i].strip(), lines[i+1].rstrip(), lines[i+2].rstrip()); i += 3
         else:
             i += 1
     cat = {int(r['NORAD_CAT_ID']): r for r in csv.DictReader(open(a.satcat, newline='', encoding='utf-8', errors='replace'))}
