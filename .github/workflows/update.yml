@@ -49,10 +49,17 @@ jobs:
             exit 1
           fi
 
+      # On a push, whoever pushed already committed a matching, locally-built index.html (the
+      # build isn't reproducible byte-for-byte across machines/Python versions, even with gzip's
+      # mtime pinned, so rebuilding here would just manufacture a diff and re-commit a no-op change
+      # every single push -- which is what kept jamming up pushes with "fetch first" conflicts).
+      # Only rebuild+commit when this run actually fetched new data itself.
       - name: Build the page
+        if: github.event_name != 'push'
         run: python tools/build.py
 
       - name: Commit refreshed data
+        if: github.event_name != 'push'
         run: |
           git config user.name "shared-sky-bot"
           git config user.email "shared-sky-bot@users.noreply.github.com"

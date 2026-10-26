@@ -50,7 +50,7 @@ h1 span{color:var(--ochre)}
 .app.closed{grid-template-columns:minmax(0,1fr)}
 .app.closed aside{display:none}
 @media (max-width: 1000px){.app{grid-template-columns:minmax(0,1fr)}}
-.skywrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;flex-direction:column;gap:10px;padding-top:12px;min-width:0}
+.skywrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);max-height:calc(100vh - 160px);overflow:auto;display:flex;flex-direction:column;gap:10px;padding-top:12px;min-width:0;scrollbar-width:thin}
 @media (max-width: 1000px){.skywrap{position:static}}
 
 /* view tabs */
@@ -126,7 +126,7 @@ dialog.guide::backdrop{background:#03050ad0;backdrop-filter:blur(3px)}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
 
 /* the drawer: a field journal, not a stack of cards */
-aside{display:flex;flex-direction:column;min-width:0;padding-top:4px;max-height:calc(100vh - 20px);overflow:auto;position:sticky;top:10px;scrollbar-width:thin}
+aside{display:flex;flex-direction:column;min-width:0;padding-top:4px;max-height:calc(100vh - 160px);overflow:auto;position:sticky;top:10px;scrollbar-width:thin}
 @media (max-width: 1000px){aside{position:static;max-height:none}}
 section.card{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:18px 2px;display:flex;flex-direction:column;gap:10px;min-width:0}
 section.card:first-child{border-top:0}
@@ -238,7 +238,7 @@ button.step{padding:7px 9px;font-family:var(--mono);font-size:12px;flex:none}
 .fold summary::after{content:"+";color:var(--faint);font-family:var(--mono)}
 .fold[open] summary::after{content:"−"}
 .stack{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-footer{grid-column:1/-1;color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
+footer{grid-column:1/-1;position:relative;color:var(--faint);font-size:12px;padding-top:16px;margin-top:8px;border-top:1px solid var(--line);max-width:110ch}
 footer a,.card a{color:var(--muted)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}body{transition:none}}
@@ -268,7 +268,7 @@ footer a,.card a{color:var(--muted)}
         </div>
       </div>
       <div class="cmd cmd-when">
-        <span class="cmd-label"><span id="lblWhen">When</span> <span id="tzName" class="tz"></span></span>
+        <span class="cmd-label"><span id="lblWhen">When</span> <span id="tzName" class="tz"></span><div class="langsw tzmodesw" id="tzmodesw" role="group" aria-label="Time zone"><button data-tzmode="local" id="tzModeLocal" aria-pressed="true">Local</button><button data-tzmode="utc" id="tzModeUtc" aria-pressed="false">UTC</button></div></span>
         <div class="cmd-row">
           <input type="datetime-local" id="dt" aria-label="Date and time at this place">
           <button id="bBack" class="step" aria-label="One hour earlier">−1h</button>
@@ -554,7 +554,7 @@ en: {
   illustrativeLandscape:"illustrative landscape",
   layerEarth:"Land", layerNight:"Night light", layerPlaces:"Places & borders", layerStars:"Stars", layerMw:"Milky Way",
   layerFigures:"Figures", layerAllfigs:"All figures of this sky", layerNames:"Names", layerObjects:"Objects now",
-  layerStreaks:"Paths ahead", layerRings:"Rings & compass", layerSphere:"Whole sphere",
+  layerTrail:"Trails", layerStreaks:"Paths ahead", layerRings:"Rings & compass", layerSphere:"Whole sphere",
   notUsedHere:"Not used in this view", compareAria:"Compare with another sky culture", compareOpt:"Compare with another sky…",
   whereToDrawAria:"Where to draw objects", objAsSeenSky:"Objects as seen in your sky", objPhysOverhead:"Objects physically overhead",
   fitFigureBtn:"Fit the figure", backToMeShort:"Back to me", zoomEllipsis:"Zoom…", wholeGlobe:"Whole globe",
@@ -604,6 +604,7 @@ en: {
   featuredHead:"Featured places · each with its local sky", goTo:"Go to {lat}°, {lon}°",
   noCity:"No city found. Try another spelling, or paste coordinates.", kmFrom:"{km} km from {name}",
   yourSpot:"Your spot (search, coordinates or tap the map)", approxZone:"(approx. local zone)",
+  tzLocal:"Local", tzUtc:"UTC", tzModeAria:"Time zone: local or UTC",
   findingYou:"Finding you…", locationNA:"Location not available",
   saved:"Saved.", notSaved:"Not saved.", saveWaiting:"A save is already waiting for your answer.", saveNA:"Saving is not available here.",
   noDebrisDate:"No debris positions for this date.", no3d:"This browser cannot show 3D (WebGL).",
@@ -696,7 +697,7 @@ es: {
   illustrativeLandscape:"paisaje ilustrativo",
   layerEarth:"Tierra", layerNight:"Luces nocturnas", layerPlaces:"Lugares y fronteras", layerStars:"Estrellas", layerMw:"Vía Láctea",
   layerFigures:"Figuras", layerAllfigs:"Todas las figuras de este cielo", layerNames:"Nombres", layerObjects:"Objetos ahora",
-  layerStreaks:"Trayectorias futuras", layerRings:"Anillos y brújula", layerSphere:"Esfera completa",
+  layerTrail:"Estelas", layerStreaks:"Trayectorias futuras", layerRings:"Anillos y brújula", layerSphere:"Esfera completa",
   notUsedHere:"No se usa en esta vista", compareAria:"Comparar con otra cultura celeste", compareOpt:"Comparar con otro cielo…",
   whereToDrawAria:"Dónde dibujar los objetos", objAsSeenSky:"Objetos vistos en tu cielo", objPhysOverhead:"Objetos físicamente sobre ti",
   fitFigureBtn:"Ajustar a la figura", backToMeShort:"Volver a mí", zoomEllipsis:"Zoom…", wholeGlobe:"Todo el globo",
@@ -746,6 +747,7 @@ es: {
   featuredHead:"Lugares destacados · cada uno con su cielo local", goTo:"Ir a {lat}°, {lon}°",
   noCity:"No se encontró ninguna ciudad. Prueba con otra ortografía o pega coordenadas.", kmFrom:"{name} (a {km} km)",
   yourSpot:"Tu lugar (busca, pega coordenadas o toca el mapa)", approxZone:"(zona local aprox.)",
+  tzLocal:"Local", tzUtc:"UTC", tzModeAria:"Zona horaria: local o UTC",
   findingYou:"Buscando tu ubicación…", locationNA:"Ubicación no disponible",
   saved:"Imagen guardada.", notSaved:"No se ha guardado.", saveWaiting:"Ya hay un guardado esperando tu respuesta.", saveNA:"Aquí no se puede guardar.",
   noDebrisDate:"No hay posiciones de basura espacial para esta fecha.", no3d:"Este navegador no puede mostrar 3D (WebGL).",
@@ -838,7 +840,7 @@ fr: {
   illustrativeLandscape:"paysage illustratif",
   layerEarth:"Terre", layerNight:"Lumières nocturnes", layerPlaces:"Lieux et frontières", layerStars:"Étoiles", layerMw:"Voie lactée",
   layerFigures:"Figures", layerAllfigs:"Toutes les figures de ce ciel", layerNames:"Noms", layerObjects:"Objets maintenant",
-  layerStreaks:"Trajectoires à venir", layerRings:"Anneaux et boussole", layerSphere:"Sphère entière",
+  layerTrail:"Traînées", layerStreaks:"Trajectoires à venir", layerRings:"Anneaux et boussole", layerSphere:"Sphère entière",
   notUsedHere:"Non utilisé dans cette vue", compareAria:"Comparer avec une autre culture céleste", compareOpt:"Comparer avec un autre ciel…",
   whereToDrawAria:"Où dessiner les objets", objAsSeenSky:"Objets vus dans votre ciel", objPhysOverhead:"Objets physiquement au-dessus",
   fitFigureBtn:"Ajuster à la figure", backToMeShort:"Revenir à moi", zoomEllipsis:"Zoom…", wholeGlobe:"Le globe entier",
@@ -888,6 +890,7 @@ fr: {
   featuredHead:"Lieux à découvrir · chacun avec son ciel local", goTo:"Aller à {lat}°, {lon}°",
   noCity:"Aucune ville trouvée. Essayez une autre orthographe ou collez des coordonnées.", kmFrom:"{name} (à {km} km)",
   yourSpot:"Votre position (recherche, coordonnées ou touchez la carte)", approxZone:"(fuseau local approx.)",
+  tzLocal:"Local", tzUtc:"UTC", tzModeAria:"Fuseau horaire : local ou UTC",
   findingYou:"Recherche de votre position…", locationNA:"Position non disponible",
   saved:"Image enregistrée.", notSaved:"Image non enregistrée.", saveWaiting:"Un enregistrement attend déjà votre réponse.", saveNA:"L'enregistrement n'est pas disponible ici.",
   noDebrisDate:"Aucune position de débris pour cette date.", no3d:"Ce navigateur ne peut pas afficher la 3D (WebGL).",
@@ -961,6 +964,7 @@ function applyStaticLang(){
   const setAria = (id,key) => { const e = document.getElementById(id); if (e) e.setAttribute('aria-label', i18n(key)); };
   const setTitle = (id,key) => { const e = document.getElementById(id); if (e) e.title = i18n(key); };
   setT('lblWhere','lblWhere'); setT('lblWhen','lblWhen'); setT('lblSky','lblSky');
+  setT('tzModeLocal','tzLocal'); setT('tzModeUtc','tzUtc'); setAria('tzmodesw','tzModeAria');
   setPh('search','searchPh'); setAria('search','searchAria');
   setTitle('bPick','pickTitle'); setAria('bPick','pickTitle');
   setTitle('bLocate','locateTitle'); setAria('bLocate','locateTitle');
@@ -1017,6 +1021,7 @@ function applyStaticLang(){
   { const b = document.getElementById('byline'); if (b) b.innerHTML = i18n('bylineTag') + ' · ' + i18n('bylineBy') + ' <a href="https://sofiagallego.com" target="_blank" rel="noopener">Sofia Gallego</a> · <a href="https://github.com/nefinia/shared-sky" target="_blank" rel="noopener">' + i18n('bylineSrc') + '</a>'; }
   { const e = document.getElementById('loading'); if (e && !S.booted) e.textContent = i18n('loading', {n:fmtN(31225), m:'15'}); }
   document.querySelectorAll('#langsw button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === LANG));
+  document.querySelectorAll('#tzmodesw button').forEach(b => b.setAttribute('aria-pressed', b.dataset.tzmode === S.tzMode));
   if (S.epoch) { const e = document.getElementById('epochTxt'); if (e) e.textContent = i18n('epochTxt', {date: new Date(S.epoch).toISOString().replace('T',' ').slice(0,16)}); }
 }
 function paintTypeToggles(){
@@ -1068,6 +1073,8 @@ function applyLang(lang){
   }
 }
 const D2R = Math.PI/180, R2D = 180/Math.PI, FS = 7;
+// how much simulated time each object's comet-tail trail spans while playing, regardless of playback speed
+const TRAIL_SPAN_MS = 150000;
 const TYPE_COL = ['#7CC6E8','#C9A0FF','#FF6F59','#9AA0B5']; // PAY, R/B, DEB, UNK
 const typeName = ty => [i18n('typeSatellite'), i18n('typeRocket'), i18n('typeDebris'), i18n('typeUnknown')][ty];
 const OWNER = {US:'United States',CIS:'Russia / former USSR',PRC:'China',FR:'France',JPN:'Japan',IND:'India',ESA:'European Space Agency',UK:'United Kingdom',GER:'Germany',FGER:'West Germany (former)',IT:'Italy',CA:'Canada',ISS:'ISS partners',GLOB:'Globalstar',ORB:'ORBCOMM',SES:'SES',O3B:'O3b / SES',ITSO:'Intelsat',EUTE:'Eutelsat',EUME:'EUMETSAT',SKOR:'South Korea',NKOR:'North Korea',CHLE:'Chile',ARGN:'Argentina',BRAZ:'Brazil',AB:'Arabsat',SPN:'Spain',AUS:'Australia',ISRA:'Israel',IRAN:'Iran',TBD:'Not yet attributed',RP:'Philippines',ROC:'Taiwan',STCT:'Singapore / Taiwan',UAE:'United Arab Emirates',TURK:'Türkiye',UKR:'Ukraine',KAZ:'Kazakhstan',SAFR:'South Africa',SAUD:'Saudi Arabia',NIG:'Nigeria',MEX:'Mexico',INDO:'Indonesia',MALA:'Malaysia',THAI:'Thailand',VTNM:'Vietnam',PAKI:'Pakistan',EGYP:'Egypt',NETH:'Netherlands',SWED:'Sweden',NOR:'Norway',DEN:'Denmark',FIN:'Finland',POL:'Poland',CZCH:'Czechia',BEL:'Belgium',LUXE:'Luxembourg',SWTZ:'Switzerland',POR:'Portugal',GREC:'Greece',EST:'Estonia',PERU:'Peru',BOL:'Bolivia',ECU:'Ecuador',COL:'Colombia',VENZ:'Venezuela',URY:'Uruguay',ALG:'Algeria',AZER:'Azerbaijan',IRAQ:'Iraq',SING:'Singapore',NATO:'NATO',IM:'Inmarsat',CHBZ:'China / Brazil',USBZ:'US / Brazil',FRIT:'France / Italy',ASRA:'Austria',NICO:'New Zealand',SEAL:'Sea Launch',RASC:'RascomStar',ABS:'ABS',AC:'AsiaSat',ORBC:'ORBCOMM',NZ:'New Zealand',LTU:'Lithuania',HUN:'Hungary',KEN:'Kenya',MA:'Morocco',MOR:'Morocco',GHA:'Ghana',BGD:'Bangladesh',NPL:'Nepal',RWA:'Rwanda',ETH:'Ethiopia',SVN:'Slovenia',JOR:'Jordan',QAT:'Qatar',KWT:'Kuwait',BHR:'Bahrain',LKA:'Sri Lanka',GUAT:'Guatemala',CRI:'Costa Rica',PRY:'Paraguay',MNG:'Mongolia',TMMC:'Turkmenistan',BELA:'Belarus',AGO:'Angola',SDN:'Sudan',TUN:'Tunisia',ZWE:'Zimbabwe',UGA:'Uganda',MUS:'Mauritius',DJI:'Djibouti',SEN:'Senegal'};
@@ -1106,8 +1113,10 @@ fr:{sydney:['Sydney, Pays gadigal, Australie','Pays gadigal'], tyrrell:['Lac Tyr
 const placeN = p => p.lat == null ? i18n('yourSpot') : ((PLACE_TR[LANG] && PLACE_TR[LANG][p.key] && PLACE_TR[LANG][p.key][0]) || p.n);
 const placeLand = p => (PLACE_TR[LANG] && PLACE_TR[LANG][p.key] && PLACE_TR[LANG][p.key][1]) || p.land;
 
+let SAVED_TZMODE = 'local';
+try { const v = localStorage.getItem('sky-tzmode'); if (v === 'utc' || v === 'local') SAVED_TZMODE = v; } catch(e){}
 const S = {
-  place:0, lat:PLACES[0].lat, lon:PLACES[0].lon, tz:PLACES[0].tz,
+  place:0, lat:PLACES[0].lat, lon:PLACES[0].lon, tz:PLACES[0].tz, tzMode:SAVED_TZMODE,
   t:0, epoch:0, cult:'northern_andes', compare:false, labels:true,
   show:[true,true,true,true], sel:-1, frame:null, playing:false,
   events:[], scanMeta:null, busy:false, pending:false,
@@ -1950,7 +1959,7 @@ function render3d(){
   $('chipLand').hidden = !S.M.earth; $('chipLand').innerHTML = `<b>${esc(landLabel(G.landKey))}</b> · ${esc(i18n('illustrativeLandscape'))}`;
 }
 function initLayers(){ initLayersAll(); }
-const LAYERS = [['earth','layerEarth'],['night','layerNight'],['places','layerPlaces'],['stars','layerStars'],['mw','layerMw'],['figures','layerFigures'],['allfigs','layerAllfigs'],['names','layerNames'],['objects','layerObjects'],['streaks','layerStreaks'],['rings','layerRings'],['sphere','layerSphere']];
+const LAYERS = [['earth','layerEarth'],['night','layerNight'],['places','layerPlaces'],['stars','layerStars'],['mw','layerMw'],['figures','layerFigures'],['allfigs','layerAllfigs'],['names','layerNames'],['objects','layerObjects'],['trail','layerTrail'],['streaks','layerStreaks'],['rings','layerRings'],['sphere','layerSphere']];
 const LAYER_NA = {sky:['earth','night','places','sphere'], focus:['night','places','sphere'], land:['night','places','sphere'], mirror:[]};
 function initLayersAll(){
   const na = LAYER_NA[S.mode] || [], m = S.mode;
@@ -1975,7 +1984,7 @@ let EARTH = {local:{}, places:[], peaks:[], borders:[]};
 try { EARTH = JSON.parse($('earthdata').textContent); } catch(e){}
 const RE = 6371.0, KM_PER_DEG = RE*D2R;
 S.touched = new Set();
-S.M = {earth:true, night:true, places:true, stars:true, mw:true, figures:true, allfigs:true, names:true, western:false, objects:false, sphere:true, streaks:false, rings:true};
+S.M = {earth:true, night:true, places:true, stars:true, mw:true, figures:true, allfigs:true, names:true, western:false, objects:false, trail:true, sphere:true, streaks:false, rings:true};
 S.view = RE*1.1; S.gc = [0,0]; S.dmode = 'ground'; // view half-size in km, view centre offset from you (km east, north), debris placement; 'ground' = true worldwide positions, so rotating the globe reveals objects everywhere, not just above your local horizon
 const RASTER = {};
 const MAPCACHE = {key:'', canvas:null};
@@ -2150,17 +2159,21 @@ function drawMirror(){
   if (S.M.objects && S.frame){
     const f = S.frame.data;
     // while playing, every object leaves a short tail showing where it has just been
-    if (S.playing && S.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
-      for (const [i,a] of S.trail){ if (a.length < 2 || S.frameNo - a[a.length-1][4] > 1) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
+    if (S.playing && S.trail && S.M.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
+      for (const [i,a] of S.trail){ if (a.length < 2 || Math.abs(S.frame.t - a[a.length-1][4]) > 2000) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
         ctx.strokeStyle = TYPE_COL[ty]; ctx.globalAlpha = .45; ctx.beginPath(); let pen = false;
         let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : (al > -0.05 ? sxy(al, az) : null);
           if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
         ctx.stroke(); }
       ctx.globalAlpha = 1; }
+    // zoomed out to see the whole globe at once, tens of thousands of markers pack together into a
+    // solid wash; shrinking and fading them as the view widens keeps the land and figures readable
+    // while still showing roughly how dense the real debris field is.
+    const zoomT = Math.max(0, Math.min(1, (S.view - 500) / (7000 - 500))), rScale = 1 - 0.55*zoomT, aScale = 1 - 0.55*zoomT;
     for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue;
       // "as seen in your sky" only makes sense above your horizon; "physically overhead" plots every object worldwide
       let p; if (S.dmode === 'ground') p = gxy(f[k+5], f[k+6]); else { const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue; p = sxy(al, az); }
-      if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], lit ? 1.9 : 1.4, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+      if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*aScale*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], (lit ? 1.9 : 1.4)*rScale, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
     genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
@@ -2267,6 +2280,7 @@ function nearestPlaceName(lat, lon, maxKm){
   return best ? (bd < 8 ? best[0] : i18n('kmFrom', {km:fmtN(Math.round(bd)), name:best[0]})) : null;
 }
 function approxZone(lon){ const o = Math.round(lon/15); return o === 0 ? 'UTC' : `Etc/GMT${o > 0 ? '-' : '+'}${Math.abs(o)}`; }
+function effTz(){ return S.tzMode === 'utc' ? 'UTC' : S.tz; }
 function setCustom(lat, lon, name){
   S.place = PLACES.length - 1; S.lat = Math.max(-89.9, Math.min(89.9, lat)); S.lon = ((lon + 540) % 360) - 180;
   S.customName = name || null; S.customNear = !name; // a derived name is re-worded in the current language each time it is shown
@@ -2311,8 +2325,8 @@ function runSearch(){
 }
 function tzParts(t, tz){ const o = {}; new Intl.DateTimeFormat('en-US', {timeZone:tz, hourCycle:'h23', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit'}).formatToParts(new Date(t)).forEach(p => o[p.type] = p.value); return o; }
 function tzOffsetMin(t, tz){ const p = tzParts(t, tz); return (Date.UTC(+p.year, +p.month-1, +p.day, +p.hour % 24, +p.minute, +p.second) - Math.floor(t/1000)*1000)/60000; }
-function toInputValue(t){ const p = tzParts(t, S.tz); return `${p.year}-${p.month}-${p.day}T${String(+p.hour % 24).padStart(2,'0')}:${p.minute}`; }
-function fromInputValue(v){ const m = v.match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+)/); if (!m) return null; let t = Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5]); t -= tzOffsetMin(t, S.tz)*60000; t = Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5]) - tzOffsetMin(t, S.tz)*60000; return t; }
+function toInputValue(t){ const p = tzParts(t, effTz()); return `${p.year}-${p.month}-${p.day}T${String(+p.hour % 24).padStart(2,'0')}:${p.minute}`; }
+function fromInputValue(v){ const m = v.match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+)/); if (!m) return null; let t = Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5]); t -= tzOffsetMin(t, effTz())*60000; t = Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5]) - tzOffsetMin(t, effTz())*60000; return t; }
 const DATA_DAYS = 7;
 const inData = t => Math.abs(t - S.epoch) <= DATA_DAYS*86400000;
 
@@ -2513,9 +2527,10 @@ function onFrame(m){
     }
   }
   S.frame = {t:m.t, data, crossObj, crossCons, consCount, counts};
-  if (S.playing){ S.frameNo = (S.frameNo || 0) + 1; const TR = S.trail || (S.trail = new Map());
-    for (let k=0;k<data.length;k+=FS){ const i = data[k]; let a = TR.get(i); if (!a){ a = []; TR.set(i, a); } a.push([data[k+1], data[k+2], data[k+5], data[k+6], S.frameNo]); if (a.length > 9) a.shift(); }
-    if (S.frameNo % 20 === 0) for (const [i,a] of TR) if (S.frameNo - a[a.length-1][4] > 3) TR.delete(i); }
+  if (S.playing){ const TR = S.trail || (S.trail = new Map()), tCut = m.t - TRAIL_SPAN_MS;
+    for (let k=0;k<data.length;k+=FS){ const i = data[k]; let a = TR.get(i); if (!a){ a = []; TR.set(i, a); } a.push([data[k+1], data[k+2], data[k+5], data[k+6], m.t]);
+      while (a.length > 2 && a[1][4] < tCut) a.shift(); }
+    for (const [i,a] of TR) if (a[a.length-1][4] < tCut) TR.delete(i); }
   if (G.ok) buildObjects();
   paintCounts();
   renderNowCross(); renderSel(); draw();
@@ -2690,12 +2705,12 @@ function onScan(m){
 
 // ---------- UI ----------
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function fmtDay(t){ return new Intl.DateTimeFormat(LOC(), {day:'numeric', month:'short', year:'numeric', timeZone:S.tz}).format(new Date(t)); }
+function fmtDay(t){ return new Intl.DateTimeFormat(LOC(), {day:'numeric', month:'short', year:'numeric', timeZone:effTz()}).format(new Date(t)); }
 function warnChip(){ const d = Math.abs(S.t - S.epoch); $('chipWarn').hidden = d < 3*86400000; $('chipWarn').textContent = d > DATA_DAYS*86400000 ? i18n('chipWarnFar') : i18n('chipWarnApprox'); }
 function nearCached(){ const k = S.lat + '|' + S.lon + '|' + LANG; if (nearCached.k !== k){ nearCached.k = k; nearCached.v = nearestPlaceName(S.lat, S.lon, 60); } return nearCached.v; }
 function placeName(){ const p = PLACES[S.place]; return p.lat == null ? (S.customName || (S.customNear && nearCached()) || `${S.lat.toFixed(3)}°, ${S.lon.toFixed(3)}°`) : placeN(p).split(',')[0]; }
 function fmtTime(t, short){
-  const o = short ? {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:S.tz} : {weekday:'short', day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZone:S.tz, timeZoneName:'short'};
+  const o = short ? {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:effTz()} : {weekday:'short', day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZone:effTz(), timeZoneName:'short'};
   try { return new Intl.DateTimeFormat(LOC(), o).format(new Date(t)); } catch(e){ return new Date(t).toISOString().slice(11,16); }
 }
 function setTime(t){
@@ -2710,10 +2725,10 @@ function setTime(t){
   if (S.mode === 'land') need3d();
 }
 function paintTimeText(){ // every clock-dependent label, in the current language
-  $('tzName').textContent = S.tz.startsWith('Etc/') || S.tz === 'UTC' ? `${S.tz === 'UTC' ? 'UTC' : 'UTC' + (S.tz.includes('-') ? '+' : '−') + S.tz.split(/[-+]/)[1]} ${i18n('approxZone')}` : S.tz.replace('_',' ');
+  $('tzName').textContent = S.tzMode === 'utc' ? 'UTC' : (S.tz.startsWith('Etc/') || S.tz === 'UTC' ? `${S.tz === 'UTC' ? 'UTC' : 'UTC' + (S.tz.includes('-') ? '+' : '−') + S.tz.split(/[-+]/)[1]} ${i18n('approxZone')}` : S.tz.replace('_',' '));
   $('timeLocal').textContent = fmtTime(S.t);
   $('timeUtc').textContent = new Date(S.t).toISOString().replace('T',' ').slice(0,16) + ' UTC';
-  updateWhere(); if ($('tTime')) $('tTime').textContent = fmtTime(S.t, true) + ' · ' + new Intl.DateTimeFormat(LOC(), {day:'numeric', month:'short', timeZone:S.tz}).format(new Date(S.t));
+  updateWhere(); if ($('tTime')) $('tTime').textContent = fmtTime(S.t, true) + ' · ' + new Intl.DateTimeFormat(LOC(), {day:'numeric', month:'short', timeZone:effTz()}).format(new Date(S.t));
 }
 function setPlace(i){
   S.place = i; const p = PLACES[i];
@@ -2788,6 +2803,7 @@ function initUI(){
   $('bBest').addEventListener('click', () => { if (S.mode === 'land') setTimeout(faceFigure, 0); });
   $('epochTxt').textContent = i18n('epochTxt', {date: new Date(S.epoch).toISOString().replace('T',' ').slice(0,16)});
   document.getElementById('langsw').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; applyLang(b.dataset.lang); });
+  document.getElementById('tzmodesw').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || !b.dataset.tzmode) return; S.tzMode = b.dataset.tzmode; try { localStorage.setItem('sky-tzmode', S.tzMode); } catch(err){} document.querySelectorAll('#tzmodesw button').forEach(x => x.setAttribute('aria-pressed', x.dataset.tzmode === S.tzMode)); paintTimeText(); if (document.activeElement !== $('dt')) $('dt').value = toInputValue(S.t); });
   new ResizeObserver(resize).observe($('canvasbox'));
 }
 
