@@ -271,6 +271,40 @@ footer a,.card a{color:var(--muted)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}body{transition:none}}
 
+/* ---------- immersive mobile layout ----------
+   Apps like Google Sky Map and Stellarium Mobile treat the sky itself as the whole screen and
+   push everything else (search, date, culture, layers) into secondary chrome you pull up when
+   you need it. Below that philosophy, kept in Shared Sky's own voice: the header shrinks to a
+   slim strip, the sky canvas fills the screen edge to edge, and the where/when/whose-sky
+   controls, view tabs, layers and legend all live in one bottom sheet that opens on tap -- the
+   same controls as before, just out of the way until asked for. */
+.sheetHandle{display:none}
+@media (max-width: 560px){
+  body{padding:0}
+  .app{display:block}
+  header.masthead{position:fixed;top:0;left:0;right:0;z-index:25;padding:8px 12px;border-bottom:none;gap:4px 10px;background:color-mix(in srgb, var(--night) 82%, transparent);backdrop-filter:blur(8px)}
+  .masthead .mark{display:none}
+  .masthead .where{flex:1 1 auto;min-width:0}
+  .masthead .where .land{font-size:15px;line-height:1.2}
+  .masthead .where .sub{font-size:10px}
+  .helpbtn span{display:none}
+  .skywrap{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:none;overflow:visible;padding-top:0;gap:0;z-index:15}
+  .canvasbox{position:fixed;inset:0;z-index:5;height:auto;min-height:0;max-width:none;border-radius:0;box-shadow:none}
+  .sheetHandle{display:flex;position:sticky;top:0;z-index:2;align-items:center;justify-content:center;width:100%;padding:14px 10px 10px;font-size:12.5px;color:var(--muted);background:color-mix(in srgb, var(--night) 90%, transparent);backdrop-filter:blur(10px);border:none;border-top:1px solid var(--line)}
+  .sheetHandle::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:34px;height:4px;border-radius:2px;background:var(--faint)}
+  .skywrap:not(.open){border-radius:16px 16px 0 0;overflow:hidden}
+  .skywrap>.command,.skywrap>.toolbar,.skywrap>.modehint,.skywrap>.layersToggle,.skywrap>.layers,.skywrap>.legend{display:none}
+  .skywrap.open{background:color-mix(in srgb, var(--night) 94%, transparent);backdrop-filter:blur(12px);border-radius:16px 16px 0 0;max-height:82dvh;overflow:auto;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .skywrap.open>.command,.skywrap.open>.toolbar,.skywrap.open>.modehint,.skywrap.open>.layersToggle,.skywrap.open>.layers,.skywrap.open>.legend{padding-left:12px;padding-right:12px}
+  .skywrap.open>.command{display:grid}
+  .skywrap.open>.toolbar,.skywrap.open>.layersToggle,.skywrap.open>.legend{display:flex}
+  .skywrap.open>.modehint{display:block}
+  .skywrap.open>.layers.open{display:flex}
+  .skywrap.open>.command{padding-top:4px}
+  aside{display:flex}
+  .app.closed aside{display:none}
+  .app:not(.closed) aside{position:fixed;inset:0;z-index:30;background:var(--night);padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));overflow:auto;max-height:none}
+}
 </style>
 
 </head>
@@ -284,7 +318,8 @@ footer a,.card a{color:var(--muted)}
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
     <div class="headtools"><button id="bHelp" class="helpbtn" aria-haspopup="dialog" aria-controls="guide"><i aria-hidden="true">?</i><span id="lblHelp">How it works</span></button><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
   </header>
-  <div class="skywrap">
+  <div class="skywrap" id="skywrap">
+    <button class="sheetHandle" id="bSheetToggle" aria-expanded="false" aria-controls="skywrap"><span id="sheetHandleTxt">Controls</span></button>
     <div class="command" role="group" aria-label="Where, when and whose sky">
       <div class="cmd cmd-where">
         <span class="cmd-label" id="lblWhere">Where</span>
@@ -518,7 +553,7 @@ const $ = id => document.getElementById(id);
 const TR = {
 en: {
   bylineTag:"The sky above a place, laid onto its land", bylineBy:"by", bylineSrc:"source",
-  hideTools:"Hide tools", showTools:"Show tools", showLayers:"Layers", hideLayers:"Hide layers",
+  hideTools:"Hide tools", showTools:"Show tools", showLayers:"Layers", hideLayers:"Hide layers", showControls:"Controls", hideControls:"Hide controls", figureInfo:"Figure info",
   lblWhere:"Where", lblWhen:"When", lblSky:"Whose sky",
   searchPh:"Search a place, or paste coordinates", searchAria:"Search a place, or paste coordinates or a map link",
   pickTitle:"Tap the map to set your spot", locateTitle:"Use my location", dtAria:"Date and time at this place",
@@ -661,7 +696,7 @@ en: {
 },
 es: {
   bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
-  hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas", showLayers:"Capas", hideLayers:"Ocultar capas",
+  hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas", showLayers:"Capas", hideLayers:"Ocultar capas", showControls:"Controles", hideControls:"Ocultar controles", figureInfo:"Información de la figura",
   lblWhere:"Dónde", lblWhen:"Cuándo", lblSky:"Cielo de quién",
   searchPh:"Busca un lugar o pega coordenadas", searchAria:"Busca un lugar, o pega coordenadas o un enlace de mapa",
   pickTitle:"Toca el mapa para fijar tu ubicación", locateTitle:"Usar mi ubicación", dtAria:"Fecha y hora en este lugar",
@@ -804,7 +839,7 @@ es: {
 },
 fr: {
   bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
-  hideTools:"Masquer les outils", showTools:"Afficher les outils", showLayers:"Calques", hideLayers:"Masquer les calques",
+  hideTools:"Masquer les outils", showTools:"Afficher les outils", showLayers:"Calques", hideLayers:"Masquer les calques", showControls:"Contrôles", hideControls:"Masquer les contrôles", figureInfo:"Info sur la figure",
   lblWhere:"Où", lblWhen:"Quand", lblSky:"Quel ciel",
   searchPh:"Cherchez un lieu ou collez des coordonnées", searchAria:"Cherchez un lieu, ou collez des coordonnées ou un lien de carte",
   pickTitle:"Touchez la carte pour définir votre position", locateTitle:"Utiliser ma position", dtAria:"Date et heure à cet endroit",
@@ -1033,7 +1068,11 @@ function applyStaticLang(){
   { const g = document.querySelector('.modes'); if (g) g.setAttribute('aria-label', i18n('viewAria')); }
   setAria('langsw','langAria'); setAria('transport','transportAria'); setAria('tSpeed','speedAria'); setAria('speed','speedAria');
   setAria('slider','scrubAria'); setAria('culture','cultureAria'); setAria('focusSel','figureAria');
-  { const b = document.getElementById('bDrawer'), app = document.getElementById('app'); if (b) b.textContent = app && app.classList.contains('closed') ? i18n('showTools') : i18n('hideTools'); }
+  // on a phone bDrawer opens the figure-info panel as a full-screen overlay (see the mobile
+  // media query) rather than showing/hiding a side panel, so it keeps one static label there
+  // instead of flipping between "show" and "hide".
+  { const b = document.getElementById('bDrawer'), app = document.getElementById('app'); if (b) b.textContent = window.innerWidth <= 560 ? i18n('figureInfo') : (app && app.classList.contains('closed') ? i18n('showTools') : i18n('hideTools')); }
+  { const b = document.getElementById('sheetHandleTxt'), sw = document.getElementById('skywrap'); if (b) b.textContent = sw && sw.classList.contains('open') ? i18n('hideControls') : i18n('showControls'); }
   { const t = document.getElementById('tPlay'); if (t) t.setAttribute('aria-label', S.playing ? i18n('pause') : i18n('play')); }
   setT('bPlay', S.playing ? 'pause' : 'play');
   setT('lblAboutCulture','aboutCulture');
@@ -2883,6 +2922,10 @@ function fillCultures(){
 function showStory(){ showFigure(); const k = CULT[S.cult] && CULT[S.cult].cons[S.focus]; $('figStory').textContent = k && k.s ? k.s : ''; $('figStory').hidden = !(k && k.s); }
 function onFocusChange(){ S.tracks = null; S.trackSel = -1; requestTracks(); buildFigures(); buildStreaks(); showStory(); renderPass(); if (S.mode === 'land') faceFigure(); if (S.mode === 'mirror') fitFigure(); draw(); }
 function initUI(){
+  // start with the figure-info panel tucked away on a phone, so the first thing you see is the
+  // sky itself rather than a long info panel below it -- matches the "canvas first" feel of
+  // Google Sky Map / Stellarium's mobile apps. Desktop keeps the panel open by default.
+  if (window.innerWidth <= 560) $('app').classList.add('closed');
   applyStaticLang();
   fillPlaces(); fillCultures();
   $('lat').value = S.lat; $('lon').value = S.lon;
@@ -2953,6 +2996,7 @@ function initUI(){
   $('guide').addEventListener('click', e => { if (e.target === e.currentTarget) closeGuide(); });
   $('bDrawer').onclick = () => { const closed = $('app').classList.toggle('closed'); $('bDrawer').setAttribute('aria-expanded', !closed); $('bDrawer').textContent = closed ? i18n('showTools') : i18n('hideTools'); setTimeout(resize, 50); };
   $('bLayersToggle').onclick = () => { const open = $('layers').classList.toggle('open'); $('bLayersToggle').setAttribute('aria-expanded', open); $('layersToggleTxt').textContent = i18n(open ? 'hideLayers' : 'showLayers'); };
+  $('bSheetToggle').onclick = () => { const open = $('skywrap').classList.toggle('open'); $('bSheetToggle').setAttribute('aria-expanded', open); $('sheetHandleTxt').textContent = i18n(open ? 'hideControls' : 'showControls'); };
   $('loading').textContent = i18n('preparingOrbits', {n:fmtN(31225)});
   const url = URL.createObjectURL(new Blob([workerSource()], {type:'text/javascript'}));
   worker = new Worker(url);
