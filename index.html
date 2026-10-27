@@ -123,6 +123,19 @@ dialog.guide::backdrop{background:#03050ad0;backdrop-filter:blur(3px)}
 
 /* layers and legend under the map */
 .layers{display:flex;flex-wrap:wrap;gap:6px 6px;align-items:center}
+.layersToggle{display:none}
+/* on a phone, a dozen-plus toggle pills (Land, Stars, Milky Way, Figures, Objects now, Trails...)
+   wrapped across 4-5 rows and pushed the actual sky view far down the page before you'd even
+   scrolled to it. Collapse them behind a small "Layers" button there instead, open by default
+   only on wider screens. */
+@media (max-width: 560px){
+  .layersToggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:7px;font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:6px;background:none}
+  .layersToggle[aria-expanded=true]{color:var(--text)}
+  #layersToggleIcon{transition:transform .15s}
+  .layersToggle[aria-expanded=true] #layersToggleIcon{transform:rotate(180deg)}
+  .layers{display:none}
+  .layers.open{display:flex;margin-top:6px}
+}
 .layers button{padding:4px 11px 4px 9px;font-size:12px;border-radius:999px;background:none;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
 .layers button[data-k]::before{content:"";width:7px;height:7px;border-radius:50%;border:1px solid var(--faint)}
 .layers button[aria-pressed=true]{color:var(--text);border-color:color-mix(in srgb, var(--ochre) 55%, var(--line));background:none}
@@ -332,6 +345,7 @@ footer a,.card a{color:var(--muted)}
       </div>
       <div class="loading" id="loading">Loading 31,225 orbits and 15 sky cultures…</div>
     </div>
+    <button class="layersToggle" id="bLayersToggle" aria-expanded="false" aria-controls="layers"><span id="layersToggleTxt">Layers</span> <span id="layersToggleIcon" aria-hidden="true">▾</span></button>
     <div class="layers" id="layers" hidden></div>
     <div class="legend">
       <span><i class="dot" style="background:var(--deb)"></i><span id="legDebris">Debris</span></span>
@@ -504,7 +518,7 @@ const $ = id => document.getElementById(id);
 const TR = {
 en: {
   bylineTag:"The sky above a place, laid onto its land", bylineBy:"by", bylineSrc:"source",
-  hideTools:"Hide tools", showTools:"Show tools",
+  hideTools:"Hide tools", showTools:"Show tools", showLayers:"Layers", hideLayers:"Hide layers",
   lblWhere:"Where", lblWhen:"When", lblSky:"Whose sky",
   searchPh:"Search a place, or paste coordinates", searchAria:"Search a place, or paste coordinates or a map link",
   pickTitle:"Tap the map to set your spot", locateTitle:"Use my location", dtAria:"Date and time at this place",
@@ -647,7 +661,7 @@ en: {
 },
 es: {
   bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
-  hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas",
+  hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas", showLayers:"Capas", hideLayers:"Ocultar capas",
   lblWhere:"Dónde", lblWhen:"Cuándo", lblSky:"Cielo de quién",
   searchPh:"Busca un lugar o pega coordenadas", searchAria:"Busca un lugar, o pega coordenadas o un enlace de mapa",
   pickTitle:"Toca el mapa para fijar tu ubicación", locateTitle:"Usar mi ubicación", dtAria:"Fecha y hora en este lugar",
@@ -790,7 +804,7 @@ es: {
 },
 fr: {
   bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
-  hideTools:"Masquer les outils", showTools:"Afficher les outils",
+  hideTools:"Masquer les outils", showTools:"Afficher les outils", showLayers:"Calques", hideLayers:"Masquer les calques",
   lblWhere:"Où", lblWhen:"Quand", lblSky:"Quel ciel",
   searchPh:"Cherchez un lieu ou collez des coordonnées", searchAria:"Cherchez un lieu, ou collez des coordonnées ou un lien de carte",
   pickTitle:"Touchez la carte pour définir votre position", locateTitle:"Utiliser ma position", dtAria:"Date et heure à cet endroit",
@@ -1007,6 +1021,7 @@ function applyStaticLang(){
   setT('tSpeedReal','optReal'); setT('tSpeed1m','opt1m'); setT('tSpeed10m','opt10m'); setT('tSpeed1h','opt1h');
   setT('speedReal','optReal'); setT('speed1m','opt1m'); setT('speed10m','opt10m'); setT('speed1h','opt1h');
   setT('tNight', document.getElementById('tNight') && document.getElementById('tNight').getAttribute('aria-pressed') === 'true' ? 'stopNight' : 'playTonight');
+  setT('layersToggleTxt', document.getElementById('layers') && document.getElementById('layers').classList.contains('open') ? 'hideLayers' : 'showLayers');
   setT('arriveEyebrow','youAreStanding'); setT('bArrive','lookUp');
   setT('lblHelp','helpBtn'); setT('bArriveHow','helpBtn'); setT('arriveWhat','arriveWhat');
   if (typeof renderGuide === 'function') renderGuide();
@@ -1488,11 +1503,16 @@ function draw(){
   // culture lines
   const C = CULT[S.cult];
   const crossingCons = S.frame ? S.frame.crossCons : new Set();
+  figHit = []; figBox = [];
+  // tap-to-select tolerance: record every drawn figure line (and each star it touches) in
+  // screen space, so a tap anywhere near the figure's actual shape selects it -- not just a
+  // small circle around its text label, which used to be the only way to tap one in.
   if (S.M.figures) C.cons.forEach((k,ci) => {
     if (!S.M.allfigs && ci !== S.focus) return;
     const hot = crossingCons.has(ci) || ci === S.focus;
     ctx.strokeStyle = hot ? 'rgba(240,190,110,.95)' : 'rgba(227,168,87,.62)'; ctx.lineWidth = hot ? 1.8 : 1.25;
-    ctx.beginPath(); k.lines.forEach(([a,b]) => { const A = SP[a], B = SP[b]; if (A && B){ ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); } }); ctx.stroke();
+    ctx.beginPath(); k.lines.forEach(([a,b]) => { const A = SP[a], B = SP[b]; if (A && B){ ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); figHit.push([ci,A[0],A[1],B[0],B[1]]); } }); ctx.stroke();
+    k.ids.forEach(i => { const p = SP[i]; if (p) figHit.push([ci,p[0],p[1],p[0],p[1]]); });
   });
   // stars
   if (starA > 0 && S.M.stars){
@@ -1547,7 +1567,7 @@ function draw(){
 function mix(a,b,t){ return a.map((v,i) => Math.round(v + (b[i]-v)*t)).join(','); }
 
 // ---------- focus view: one figure, seen from the ground ----------
-let CAM = null, trackPolys = [], labelPos = [];
+let CAM = null, trackPolys = [], labelPos = [], figHit = [], figBox = [];
 function consCenter(ci){
   const k = CULT[S.cult].cons[ci]; const vs = k.ids.map(i => STARS[i].v);
   const s = [0,0,0]; vs.forEach(v => { s[0]+=v[0]; s[1]+=v[1]; s[2]+=v[2]; });
@@ -2206,16 +2226,21 @@ function drawMirror(){
       trackPolys.push([j, P]); });
     ctx.globalAlpha = 1;
   }
+  figHit = []; figBox = [];
   if (S.M.figures){
     const C = CULT[S.cult], month = new Date(S.t).getUTCMonth();
+    // tap-to-select tolerance: record where each figure actually landed on screen -- a bounding
+    // box for the painted artwork (so any pixel inside the illustration counts, not just its
+    // label), and line segments for the plain accent-colour lines drawn in "all figures" mode.
     const drawArt = (Cc, ci, k, alpha) => { const im = (k.img2 && (month === 3 || month === 4)) ? k.img2 : k.img;
       const dst = im.a.map(a => { const i = HIPIDX.get(a[2]); return i != null ? SP[i] : null; }); if (dst.some(p => !p)) return;
       const M = affine(im.a.map(a => [a[0], a[1]]), dst); const tex = tinted(im.f); if (!M || !tex) return;
+      if (Cc === C){ const xs = dst.map(p => p[0]), ys = dst.map(p => p[1]); figBox.push([ci, Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]); }
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = alpha; ctx.setTransform(DPR*M[0], DPR*M[1], DPR*M[2], DPR*M[3], DPR*M[4], DPR*M[5]);
       ctx.drawImage(tex, 0, 0, im.size[0], im.size[1]); ctx.restore(); };
     if (OV) OV.cons.forEach((k,ci) => { if (k.img) drawArt(OV, ci, k, .45); });
     C.cons.forEach((k,ci) => { if (k.img && (ci === S.focus || S.M.allfigs)) drawArt(C, ci, k, ci === S.focus ? .95 : .8); });
-    if (S.M.allfigs){ ctx.strokeStyle = acc(.9); ctx.lineWidth = 1.6; ctx.beginPath(); C.cons.forEach((k,ci) => { if (ci !== S.focus) k.lines.forEach(([a,b]) => seg(a,b)); }); ctx.stroke(); }
+    if (S.M.allfigs){ ctx.strokeStyle = acc(.9); ctx.lineWidth = 1.6; ctx.beginPath(); C.cons.forEach((k,ci) => { if (ci !== S.focus) k.lines.forEach(([a,b]) => { seg(a,b); const A = SP[a], B = SP[b]; if (A && B) figHit.push([ci,A[0],A[1],B[0],B[1]]); }); }); ctx.stroke(); }
     ctx.save(); ctx.strokeStyle = 'rgba(5,8,18,.8)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); C.cons[S.focus].lines.forEach(([a,b]) => seg(a,b)); ctx.stroke();
     ctx.shadowColor = acc(.8); ctx.shadowBlur = 10; ctx.strokeStyle = accL(1); ctx.lineWidth = 2.6; ctx.beginPath(); C.cons[S.focus].lines.forEach(([a,b]) => seg(a,b)); ctx.stroke(); ctx.restore();
   }
@@ -2725,6 +2750,18 @@ function genRows(i){
 }
 
 // ---------- selection ----------
+// finds the nearest figure to a tap: first checks whether the tap landed inside a painted
+// figure's bounding box (any pixel of the illustration, with a little padding for fat fingers),
+// then falls back to proximity to one of its lines/stars -- so you can tap the figure itself,
+// not just hunt for its small text label.
+function hitFig(x, y, pad){
+  for (const [ci,x0,y0,x1,y1] of figBox) if (x >= x0-pad && x <= x1+pad && y >= y0-pad && y <= y1+pad) return ci;
+  let bj = -1, bd2 = pad*pad;
+  for (const [ci,ax,ay,bx,by] of figHit){ const dx = bx-ax, dy = by-ay, L = dx*dx+dy*dy || 1;
+    const u = Math.max(0, Math.min(1, ((x-ax)*dx + (y-ay)*dy)/L));
+    const d = (ax+u*dx-x)**2 + (ay+u*dy-y)**2; if (d < bd2){ bd2 = d; bj = ci; } }
+  return bj;
+}
 cv.addEventListener('click', e => {
   const r = cv.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;
   if (S.mode === 'mirror' && performance.now() - dragEnd < 300) return;
@@ -2742,6 +2779,7 @@ cv.addEventListener('click', e => {
   let best = -1, bd = 12*12;
   for (const [px,py,i] of lastDrawn){ const d = (px-x)**2 + (py-y)**2; if (d < bd){ bd = d; best = i; } }
   if (best < 0){ for (const [lx,ly,ci] of labelPos) if ((lx-x)**2 + (ly-y)**2 < 30*30){ S.focus = ci; $('focusSel').value = ci; if (S.mode === 'mirror') onFocusChange(); else { S.tracks = null; setMode('focus'); showStory(); renderPass(); } return; } }
+  if (best < 0){ const ci = hitFig(x, y, 16); if (ci >= 0){ S.focus = ci; $('focusSel').value = ci; if (S.mode === 'mirror') onFocusChange(); else { S.tracks = null; setMode('focus'); showStory(); renderPass(); } return; } }
   S.sel = best; renderSel(); draw();
 });
 function renderSel(){
@@ -2914,6 +2952,7 @@ function initUI(){
   $('guideX').onclick = closeGuide; $('guideGo').onclick = closeGuide;
   $('guide').addEventListener('click', e => { if (e.target === e.currentTarget) closeGuide(); });
   $('bDrawer').onclick = () => { const closed = $('app').classList.toggle('closed'); $('bDrawer').setAttribute('aria-expanded', !closed); $('bDrawer').textContent = closed ? i18n('showTools') : i18n('hideTools'); setTimeout(resize, 50); };
+  $('bLayersToggle').onclick = () => { const open = $('layers').classList.toggle('open'); $('bLayersToggle').setAttribute('aria-expanded', open); $('layersToggleTxt').textContent = i18n(open ? 'hideLayers' : 'showLayers'); };
   $('loading').textContent = i18n('preparingOrbits', {n:fmtN(31225)});
   const url = URL.createObjectURL(new Blob([workerSource()], {type:'text/javascript'}));
   worker = new Worker(url);
