@@ -1741,7 +1741,7 @@ function setMode(m){
   S.mode = m; paintModeHint(); $('mMirror').setAttribute('aria-pressed', m === 'mirror'); $('mFocus').setAttribute('aria-pressed', m === 'focus'); $('mSky').setAttribute('aria-pressed', m === 'sky'); $('mLand').setAttribute('aria-pressed', m === 'land');
   $('focusCard').hidden = m === 'sky';
   $('land3d').hidden = m !== 'land'; $('sky').hidden = m === 'land'; $('layers').hidden = false;
-  if (!S.touched.has('objects')) S.M.objects = m === 'sky' || m === 'land'; // sensible default per view until the viewer chooses
+  if (!S.touched.has('objects')) S.M.objects = m === 'sky' || m === 'land' || m === 'mirror'; // sensible default per view until the viewer chooses (mirror is the default landing tab)
   initLayersAll(); if (m === 'mirror') homeView();
   if (m !== 'land') $('chipLand').hidden = true;
   if (m === 'land'){ buildObjects(); buildStreaks(); faceFigure(); }
