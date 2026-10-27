@@ -264,11 +264,17 @@ footer a,.card a{color:var(--muted)}
    not create a box of its own here, or it'd swallow the gap .skywrap puts between its children
    (command, toolbar, modehint, ... were five separate flex items; now three wrappers are). */
 .sheetPanel{display:contents}
-/* Fullscreen: everything but the sky itself can be tucked away, reachable again through one
-   small tab at the bottom -- works the same on desktop (the sidebar of controls) and on
-   mobile (the header and bubble bar). */
-body.fs .uiToggle{display:flex;position:fixed;left:50%;transform:translateX(-50%);bottom:10px;z-index:40;align-items:center;justify-content:center;width:44px;height:26px;border-radius:999px 999px 6px 6px;background:color-mix(in srgb, var(--night) 82%, transparent);backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--muted)}
-body.fs.uiHidden header.masthead,body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox){display:none}
+/* Fullscreen: everything but the sky itself can be tucked away, reachable again through a
+   small tab on the right edge -- works the same on desktop (the sidebar of controls, the
+   figure-info column) and on mobile (the header and bubble bar). */
+body.fs .uiToggle{display:flex;position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:40;align-items:center;justify-content:center;width:26px;height:56px;border-radius:14px 0 0 14px;background:color-mix(in srgb, var(--night) 82%, transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-right:none;color:var(--muted);font-size:15px}
+body.fs.uiHidden header.masthead,body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside{display:none}
+/* On wide screens the sky normally shares the page with a sidebar and a figure-info column;
+   once everything's tucked away in fullscreen it should fill the whole window too, the same
+   way it already does on a phone, instead of leaving it stranded in its usual, smaller box. */
+body.fs.uiHidden .app{display:block}
+body.fs.uiHidden .skywrap{position:static;max-height:none}
+body.fs.uiHidden .canvasbox{position:fixed;inset:0;height:auto;min-height:0;max-width:none;border-radius:0;box-shadow:none}
 @media (max-width: 560px){
   body{padding:0}
   .app{display:block}
@@ -398,7 +404,7 @@ body.fs.uiHidden header.masthead,body.fs.uiHidden .bubbleBar,body.fs.uiHidden .t
     <button class="bubble" data-focus="layers" aria-pressed="false"><span id="bubLayersTxt">Layers</span></button>
   </div>
 
-  <button class="uiToggle" id="bUiToggle" aria-label="Hide controls"><span aria-hidden="true" id="uiToggleIcon">⌄</span></button>
+  <button class="uiToggle" id="bUiToggle" aria-label="Hide controls"><span aria-hidden="true" id="uiToggleIcon">›</span></button>
 
   <aside id="drawer">
     <button class="asideClose" id="bAsideClose" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -2811,7 +2817,8 @@ function setUiHidden(h){
   if (h) { $('skywrap').removeAttribute('data-focus'); document.querySelectorAll('.bubbleBar .bubble').forEach(b => b.setAttribute('aria-pressed', 'false')); }
   const t = $('bUiToggle'), ic = $('uiToggleIcon');
   if (t) t.setAttribute('aria-label', i18n(h ? 'showControls' : 'hideControls'));
-  if (ic) ic.textContent = h ? '⌃' : '⌄';
+  if (ic) ic.textContent = h ? '‹' : '›';
+  setTimeout(resize, 50); // tucking the UI away resizes the canvas on wide screens too, not just on a phone
 }
 cv.addEventListener('click', e => {
   if (document.body.classList.contains('fs') && document.body.classList.contains('uiHidden')) { setUiHidden(false); return; }
