@@ -2173,14 +2173,6 @@ function drawMirror(){
   lastDrawn = [];
   if (S.M.objects && S.frame){
     const f = S.frame.data;
-    // while playing, every object leaves a short tail showing where it has just been
-    if (S.playing && S.trail && S.M.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
-      for (const [i,a] of S.trail){ if (a.length < 2 || Math.abs(S.frame.t - a[a.length-1][4]) > 2000) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
-        ctx.strokeStyle = TYPE_COL[ty]; ctx.globalAlpha = .45; ctx.beginPath(); let pen = false;
-        let last = null; for (const q of a){ const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : (al > -0.05 ? sxy(al, az) : null);
-          if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
-        ctx.stroke(); }
-      ctx.globalAlpha = 1; }
     // zoomed out to see the whole globe at once, tens of thousands of markers pack together into a
     // solid wash; shrinking and fading them as the view widens keeps the land and figures readable
     // while still showing roughly how dense the real debris field is.
@@ -2190,6 +2182,19 @@ function drawMirror(){
     // count too, keeping a consistent (not flickering) subset as zoomT changes, so the view
     // reads as "a lot of debris" rather than a single solid wash covering the land and figures.
     const stride = 1 + Math.round(zoomT*3);
+    // while playing, every object leaves a short tail showing where it has just been; at a wide
+    // zoom those tails criss-cross the whole globe and bury the land/figures under lines, so the
+    // tail both shortens (less of TRAIL_SPAN_MS is drawn) and thins (same stride as the dots) the
+    // further out you zoom.
+    if (S.playing && S.trail && S.M.trail){ ctx.lineWidth = 1.1; ctx.lineCap = 'round';
+      const trailCut = S.frame.t - TRAIL_SPAN_MS*(1 - 0.8*zoomT);
+      for (const [i,a] of S.trail){ if (a.length < 2 || Math.abs(S.frame.t - a[a.length-1][4]) > 2000) continue; const ty = SAT.types[i]; if (!S.show[ty]) continue;
+        if (stride > 1 && i % stride !== 0) continue;
+        ctx.strokeStyle = TYPE_COL[ty]; ctx.globalAlpha = .45; ctx.beginPath(); let pen = false;
+        let last = null; for (const q of a){ if (q[4] < trailCut) continue; const [al,az] = altaz(q[0], q[1], lst, phi); const p = S.dmode === 'ground' ? gxy(q[2], q[3]) : (al > -0.05 ? sxy(al, az) : null);
+          if (!p || (last && Math.hypot(p[0]-last[0], p[1]-last[1]) > 45)){ pen = false; last = p; if (!p) continue; } pen ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); pen = true; last = p; }
+        ctx.stroke(); }
+      ctx.globalAlpha = 1; }
     for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue;
       if (stride > 1 && i % stride !== 0) continue;
       // "as seen in your sky" only makes sense above your horizon; "physically overhead" plots every object worldwide
