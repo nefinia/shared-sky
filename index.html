@@ -2855,9 +2855,9 @@ function initUI(){
   prepare();
   SAT = {list:DATA.sats, types:DATA.sats.map(s => s[3]), owners:DATA.owners};
   initUI();
-  // default: Sydney (Gadigal Country), Kamilaroi sky, 20:30 on the evening after the orbit data
-  S.t = S.epoch; setPlace(0);
-  setTime(Date.UTC(2026,8,26,10,30));
+  // default: Sydney (Gadigal Country), Kamilaroi sky, at the orbit data's own epoch (always within the valid window)
+  setPlace(0);
+  setTime(S.epoch);
   initGen();
   resize(); pickFocus();
   { const C = consCenter(0), [al] = altaz(C.ra, C.dec, lstNow(), S.lat*D2R); if (S.cult === 'kamilaroi' && al > 10*D2R){ S.focus = 0; $('focusSel').value = 0; } }
