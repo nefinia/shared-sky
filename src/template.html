@@ -71,7 +71,7 @@ canvas#sky{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:12px;text-align:center;padding:20px}
 
 /* arrival */
-.arrive{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:radial-gradient(ellipse at center, color-mix(in srgb, var(--night) 72%, transparent) 0%, color-mix(in srgb, var(--night) 92%, transparent) 70%);transition:opacity .9s ease}
+.arrive{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:radial-gradient(ellipse at center, color-mix(in srgb, var(--night) 72%, transparent) 0%, color-mix(in srgb, var(--night) 92%, transparent) 70%);transition:opacity .9s ease}
 .arrive.gone{opacity:0;pointer-events:none}
 .arrive .eyebrow{color:var(--muted)}
 .arrive-land{font-family:var(--serif);font-size:clamp(30px, 5vw, 56px);line-height:1.05;text-wrap:balance;max-width:18ch}
@@ -232,7 +232,7 @@ details p{margin-top:6px}
   /* four controls (play, time, speed, "play/stop tonight") in one pill don't fit a phone's
      width without the time text overflowing/clipping behind its neighbours -- wrap onto two
      rows instead so everything stays legible. */
-  .transport{left:10px;right:10px;top:auto;bottom:52px;flex-wrap:wrap;justify-content:center;row-gap:6px;padding:7px 10px}
+  .transport{left:10px;right:10px;top:auto;bottom:52px;flex-wrap:wrap;justify-content:center;row-gap:6px;padding:7px 10px;border-radius:16px}
   .ttime{min-width:0;flex:1 1 auto;text-align:center;overflow:hidden;text-overflow:ellipsis}
   .transport select{flex:0 0 auto}
   .transport #tNight{order:1;flex:1 0 100%;text-align:center}
