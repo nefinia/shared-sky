@@ -9,6 +9,11 @@ import argparse, csv, datetime, gzip, json, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TYPES = ['PAY', 'R/B', 'DEB', 'UNK']
+# CelesTrak's and Space-Track's SATCAT/GP OBJECT_TYPE field spells these out in full
+# ("PAYLOAD", "ROCKET BODY", "DEBRIS", "UNKNOWN"/"TBA") rather than using TYPES' short
+# codes, so comparing the raw field against TYPES directly silently classified almost
+# everything as UNK (grey) -- this maps the real values onto our short codes.
+TYPE_WORDS = {'PAYLOAD': 'PAY', 'ROCKET BODY': 'R/B', 'DEBRIS': 'DEB', 'UNKNOWN': 'UNK', 'TBA': 'UNK'}
 
 # TLE lines only have 5 characters for the catalogue number, which ran out once the
 # catalogue passed 99999 objects. The Alpha-5 scheme (used by Space-Track and CelesTrak
@@ -40,7 +45,8 @@ def main():
     owners, idx, out = [], {}, []
     for nid, (name, l1, l2) in sats.items():
         r = cat.get(nid, {})
-        t = r.get('OBJECT_TYPE') or ('DEB' if ' DEB' in name else 'R/B' if 'R/B' in name else 'UNK')
+        raw_t = (r.get('OBJECT_TYPE') or '').strip().upper()
+        t = TYPE_WORDS.get(raw_t) or (raw_t if raw_t in TYPES else None) or ('DEB' if ' DEB' in name else 'R/B' if 'R/B' in name else 'UNK')
         o = r.get('OWNER') or '?'
         if o not in idx: idx[o] = len(owners); owners.append(o)
         year = (r.get('LAUNCH_DATE') or '')[:4]
