@@ -276,7 +276,7 @@ footer a,.card a{color:var(--muted)}
    edge of the screen, so anything floating free of the header or the bottom bar risks sitting
    right on top of it; the header's strip is the one place that never does. */
 body.fs .uiToggle{display:flex;width:30px;height:30px;padding:0;align-items:center;justify-content:center;border-radius:999px;background:color-mix(in srgb, var(--panel) 55%, transparent);border:1px solid var(--line);color:var(--muted);font-size:15px;flex:none}
-body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside{display:none}
+body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside,body.fs.uiHidden .overlay{display:none}
 body.fs.uiHidden header.masthead{position:fixed;top:0;left:0;right:0;z-index:25;padding:8px 12px;border-bottom:none;background:none;backdrop-filter:none;box-shadow:none;justify-content:flex-start}
 body.fs.uiHidden header.masthead>*:not(.uiToggle){display:none}
 /* On wide screens the sky normally shares the page with a sidebar and a figure-info column;
@@ -2390,14 +2390,19 @@ function drawMirror(){
   // and the "You: ..." caption below it, both drawn at a fixed offset from the canvas bottom,
   // sit right underneath it and the two overlap into unreadable text-on-text.
   const botPad = W <= 560 ? 142 : 0; // clears the two-row mobile transport pill (bottom:52px + its own ~82px height)
-  if (S.M.rings){
+  // in fullscreen, once everything else is tucked away, this scale bar and caption are the
+  // last bit of text cluttering an otherwise clean sky -- skip drawing them too in that state.
+  const showCaption = !(document.body.classList.contains('fs') && document.body.classList.contains('uiHidden'));
+  if (showCaption && S.M.rings){
     const nice = [5,10,20,50,100,200,500,1000,2000]; const km = nice.reduce((b,v) => v*kmPx <= 150 ? v : b, 5);
     ctx.strokeStyle = '#ECE6D6'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(16, H-38-botPad); ctx.lineTo(16 + km*kmPx, H-38-botPad); ctx.stroke();
     ctx.fillStyle = '#ECE6D6'; ctx.font = '11px "JetBrains Mono", monospace'; ctx.textAlign = 'left';
     ctx.fillText(`${fmtN(km)} km = ${fmtD(km/KM_PER_DEG, km < 111 ? 2 : 1)}° ${i18n('ofSkyAtCentre')}`, 16, H-44-botPad);
   }
-  ctx.font = '12px "JetBrains Mono", ui-monospace, monospace'; ctx.fillStyle = 'rgba(236,230,214,.85)'; ctx.textAlign = 'left';
-  ctx.fillText(i18n('youSummary',{place:placeName()}), 16, H-16-botPad);
+  if (showCaption) {
+    ctx.font = '12px "JetBrains Mono", ui-monospace, monospace'; ctx.fillStyle = 'rgba(236,230,214,.85)'; ctx.textAlign = 'left';
+    ctx.fillText(i18n('youSummary',{place:placeName()}), 16, H-16-botPad);
+  }
   $('chipSun').innerHTML = chipSunHtml(sAltD);
   warnChip();
 }
