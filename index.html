@@ -266,7 +266,16 @@ footer a,.card a{color:var(--muted)}
    slim strip, the sky canvas fills the screen edge to edge, and the where/when/whose-sky
    controls, view tabs, layers and legend all live in one bottom sheet that opens on tap -- the
    same controls as before, just out of the way until asked for. */
-.bubbleBar,.sheetPanel,.asideClose{display:none}
+.bubbleBar,.asideClose,.uiToggle{display:none}
+/* On wide screens .sheetPanel is just DOM scaffolding for the mobile popovers below -- it must
+   not create a box of its own here, or it'd swallow the gap .skywrap puts between its children
+   (command, toolbar, modehint, ... were five separate flex items; now three wrappers are). */
+.sheetPanel{display:contents}
+/* Fullscreen: everything but the sky itself can be tucked away, reachable again through one
+   small tab at the bottom -- works the same on desktop (the sidebar of controls) and on
+   mobile (the header and bubble bar). */
+body.fs .uiToggle{display:flex;position:fixed;left:50%;transform:translateX(-50%);bottom:10px;z-index:40;align-items:center;justify-content:center;width:44px;height:26px;border-radius:999px 999px 6px 6px;background:color-mix(in srgb, var(--night) 82%, transparent);backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--muted)}
+body.fs.uiHidden header.masthead,body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox){display:none}
 @media (max-width: 560px){
   body{padding:0}
   .app{display:block}
@@ -284,7 +293,7 @@ footer a,.card a{color:var(--muted)}
   .bubbleBar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:21;justify-content:center;flex-wrap:wrap;gap:7px;padding:8px 10px max(14px, calc(10px + env(safe-area-inset-bottom,0px)));background:color-mix(in srgb, var(--night) 88%, transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
   .bubble{padding:8px 13px;border-radius:999px;background:color-mix(in srgb, var(--panel) 55%, transparent);border:1px solid var(--line);color:var(--muted);font-size:12.5px;white-space:nowrap}
   .bubble[aria-pressed=true]{color:var(--text);border-color:color-mix(in srgb, var(--ochre) 55%, var(--line));background:color-mix(in srgb, var(--ochre) 20%, var(--panel))}
-  .sheetPanel{position:fixed;left:10px;right:10px;bottom:58px;z-index:22;max-height:50dvh;overflow:auto;background:color-mix(in srgb, var(--night) 94%, transparent);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 20px 50px -20px #000}
+  .sheetPanel{display:none;position:fixed;left:10px;right:10px;bottom:58px;z-index:22;max-height:50dvh;overflow:auto;background:color-mix(in srgb, var(--night) 94%, transparent);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 20px 50px -20px #000}
   .sheetPanel .command{display:grid;padding:0;border:none;background:none}
   .sheetPanel .toolbar,.sheetPanel .layersToggle,.sheetPanel .legend{display:flex}
   .sheetPanel .modehint{display:block}
@@ -397,6 +406,8 @@ footer a,.card a{color:var(--muted)}
     <button class="bubble" data-focus="mode" aria-pressed="false"><span id="bubModeTxt">View</span></button>
     <button class="bubble" data-focus="layers" aria-pressed="false"><span id="bubLayersTxt">Layers</span></button>
   </div>
+
+  <button class="uiToggle" id="bUiToggle" aria-label="Hide controls"><span aria-hidden="true" id="uiToggleIcon">⌄</span></button>
 
   <aside id="drawer">
     <button class="asideClose" id="bAsideClose" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -562,6 +573,7 @@ en: {
   bylineTag:"The sky above a place, laid onto its land", bylineBy:"by", bylineSrc:"source",
   hideTools:"Hide tools", showTools:"Show tools", showLayers:"Layers", hideLayers:"Hide layers", figureInfo:"Figure info",
   bubPlace:"Place", bubTime:"Time", bubSky:"Sky", bubView:"View", bubLayers:"Layers",
+  showControls:"Show controls", hideControls:"Hide controls",
   fullscreenOn:"Fullscreen", fullscreenOff:"Exit fullscreen",
   lblWhere:"Where", lblWhen:"When", lblSky:"Whose sky",
   searchPh:"Search a place, or paste coordinates", searchAria:"Search a place, or paste coordinates or a map link",
@@ -706,6 +718,7 @@ es: {
   bylineTag:"El cielo sobre un lugar, posado en su tierra", bylineBy:"por", bylineSrc:"código",
   hideTools:"Ocultar herramientas", showTools:"Mostrar herramientas", showLayers:"Capas", hideLayers:"Ocultar capas", figureInfo:"Información de la figura",
   bubPlace:"Lugar", bubTime:"Hora", bubSky:"Cielo", bubView:"Vista", bubLayers:"Capas",
+  showControls:"Mostrar controles", hideControls:"Ocultar controles",
   fullscreenOn:"Pantalla completa", fullscreenOff:"Salir de pantalla completa",
   lblWhere:"Dónde", lblWhen:"Cuándo", lblSky:"Cielo de quién",
   searchPh:"Busca un lugar o pega coordenadas", searchAria:"Busca un lugar, o pega coordenadas o un enlace de mapa",
@@ -850,6 +863,7 @@ fr: {
   bylineTag:"Le ciel au-dessus d'un lieu, posé sur sa terre", bylineBy:"par", bylineSrc:"code source",
   hideTools:"Masquer les outils", showTools:"Afficher les outils", showLayers:"Calques", hideLayers:"Masquer les calques", figureInfo:"Info sur la figure",
   bubPlace:"Lieu", bubTime:"Heure", bubSky:"Ciel", bubView:"Vue", bubLayers:"Calques",
+  showControls:"Afficher les contrôles", hideControls:"Masquer les contrôles",
   fullscreenOn:"Plein écran", fullscreenOff:"Quitter le plein écran",
   lblWhere:"Où", lblWhen:"Quand", lblSky:"Quel ciel",
   searchPh:"Cherchez un lieu ou collez des coordonnées", searchAria:"Cherchez un lieu, ou collez des coordonnées ou un lien de carte",
@@ -2811,7 +2825,19 @@ function hitFig(x, y, pad){
     const d = (ax+u*dx-x)**2 + (ay+u*dy-y)**2; if (d < bd2){ bd2 = d; bj = ci; } }
   return bj;
 }
+// In fullscreen everything but the sky is tucked away by default; tapping the sky (like
+// tapping a video to bring back its controls) reveals it again, swallowing that one tap so it
+// doesn't also select whatever figure happens to be underneath. The small tab at the bottom
+// (#bUiToggle) does the same thing, and is the only way to tuck it back away again.
+function setUiHidden(h){
+  document.body.classList.toggle('uiHidden', h);
+  if (h) { $('skywrap').removeAttribute('data-focus'); document.querySelectorAll('.bubbleBar .bubble').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+  const t = $('bUiToggle'), ic = $('uiToggleIcon');
+  if (t) t.setAttribute('aria-label', i18n(h ? 'showControls' : 'hideControls'));
+  if (ic) ic.textContent = h ? '⌃' : '⌄';
+}
 cv.addEventListener('click', e => {
+  if (document.body.classList.contains('fs') && document.body.classList.contains('uiHidden')) { setUiHidden(false); return; }
   // a bubble popover is open and the tap landed on the sky itself (not the popover, which sits
   // above the bubble bar, outside the canvas) -- treat it as "dismiss", same as tapping outside
   // any other bottom sheet, rather than also selecting whatever figure happens to be underneath.
@@ -3023,14 +3049,23 @@ function initUI(){
     if (f) $('skywrap').setAttribute('data-focus', f); else $('skywrap').removeAttribute('data-focus');
     document.querySelectorAll('.bubbleBar .bubble').forEach(b => b.setAttribute('aria-pressed', b.dataset.focus === f));
   }
+  $('bUiToggle').onclick = () => setUiHidden(!document.body.classList.contains('uiHidden'));
   if ($('bFull') && (document.fullscreenEnabled || document.documentElement.webkitRequestFullscreen)) {
     $('bFull').hidden = false;
     $('bFull').onclick = () => {
       if (document.fullscreenElement) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
       else { const el = document.documentElement; (el.requestFullscreen || el.webkitRequestFullscreen).call(el).catch(() => {}); }
     };
-    document.addEventListener('fullscreenchange', applyStaticLang);
-    document.addEventListener('webkitfullscreenchange', applyStaticLang);
+    const onFsChange = () => {
+      const fs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      document.body.classList.toggle('fs', fs);
+      // entering fullscreen starts with everything tucked away (the point of fullscreen);
+      // leaving it always restores the normal, fully-visible layout.
+      setUiHidden(fs);
+      applyStaticLang(); setTimeout(resize, 50);
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
   }
   $('loading').textContent = i18n('preparingOrbits', {n:fmtN(31225)});
   const url = URL.createObjectURL(new Blob([workerSource()], {type:'text/javascript'}));
