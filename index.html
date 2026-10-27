@@ -1611,7 +1611,8 @@ function drawFocus(){
   ctx.shadowColor = 'rgba(227,168,87,.7)'; ctx.shadowBlur = 10;
   ctx.strokeStyle = 'rgba(245,195,115,1)'; ctx.lineWidth = 2.6; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke(); ctx.restore();
   }
-  if (S.M.figures) k.ids.forEach(i => { const p = SP.get(i); if (!p) return; const rr = Math.max(2.4, (6.6-STARS[i].mag)*1.5); ctx.drawImage(starSprite('#FFF4DE'), p[0]-rr, p[1]-rr, rr*2, rr*2); });
+  { const fovK = Math.max(.6, Math.min(2, Math.sqrt((50*D2R)/cam.fov)));
+  if (S.M.figures) k.ids.forEach(i => { const p = SP.get(i); if (!p) return; const rr = Math.max(1.4, (6.6-STARS[i].mag)*1.0)*fovK; ctx.drawImage(starSprite('#FFF4DE'), p[0]-rr, p[1]-rr, rr*2, rr*2); }); }
   // labels of figure and bright stars
   if (S.M.names){
     ctx.font = '10.5px Figtree, system-ui, sans-serif'; ctx.fillStyle = 'rgba(190,198,225,.6)'; ctx.textAlign = 'left';
@@ -2148,7 +2149,7 @@ function drawMirror(){
   }
   // the sky shell, laid on the globe
   const whole = S.M.sphere;
-  const starA = Math.max(.3, Math.min(1, (-sAltD - 2)/10)), zoomK = Math.max(1, Math.min(3, Math.sqrt(3000/S.view)));
+  const starA = Math.max(.3, Math.min(1, (-sAltD - 2)/10)), zoomK = Math.max(.5, Math.min(3, Math.sqrt(3000/S.view)));
   if (S.M.mw){
     DATA.mw.forEach(m => { ctx.fillStyle = `rgba(205,215,255,${0.05*starA})`; ctx.beginPath();
       m.v.forEach(ring => { let first = true; for (const [ra,dec] of ring){ const [al,az] = altaz(ra,dec,lst,phi); const P = (!whole && al < -0.3) ? null : sxy(al,az); if (!P){ first = true; continue; } if (first){ ctx.moveTo(P[0],P[1]); first = false; } else ctx.lineTo(P[0],P[1]); } ctx.closePath(); });
@@ -2160,7 +2161,7 @@ function drawMirror(){
   const OV = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; // a second sky culture, for comparison
   if (OV){ ctx.strokeStyle = 'rgba(160,185,255,.75)'; ctx.setLineDash([4,4]); ctx.lineWidth = 1.2; ctx.beginPath(); OV.cons.forEach(k => k.lines.forEach(([a,b]) => seg(a,b))); ctx.stroke(); ctx.setLineDash([]); }
   if (S.M.stars) for (let i=0;i<STARS.length;i++){ const p = SP[i]; if (!on(p, 4)) continue; const s = STARS[i];
-    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); const rr = Math.max(1.6, (6.3 - s.mag)*1.35)*zoomK; ctx.drawImage(starSprite(starColor(s.bv)), p[0]-rr, p[1]-rr, rr*2, rr*2); }
+    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); const rr = Math.max(1, (6.3 - s.mag)*.8)*zoomK; ctx.drawImage(starSprite(starColor(s.bv)), p[0]-rr, p[1]-rr, rr*2, rr*2); }
   ctx.globalAlpha = 1;
   trackPolys = [];
   if (S.M.streaks && S.tracks){
@@ -2206,11 +2207,11 @@ function drawMirror(){
     // zoomed out to see the whole globe at once, tens of thousands of markers pack together into a
     // solid wash; shrinking and fading them as the view widens keeps the land and figures readable
     // while still showing roughly how dense the real debris field is.
-    const zoomT = Math.max(0, Math.min(1, (S.view - 500) / (7000 - 500))), rScale = 1 - 0.55*zoomT, aScale = 1 - 0.55*zoomT;
+    const zoomT = Math.max(0, Math.min(1, (S.view - 500) / (7000 - 500))), rScale = 1 - 0.3*zoomT, aScale = 1 - 0.25*zoomT;
     for (let k=0;k<f.length;k+=FS){ const i = f[k], ty = SAT.types[i]; if (!S.show[ty]) continue;
       // "as seen in your sky" only makes sense above your horizon; "physically overhead" plots every object worldwide
       let p; if (S.dmode === 'ground') p = gxy(f[k+5], f[k+6]); else { const [al,az] = altaz(f[k+1], f[k+2], lst, phi); if (al < 0) continue; p = sxy(al, az); }
-      if (!on(p, 4)) continue; const lit = f[k+4] > 0; ctx.globalAlpha = (lit ? .95 : .4)*aScale*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], (lit ? 1.9 : 1.4)*rScale, 0, Math.PI*2); ctx.fill(); lastDrawn.push([p[0],p[1],i]); }
+      if (!on(p, 4)) continue; const lit = f[k+4] > 0; const or = Math.max(1.3, (lit ? 1.9 : 1.4)*rScale); ctx.globalAlpha = Math.max(.55, (lit ? .95 : .4)*aScale)*lensA(i); ctx.fillStyle = TYPE_COL[ty]; ctx.beginPath(); ctx.arc(p[0], p[1], or, 0, Math.PI*2); ctx.fill(); ctx.lineWidth = .6; ctx.strokeStyle = 'rgba(10,12,20,.55)'; ctx.stroke(); lastDrawn.push([p[0],p[1],i]); }
     ctx.globalAlpha = 1;
     genRings();
     if (S.sel >= 0){ const p = lastDrawn.find(d => d[2] === S.sel); if (p){ ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI*2); ctx.stroke(); } }
