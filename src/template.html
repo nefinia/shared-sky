@@ -1370,6 +1370,20 @@ function proj(alt, az){
   return [cx - r*Math.sin(az), cy - r*Math.cos(az), r];
 }
 function starColor(bv){ return bv < 0 ? '#BCD2FF' : bv < .4 ? '#EAF0FF' : bv < .9 ? '#FFF3DD' : bv < 1.4 ? '#FFDDB3' : '#FFC48F'; }
+// Stars get a soft radial-gradient glow (bright core fading to nothing) so they read as
+// "sky" at a glance, distinct from the flat, solid-colored dots used for tracked objects.
+// Gradients are cached per color as a small sprite rather than rebuilt every star every
+// frame, then scaled with drawImage -- cheap even with thousands of stars while playing.
+const STAR_SPRITES = new Map();
+function starSprite(color){
+  let c = STAR_SPRITES.get(color); if (c) return c;
+  c = document.createElement('canvas'); c.width = c.height = 32;
+  const g = c.getContext('2d'), r = 16, grad = g.createRadialGradient(r, r, 0, r, r, r);
+  const hex = color.replace('#',''), br = parseInt(hex.slice(0,2),16), bg = parseInt(hex.slice(2,4),16), bb = parseInt(hex.slice(4,6),16);
+  grad.addColorStop(0, color); grad.addColorStop(.35, color); grad.addColorStop(1, `rgba(${br},${bg},${bb},0)`);
+  g.fillStyle = grad; g.beginPath(); g.arc(r, r, r, 0, Math.PI*2); g.fill();
+  STAR_SPRITES.set(color, c); return c;
+}
 
 function lstNow(){ return satellite.gstime(new Date(S.t)) + S.lon*D2R; }
 
@@ -1574,7 +1588,7 @@ function drawFocus(){
   ctx.shadowColor = 'rgba(227,168,87,.7)'; ctx.shadowBlur = 10;
   ctx.strokeStyle = 'rgba(245,195,115,1)'; ctx.lineWidth = 2.6; ctx.beginPath(); k.lines.forEach(([a,b]) => line(a,b)); ctx.stroke(); ctx.restore();
   }
-  if (S.M.figures) k.ids.forEach(i => { const p = SP.get(i); if (!p) return; ctx.fillStyle = '#FFF4DE'; ctx.beginPath(); ctx.arc(p[0],p[1], Math.max(1.6,(6.6-STARS[i].mag)*.9),0,Math.PI*2); ctx.fill(); });
+  if (S.M.figures) k.ids.forEach(i => { const p = SP.get(i); if (!p) return; const rr = Math.max(2.4, (6.6-STARS[i].mag)*1.5); ctx.drawImage(starSprite('#FFF4DE'), p[0]-rr, p[1]-rr, rr*2, rr*2); });
   // labels of figure and bright stars
   if (S.M.names){
     ctx.font = '10.5px Figtree, system-ui, sans-serif'; ctx.fillStyle = 'rgba(190,198,225,.6)'; ctx.textAlign = 'left';
@@ -2123,7 +2137,7 @@ function drawMirror(){
   const OV = S.overlay && S.overlay !== S.cult ? CULT[S.overlay] : null; // a second sky culture, for comparison
   if (OV){ ctx.strokeStyle = 'rgba(160,185,255,.75)'; ctx.setLineDash([4,4]); ctx.lineWidth = 1.2; ctx.beginPath(); OV.cons.forEach(k => k.lines.forEach(([a,b]) => seg(a,b))); ctx.stroke(); ctx.setLineDash([]); }
   if (S.M.stars) for (let i=0;i<STARS.length;i++){ const p = SP[i]; if (!on(p, 4)) continue; const s = STARS[i];
-    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); ctx.fillStyle = starColor(s.bv); ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(.8, (6.3 - s.mag)*.72)*zoomK, 0, Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha = starA*Math.min(1, .5 + (6 - s.mag)*.22)*(SA[i] < 0 ? .6 : 1); const rr = Math.max(1.6, (6.3 - s.mag)*1.35)*zoomK; ctx.drawImage(starSprite(starColor(s.bv)), p[0]-rr, p[1]-rr, rr*2, rr*2); }
   ctx.globalAlpha = 1;
   trackPolys = [];
   if (S.M.streaks && S.tracks){
