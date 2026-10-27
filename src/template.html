@@ -264,11 +264,14 @@ footer a,.card a{color:var(--muted)}
    not create a box of its own here, or it'd swallow the gap .skywrap puts between its children
    (command, toolbar, modehint, ... were five separate flex items; now three wrappers are). */
 .sheetPanel{display:contents}
-/* Fullscreen: everything but the sky itself can be tucked away, reachable again through a
-   small tab on the right edge -- works the same on desktop (the sidebar of controls, the
-   figure-info column) and on mobile (the header and bubble bar). */
-body.fs .uiToggle{display:flex;position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:40;align-items:center;justify-content:center;width:26px;height:56px;border-radius:14px 0 0 14px;background:color-mix(in srgb, var(--night) 82%, transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-right:none;color:var(--muted);font-size:15px}
-body.fs.uiHidden header.masthead,body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside{display:none}
+/* Fullscreen: everything but the sky itself can be tucked away, reachable again through one
+   small button that stays in the header's own strip -- a circular sky view can touch every
+   edge of the screen, so anything floating free of the header or the bottom bar risks sitting
+   right on top of it; the header's strip is the one place that never does. */
+body.fs .uiToggle{display:flex;width:30px;height:30px;padding:0;align-items:center;justify-content:center;border-radius:999px;background:color-mix(in srgb, var(--panel) 55%, transparent);border:1px solid var(--line);color:var(--muted);font-size:15px;flex:none}
+body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside{display:none}
+body.fs.uiHidden header.masthead{position:fixed;top:0;left:0;right:0;z-index:25;padding:8px 12px;border-bottom:none;background:none;backdrop-filter:none;box-shadow:none;justify-content:flex-start}
+body.fs.uiHidden header.masthead>*:not(.uiToggle){display:none}
 /* On wide screens the sky normally shares the page with a sidebar and a figure-info column;
    once everything's tucked away in fullscreen it should fill the whole window too, the same
    way it already does on a phone, instead of leaving it stranded in its usual, smaller box. */
@@ -320,6 +323,7 @@ body.fs.uiHidden .canvasbox{position:fixed;inset:0;height:auto;min-height:0;max-
     </div>
     <p class="where"><span class="land" id="whereLand">—</span><span class="sub" id="whereSub"></span></p>
     <div class="headtools"><button id="bFull" class="icon bFull" hidden aria-pressed="false" title="Fullscreen" aria-label="Fullscreen">&#x26F6;</button><button id="bHelp" class="helpbtn" aria-haspopup="dialog" aria-controls="guide"><i aria-hidden="true">?</i><span id="lblHelp">How it works</span></button><div class="langsw" id="langsw" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button></div><button id="bDrawer" aria-expanded="true" aria-controls="drawer">Hide tools</button></div>
+    <button class="uiToggle" id="bUiToggle" aria-label="Hide controls"><span aria-hidden="true" id="uiToggleIcon">‹</span></button>
   </header>
   <div class="skywrap" id="skywrap">
     <div class="sheetPanel" id="sheetPanelA">
@@ -404,7 +408,6 @@ body.fs.uiHidden .canvasbox{position:fixed;inset:0;height:auto;min-height:0;max-
     <button class="bubble" data-focus="layers" aria-pressed="false"><span id="bubLayersTxt">Layers</span></button>
   </div>
 
-  <button class="uiToggle" id="bUiToggle" aria-label="Hide controls"><span aria-hidden="true" id="uiToggleIcon">›</span></button>
 
   <aside id="drawer">
     <button class="asideClose" id="bAsideClose" aria-label="Close"><span aria-hidden="true">×</span></button>
