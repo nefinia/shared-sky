@@ -269,7 +269,7 @@ footer a,.card a{color:var(--muted)}
    edge of the screen, so anything floating free of the header or the bottom bar risks sitting
    right on top of it; the header's strip is the one place that never does. */
 body.fs .uiToggle{display:flex;width:30px;height:30px;padding:0;align-items:center;justify-content:center;border-radius:999px;background:color-mix(in srgb, var(--panel) 55%, transparent);border:1px solid var(--line);color:var(--muted);font-size:15px;flex:none}
-body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside,body.fs.uiHidden .overlay,body.fs.uiHidden .arrive{display:none}
+body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside,body.fs.uiHidden .overlay,body.fs.uiHidden .arrive,body.fs.uiHidden footer{display:none}
 body.fs.uiHidden header.masthead{position:fixed;top:0;left:0;right:0;z-index:25;padding:8px 12px;border-bottom:none;background:none;backdrop-filter:none;box-shadow:none;justify-content:flex-start}
 body.fs.uiHidden header.masthead>*:not(.uiToggle){display:none}
 /* On wide screens the sky normally shares the page with a sidebar and a figure-info column;
