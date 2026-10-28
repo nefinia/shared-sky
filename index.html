@@ -276,7 +276,7 @@ footer a,.card a{color:var(--muted)}
    edge of the screen, so anything floating free of the header or the bottom bar risks sitting
    right on top of it; the header's strip is the one place that never does. */
 body.fs .uiToggle{display:flex;width:30px;height:30px;padding:0;align-items:center;justify-content:center;border-radius:999px;background:color-mix(in srgb, var(--panel) 55%, transparent);border:1px solid var(--line);color:var(--muted);font-size:15px;flex:none}
-body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside,body.fs.uiHidden .overlay{display:none}
+body.fs.uiHidden .bubbleBar,body.fs.uiHidden .transport,body.fs.uiHidden .skywrap>*:not(.canvasbox),body.fs.uiHidden aside,body.fs.uiHidden .overlay,body.fs.uiHidden .arrive{display:none}
 body.fs.uiHidden header.masthead{position:fixed;top:0;left:0;right:0;z-index:25;padding:8px 12px;border-bottom:none;background:none;backdrop-filter:none;box-shadow:none;justify-content:flex-start}
 body.fs.uiHidden header.masthead>*:not(.uiToggle){display:none}
 /* On wide screens the sky normally shares the page with a sidebar and a figure-info column;
@@ -2384,7 +2384,7 @@ function drawMirror(){
   ctx.restore();
   // you
   if (me){ ctx.fillStyle = '#fff'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, 4.5, 0, Math.PI*2); ctx.stroke(); ctx.fill(); }
-  else { ctx.fillStyle = '#fff'; ctx.font = '12px Figtree, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.shadowColor = '#000'; ctx.shadowBlur = 4; ctx.fillText(i18n('farSideGlobe'), W/2, 26); ctx.shadowBlur = 0; }
+  else if (!fsHidden()) { ctx.fillStyle = '#fff'; ctx.font = '12px Figtree, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.shadowColor = '#000'; ctx.shadowBlur = 4; ctx.fillText(i18n('farSideGlobe'), W/2, 26); ctx.shadowBlur = 0; }
   // on narrow screens the play/pause transport bar becomes a floating overlay pinned near the
   // bottom of the canvas (see .transport's max-width:560px rule) -- without this, the scale bar
   // and the "You: ..." caption below it, both drawn at a fixed offset from the canvas bottom,
@@ -2392,7 +2392,7 @@ function drawMirror(){
   const botPad = W <= 560 ? 142 : 0; // clears the two-row mobile transport pill (bottom:52px + its own ~82px height)
   // in fullscreen, once everything else is tucked away, this scale bar and caption are the
   // last bit of text cluttering an otherwise clean sky -- skip drawing them too in that state.
-  const showCaption = !(document.body.classList.contains('fs') && document.body.classList.contains('uiHidden'));
+  const showCaption = !fsHidden();
   if (showCaption && S.M.rings){
     const nice = [5,10,20,50,100,200,500,1000,2000]; const km = nice.reduce((b,v) => v*kmPx <= 150 ? v : b, 5);
     ctx.strokeStyle = '#ECE6D6'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(16, H-38-botPad); ctx.lineTo(16 + km*kmPx, H-38-botPad); ctx.stroke();
@@ -2843,6 +2843,7 @@ function hitFig(x, y, pad){
 // tapping a video to bring back its controls) reveals it again, swallowing that one tap so it
 // doesn't also select whatever figure happens to be underneath. The small tab at the bottom
 // (#bUiToggle) does the same thing, and is the only way to tuck it back away again.
+function fsHidden(){ return document.body.classList.contains('fs') && document.body.classList.contains('uiHidden'); }
 function setUiHidden(h){
   document.body.classList.toggle('uiHidden', h);
   if (h) { $('skywrap').removeAttribute('data-focus'); document.querySelectorAll('.bubbleBar .bubble').forEach(b => b.setAttribute('aria-pressed', 'false')); }
